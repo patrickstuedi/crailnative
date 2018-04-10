@@ -13,6 +13,7 @@ ByteBuffer::ByteBuffer(int size) {
   this->size_ = size;
   this->limit_ = size;
   this->position_ = 0;
+  Zero();
 }
 
 ByteBuffer::~ByteBuffer() { delete[] buf_; }
@@ -67,3 +68,14 @@ void ByteBuffer::GetBytes(char value[], int length) {
   memcpy(value, _tmp, length);
   this->position_ += length;
 }
+
+void ByteBuffer::PrintBytes(string message) {
+  cout << "printbytes [" << message.c_str() << "]" << endl;
+  for (int i = 0; i < size_; i++) {
+    unsigned int ch = (unsigned int)buf_[i];
+    cout << ch << ".";
+  }
+  cout << endl;
+}
+
+void ByteBuffer::Zero() { bzero(buf_, size_); }

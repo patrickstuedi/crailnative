@@ -4,6 +4,7 @@ add_library (cppcrail SHARED
 	crail_store.cc
 	crail_node.cc
 	crail_file.cc
+	crail_directory.cc
 	crail_outputstream.cc
 	crail_inputstream.cc
 	directory_record.cc
@@ -13,6 +14,8 @@ add_library (cppcrail SHARED
 	namenode/namenode_response.cc
 	namenode/create_request.cc
 	namenode/create_response.cc
+	namenode/lookup_request.cc
+	namenode/lookup_response.cc
 	namenode/getblock_request.cc
 	namenode/getblock_response.cc
 	namenode/namenode_client.cc
@@ -21,6 +24,8 @@ add_library (cppcrail SHARED
 	storage/storage_response.cc
 	storage/write_request.cc
 	storage/write_response.cc
+	storage/read_request.cc
+	storage/read_response.cc
 	metadata/filename.cc
 	metadata/file_info.cc
 	metadata/datanode_info.cc

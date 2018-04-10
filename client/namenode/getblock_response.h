@@ -32,8 +32,7 @@ public:
   GetblockResponse();
   virtual ~GetblockResponse();
 
-  Serializable *Header() { return this; }
-  ByteBuffer *Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);

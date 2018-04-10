@@ -16,6 +16,7 @@
 #include "create_response.h"
 #include "getblock_request.h"
 #include "getblock_response.h"
+#include "lookup_request.h"
 
 NamenodeClient::NamenodeClient() { this->counter_ = 1; }
 
@@ -28,10 +29,19 @@ shared_ptr<CreateResponse> NamenodeClient::Create(Filename &name, int type,
   Createrequest createReq(name, type, storage_class, location_class,
                           enumerable);
   shared_ptr<CreateResponse> getblockRes = make_shared<CreateResponse>();
-  RpcClient::issueRequest(createReq, getblockRes);
-  while (RpcClient::pollResponse() < 0)
+  RpcClient::IssueRequest(createReq, getblockRes);
+  while (RpcClient::PollResponse() < 0)
     ;
   return getblockRes;
+}
+
+shared_ptr<LookupResponse> NamenodeClient::Lookup(Filename &name) {
+  LookupRequest lookupReq(name);
+  shared_ptr<LookupResponse> lookupRes = make_shared<LookupResponse>();
+  RpcClient::IssueRequest(lookupReq, lookupRes);
+  while (RpcClient::PollResponse() < 0)
+    ;
+  return lookupRes;
 }
 
 shared_ptr<GetblockResponse> NamenodeClient::GetBlock(long long fd,
@@ -40,8 +50,8 @@ shared_ptr<GetblockResponse> NamenodeClient::GetBlock(long long fd,
                                                       long long capacity) {
   GetblockRequest getblockReq(fd, token, position, capacity);
   shared_ptr<GetblockResponse> getblockRes = make_shared<GetblockResponse>();
-  RpcClient::issueRequest(getblockReq, getblockRes);
-  while (RpcClient::pollResponse() < 0)
+  RpcClient::IssueRequest(getblockReq, getblockRes);
+  while (RpcClient::PollResponse() < 0)
     ;
   return getblockRes;
 }

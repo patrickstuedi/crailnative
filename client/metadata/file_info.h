@@ -30,19 +30,19 @@ public:
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  inline int Size() const {
+  int Size() const {
     return sizeof(unsigned long long) * 2 + sizeof(int) +
            sizeof(unsigned long long) * 3;
   }
 
-  inline unsigned long long fd() const { return fd_; }
-  inline unsigned long long capacity() const { return capacity_; }
-  inline int type() const { return node_type_; }
-  inline unsigned long long dir_offset() const { return dir_offset_; }
-  inline unsigned long long token() const { return token_; }
-  inline unsigned long long modification_time() const {
-    return modification_time_;
-  }
+  int Dump() const;
+
+  unsigned long long fd() const { return fd_; }
+  unsigned long long capacity() const { return capacity_; }
+  int type() const { return node_type_; }
+  long long dir_offset() const { return dir_offset_; }
+  unsigned long long token() const { return token_; }
+  unsigned long long modification_time() const { return modification_time_; }
 
 private:
   unsigned long long fd_;

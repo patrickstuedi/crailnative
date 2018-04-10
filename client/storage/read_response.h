@@ -17,34 +17,30 @@
 * limitations under the License.
 */
 
-#include <memory>
-#include <string>
+#ifndef READ_RESPONSE_H
+#define READ_RESPONSE_H
 
-#include "crail_inputstream.h"
-#include "crail_node.h"
-#include "crail_outputstream.h"
-#include "namenode/namenode_client.h"
+#include <memory>
+
+#include "rpc/rpc_message.h"
+#include "storage_response.h"
 
 using namespace std;
 
-namespace crail {
-
-enum class FileType { File = 0, Directory = 1 };
-
-class CrailStore {
+class ReadResponse : public StorageResponse, public RpcMessage {
 public:
-  CrailStore();
-  virtual ~CrailStore();
+  ReadResponse(shared_ptr<ByteBuffer> payload);
+  virtual ~ReadResponse();
 
-  int Initialize(string address, int port);
+  shared_ptr<ByteBuffer> Payload() { return payload_; }
 
-  unique_ptr<CrailNode> Create(string &name, FileType type);
-  unique_ptr<CrailNode> Lookup(string &name);
-  int Remove(string &name);
+  int Size() const { return length_; }
+  int Write(ByteBuffer &buf) const;
+  int Update(ByteBuffer &buf);
 
 private:
-  unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
-
-  shared_ptr<NamenodeClient> namenode_client_;
+  int length_;
+  shared_ptr<ByteBuffer> payload_;
 };
-} // crail
+
+#endif /* READ_RESPONSE_H */

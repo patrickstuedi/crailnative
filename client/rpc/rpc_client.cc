@@ -37,15 +37,17 @@
 using namespace std;
 using namespace crail;
 
-RpcClient::RpcClient() {
+RpcClient::RpcClient() : isConnected(false) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
   this->counter_ = 1;
 }
 
-RpcClient::~RpcClient() {}
+RpcClient::~RpcClient() { Close(); }
 
 int RpcClient::Connect(int address, int port) {
-  Debug(address, port);
+  if (isConnected) {
+    return -1;
+  }
 
   struct sockaddr_in addr_;
   addr_.sin_family = AF_INET;
@@ -54,8 +56,17 @@ int RpcClient::Connect(int address, int port) {
   addr_.sin_addr.s_addr = address;
 
   if (connect(socket_, (struct sockaddr *)&addr_, sizeof(addr_)) == -1) {
-    cout << "Cannot connect to server" << endl;
+    perror("cannot connect to server");
     return -1;
+  }
+  isConnected = true;
+  return 0;
+}
+
+int RpcClient::Close() {
+  if (isConnected) {
+    close(socket_);
+    isConnected = false;
   }
   return 0;
 }
@@ -71,7 +82,7 @@ void RpcClient::Debug(int address, int port) {
   cout << ", port " << port << endl;
 }
 
-int RpcClient::issueRequest(RpcMessage &request,
+int RpcClient::IssueRequest(RpcMessage &request,
                             shared_ptr<RpcMessage> response) {
   unsigned long long ticket = counter_++;
   responseMap.insert({ticket, response});
@@ -80,16 +91,15 @@ int RpcClient::issueRequest(RpcMessage &request,
   // narpc header (size, ticket)
   AddNaRPCHeader(buf, request.Size(), ticket);
   // create file request
-  request.Header()->Write(buf);
+  request.Write(buf);
 
   // issue request
   buf.Flip();
-  cout << "rpc::sending buffer size " << buf.remaining() << endl;
   if (SendBytes(buf.get_bytes(), buf.remaining()) < 0) {
     return -1;
   }
 
-  ByteBuffer *payload = request.Payload();
+  shared_ptr<ByteBuffer> payload = request.Payload();
   if (payload) {
     if (SendBytes(payload->get_bytes(), payload->remaining()) < 0) {
       return -1;
@@ -98,9 +108,9 @@ int RpcClient::issueRequest(RpcMessage &request,
   return 0;
 }
 
-int RpcClient::pollResponse() {
+int RpcClient::PollResponse() {
   // recv resp header
-  ByteBuffer buf(1024);
+  ByteBuffer buf(256);
   buf.Clear();
   if (RecvBytes(buf.get_bytes(), kNarpcHeader) < 0) {
     return -1;
@@ -108,20 +118,24 @@ int RpcClient::pollResponse() {
   int size = buf.GetInt();
   long long ticket = buf.GetLong();
 
+  shared_ptr<RpcMessage> response = responseMap[ticket];
+
+  shared_ptr<ByteBuffer> payload = response->Payload();
+  int payload_size = 0;
+  if (payload) {
+    payload_size = payload->remaining();
+  }
+
   // recv resp obj
   buf.Clear();
-  if (RecvBytes(buf.get_bytes(), size) < 0) {
+  int header_size = size - payload_size;
+  if (RecvBytes(buf.get_bytes(), header_size) < 0) {
     return -1;
   }
 
-  shared_ptr<RpcMessage> response = responseMap[ticket];
-  response->Header()->Update(buf);
+  response->Update(buf);
 
-  ByteBuffer *payload = response->Payload();
   if (payload) {
-    if (payload->remaining() != buf.remaining()) {
-      return -1;
-    }
     if (RecvBytes(payload->get_bytes(), payload->remaining()) < 0) {
       return -1;
     }

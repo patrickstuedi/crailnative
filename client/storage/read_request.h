@@ -17,34 +17,35 @@
 * limitations under the License.
 */
 
+#ifndef READ_REQUEST_H
+#define READ_REQUEST_H
+
 #include <memory>
-#include <string>
+#include <vector>
 
-#include "crail_inputstream.h"
-#include "crail_node.h"
-#include "crail_outputstream.h"
-#include "namenode/namenode_client.h"
+#include "common/byte_buffer.h"
+#include "common/serializable.h"
+#include "rpc/rpc_client.h"
+#include "storage_request.h"
 
-using namespace std;
-
-namespace crail {
-
-enum class FileType { File = 0, Directory = 1 };
-
-class CrailStore {
+class ReadRequest : public StorageRequest, public RpcMessage {
 public:
-  CrailStore();
-  virtual ~CrailStore();
+  ReadRequest(int key, long long address, int length);
+  virtual ~ReadRequest();
 
-  int Initialize(string address, int port);
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  unique_ptr<CrailNode> Create(string &name, FileType type);
-  unique_ptr<CrailNode> Lookup(string &name);
-  int Remove(string &name);
+  int Size() const {
+    return StorageRequest::Size() + sizeof(int) + sizeof(long long) +
+           sizeof(int) * 2;
+  }
+  int Write(ByteBuffer &buf) const;
+  int Update(ByteBuffer &buf);
 
 private:
-  unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
-
-  shared_ptr<NamenodeClient> namenode_client_;
+  int key_;
+  long long address_;
+  int length_;
 };
-} // crail
+
+#endif /* READ_REQUEST_H */

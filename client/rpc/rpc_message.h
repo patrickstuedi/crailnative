@@ -20,14 +20,16 @@
 #ifndef RPC_MESSAGE_H
 #define RPC_MESSAGE_H
 
+#include <memory>
+
 #include "common/byte_buffer.h"
 #include "common/serializable.h"
 
-class RpcMessage {
+using namespace std;
+
+class RpcMessage : public Serializable {
 public:
-  virtual int Size() const = 0;
-  virtual Serializable *Header() = 0;
-  virtual ByteBuffer *Payload() = 0;
+  virtual shared_ptr<ByteBuffer> Payload() = 0;
 };
 
 #endif /* RPC_MESSAGE_H */

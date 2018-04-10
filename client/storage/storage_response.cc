@@ -1,5 +1,9 @@
 #include "storage_response.h"
 
+#include <iostream>
+
+using namespace std;
+
 StorageResponse::StorageResponse(int error, int type)
     : error_(error), type_(type) {}
 

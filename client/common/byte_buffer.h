@@ -40,6 +40,8 @@ public:
   int GetInt();
   long long GetLong();
   void GetBytes(char value[], int length);
+  void PrintBytes(string message);
+  void Zero();
 
   ByteBuffer &Clear() {
     position_ = 0;

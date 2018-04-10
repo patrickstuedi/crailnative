@@ -27,6 +27,8 @@
 #include <unistd.h>
 
 #include "common/crail_constants.h"
+#include "crail_directory.h"
+#include "crail_file.h"
 #include "directory_record.h"
 #include "metadata/filename.h"
 #include "storage/storage_client.h"
@@ -48,24 +50,38 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type) {
   auto create_res =
       namenode_client_->Create(filename, static_cast<int>(type), 0, 0, 1);
 
-  cout << "starging dir record writing " << endl;
-  string fname = filename.name();
   if (create_res->file()->dir_offset() >= 0) {
     auto directory_stream = make_unique<CrailOutputstream>(
         this->namenode_client_, create_res->parent(),
         create_res->file()->dir_offset());
+    string fname = filename.name();
     DirectoryRecord record(1, fname);
     shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(1024);
     record.Write(*buf);
     buf->Flip();
-    cout << "sending dir record, remaining " << buf->remaining() << endl;
     directory_stream->Write(buf);
   }
 
-  auto crail_node = make_unique<CrailNode>(create_res->file());
-  return crail_node;
+  auto file_info = create_res->file();
+  return DispatchType(file_info);
 }
 
-unique_ptr<CrailNode> CrailStore::Lookup(string &name) { return nullptr; }
+unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
+  Filename filename(name);
+  auto lookup_res = namenode_client_->Lookup(filename);
+  auto file_info = lookup_res->file();
+
+  return DispatchType(file_info);
+}
 
 int CrailStore::Remove(string &name) { return 0; }
+
+unique_ptr<CrailNode> CrailStore::DispatchType(shared_ptr<FileInfo> file_info) {
+  if (file_info->type() == static_cast<int>(FileType::File)) {
+    return make_unique<CrailFile>(file_info, namenode_client_);
+  } else if (file_info->type() == static_cast<int>(FileType::Directory)) {
+    return make_unique<CrailDirectory>(file_info, namenode_client_);
+  } else {
+    return nullptr;
+  }
+}

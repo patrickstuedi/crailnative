@@ -23,11 +23,6 @@ CrailOutputstream::~CrailOutputstream() {}
 int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   shared_ptr<GetblockResponse> get_block_res = namenode_client_->GetBlock(
       file_info_->fd(), file_info_->token(), position_, 0);
-  cout << "fd " << file_info_->fd() << ", blockinfo "
-       << get_block_res->block_info()->length() << ", address "
-       << get_block_res->block_info()->addr() << ", buf rem "
-       << buf->remaining() << endl;
-
   shared_ptr<BlockInfo> block_info = get_block_res->block_info();
   int address = block_info->datanode()->addr();
   int port = block_info->datanode()->port();
@@ -36,8 +31,9 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (storage_client.Connect(address, port) < 0) {
     return -1;
   }
-  storage_client.WriteData(block_info->lkey(), block_info->addr(), buf);
+  long long block_addr = block_info->addr() + position_;
+  storage_client.WriteData(block_info->lkey(), block_addr, buf);
   return 0;
 }
 
-int CrailOutputstream::Close() {}
+int CrailOutputstream::Close() { return 0; }

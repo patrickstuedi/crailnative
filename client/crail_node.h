@@ -32,6 +32,10 @@ public:
   CrailNode(shared_ptr<FileInfo> file_info);
   virtual ~CrailNode();
 
+  int type() const { return file_info_->type(); }
+  unsigned long long fd() const { return file_info_->fd(); }
+  unsigned long long capacity() const { return file_info_->capacity(); }
+
 protected:
   shared_ptr<FileInfo> file_info_;
 };

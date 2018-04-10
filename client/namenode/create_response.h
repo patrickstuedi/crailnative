@@ -35,8 +35,7 @@ public:
   CreateResponse();
   virtual ~CreateResponse();
 
-  Serializable *Header() { return this; }
-  ByteBuffer *Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + file_info_->Size() * 2 +

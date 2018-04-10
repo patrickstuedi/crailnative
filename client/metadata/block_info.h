@@ -37,11 +37,13 @@ public:
            sizeof(int) * 2;
   }
 
-  inline DatanodeInfo *datanode() const { return datanode_info_; }
-  inline unsigned long long lba() const { return lba_; }
-  inline unsigned long long addr() const { return addr_; }
-  inline int length() const { return length_; }
-  inline int lkey() const { return lkey_; }
+  int Dump() const;
+
+  DatanodeInfo *datanode() const { return datanode_info_; }
+  unsigned long long lba() const { return lba_; }
+  unsigned long long addr() const { return addr_; }
+  int length() const { return length_; }
+  int lkey() const { return lkey_; }
 
 private:
   DatanodeInfo *datanode_info_;

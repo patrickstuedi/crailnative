@@ -28,6 +28,8 @@ using namespace std;
 
 enum class Operation {
   MakeDir = 1,
+  Lookup = 2,
+  Enumerate = 3,
 };
 
 struct Settings {
@@ -42,6 +44,12 @@ struct Settings {
 Operation getOperation(string name) {
   if (name == "MakeDir") {
     return Operation::MakeDir;
+  }
+  if (name == "Lookup") {
+    return Operation::Lookup;
+  }
+  if (name == "Enumerate") {
+    return Operation::Enumerate;
   } else {
     return Operation::MakeDir;
   }
@@ -90,10 +98,11 @@ int main(int argc, char *argv[]) {
 
   if (settings.operation == Operation::MakeDir) {
     benchmark.MakeDir(settings.filename);
+  } else if (settings.operation == Operation::Lookup) {
+    benchmark.Lookup(settings.filename);
+  } else if (settings.operation == Operation::Enumerate) {
+    benchmark.Enumerate(settings.filename);
   }
-
-  while (true)
-    ;
 
   return 0;
 }

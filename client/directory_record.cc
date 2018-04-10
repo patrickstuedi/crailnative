@@ -4,6 +4,10 @@
 
 using namespace std;
 
+DirectoryRecord::DirectoryRecord() : valid_(-1) {
+  this->name_ = make_unique<string>("");
+}
+
 DirectoryRecord::DirectoryRecord(int valid, string &name)
     : valid_(valid), name_(new string(name)) {}
 
@@ -20,9 +24,9 @@ int DirectoryRecord::Write(ByteBuffer &buf) const {
 int DirectoryRecord::Update(ByteBuffer &buf) {
   this->valid_ = buf.GetInt();
   int _length = buf.GetInt();
-  char _tmp[_length];
+  char _tmp[_length + 1];
   buf.GetBytes(_tmp, _length);
-  _tmp[_length - 1] = '\0';
+  _tmp[_length] = '\0';
   name_.reset(new string(_tmp));
   return Size();
 }

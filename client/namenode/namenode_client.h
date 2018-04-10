@@ -25,6 +25,7 @@
 
 #include "create_response.h"
 #include "getblock_response.h"
+#include "lookup_response.h"
 #include "metadata/filename.h"
 #include "rpc/rpc_client.h"
 
@@ -35,6 +36,7 @@ public:
 
   shared_ptr<CreateResponse> Create(Filename &name, int type, int storage_class,
                                     int location_class, int enumerable);
+  shared_ptr<LookupResponse> Lookup(Filename &name);
   shared_ptr<GetblockResponse> GetBlock(long long fd, long long token,
                                         long long position, long long capacity);
 

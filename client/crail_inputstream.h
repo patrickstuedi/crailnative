@@ -20,12 +20,27 @@
 #ifndef CRAIL_INPUTSTREAM_H
 #define CRAIL_INPUTSTREAM_H
 
+#include <memory>
+
+#include "common/byte_buffer.h"
+#include "namenode/namenode_client.h"
+
 class CrailInputstream {
 public:
-  CrailInputstream();
+  CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
+                   shared_ptr<FileInfo> file_info, int position);
   virtual ~CrailInputstream();
 
+  int Read(shared_ptr<ByteBuffer> buf);
+  int Close();
+
+  int position() const { return position_; }
+  int capacity() const { return file_info_->capacity(); }
+
 private:
+  shared_ptr<FileInfo> file_info_;
+  shared_ptr<NamenodeClient> namenode_client_;
+  int position_;
 };
 
 #endif /* CRAIL_INPUTSTREAM_H */

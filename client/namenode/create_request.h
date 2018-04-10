@@ -20,6 +20,7 @@
 #ifndef CREATEREQUEST_H
 #define CREATEREQUEST_H
 
+#include <memory>
 #include <string>
 
 #include "common/byte_buffer.h"
@@ -38,10 +39,11 @@ public:
                 int enumerable);
   virtual ~Createrequest();
 
-  Serializable *Header() { return this; }
-  ByteBuffer *Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  int Size() const;
+  int Size() const {
+    return NamenodeRequest::Size() + filename_.Size() + 4 * sizeof(int);
+  }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 

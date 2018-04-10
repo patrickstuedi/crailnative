@@ -34,6 +34,8 @@ public:
   int Initialize(string address, int port);
 
   int MakeDir(string name);
+  int Lookup(string name);
+  int Enumerate(string name);
   int PutFile(string local_file, string dst_file);
   int GetFile(string src_file, string local_file);
   int DeleteFile(string file);

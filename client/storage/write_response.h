@@ -20,16 +20,19 @@
 #ifndef WRITE_RESPONSE_H
 #define WRITE_RESPONSE_H
 
+#include <memory>
+
 #include "rpc/rpc_message.h"
 #include "storage_response.h"
+
+using namespace std;
 
 class WriteResponse : public StorageResponse, public RpcMessage {
 public:
   WriteResponse();
   virtual ~WriteResponse();
 
-  Serializable *Header() { return this; }
-  ByteBuffer *Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const { return sizeof(int); }
   int Write(ByteBuffer &buf) const;

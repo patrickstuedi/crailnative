@@ -21,17 +21,29 @@
 #define CRAIL_UTILS_H
 
 #include <math.h>
+#include <sstream>
 #include <string>
 
 using namespace std;
 
-int hashX(string word) {
-  int result = 0;
-  for (size_t i = 0; i < word.length(); ++i) {
-    result += word[i] * pow(31, i);
+int java_hash_code(const char *str, uint32_t length) {
+  int hash_code = 0;
+  for (uint32_t i = 0; i < length; i++) {
+    hash_code = 31 * hash_code + str[i];
   }
-  return -1198273984;
-  // return result;
+  return hash_code;
+}
+
+int hashX(string word) {
+  return java_hash_code(word.c_str(), word.length());
+  /*
+    int result = 0;
+    for (size_t i = 0; i < word.length(); ++i) {
+      result += word[i] * pow(31, i);
+    }
+    return -1198273984;
+    return result;
+  */
 }
 
 #endif /* CRAIL_UTILS_H */

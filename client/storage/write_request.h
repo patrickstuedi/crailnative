@@ -36,8 +36,7 @@ public:
                shared_ptr<ByteBuffer> buf);
   virtual ~WriteRequest();
 
-  Serializable *Header() { return this; }
-  ByteBuffer *Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return buf_; }
 
   int Size() const {
     return StorageRequest::Size() + sizeof(int) + sizeof(long long) +

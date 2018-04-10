@@ -30,6 +30,7 @@ using namespace std;
 
 class DirectoryRecord : public Serializable {
 public:
+  DirectoryRecord();
   DirectoryRecord(int valid, string &name);
   virtual ~DirectoryRecord();
 

@@ -11,10 +11,6 @@ Createrequest::Createrequest(Filename &name, int type, int storage_class,
 
 Createrequest::~Createrequest() {}
 
-int Createrequest::Size() const {
-  return NamenodeRequest::Size() + filename_.Size() + 4 * sizeof(int);
-}
-
 int Createrequest::Write(ByteBuffer &buf) const {
   NamenodeRequest::Write(buf);
 

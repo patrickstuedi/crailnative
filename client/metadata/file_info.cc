@@ -29,3 +29,9 @@ int FileInfo::Update(ByteBuffer &buf) {
 
   return 0;
 }
+
+int FileInfo::Dump() const {
+  cout << "fd " << fd_ << ", capacity " << capacity_ << ", type " << node_type_
+       << endl;
+  return 0;
+}

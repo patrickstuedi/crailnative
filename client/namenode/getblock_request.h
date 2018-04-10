@@ -20,6 +20,8 @@
 #ifndef GETBLOCK_REQUEST_H
 #define GETBLOCK_REQUEST_H
 
+#include <memory>
+
 #include "common/byte_buffer.h"
 #include "namenode_request.h"
 #include "rpc/rpc_client.h"
@@ -30,8 +32,7 @@ public:
                   long long capacity);
   virtual ~GetblockRequest();
 
-  Serializable *Header() { return this; }
-  ByteBuffer *Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const { return NamenodeRequest::Size() + sizeof(long long) * 4; };
   int Write(ByteBuffer &buf) const;

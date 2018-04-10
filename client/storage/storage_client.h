@@ -31,6 +31,7 @@ public:
   virtual ~StorageClient();
 
   int WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
+  int ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 
 private:
 };

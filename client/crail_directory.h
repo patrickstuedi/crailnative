@@ -17,34 +17,23 @@
 * limitations under the License.
 */
 
-#include <memory>
-#include <string>
+#ifndef CRAIL_DIRECTORY_H
+#define CRAIL_DIRECTORY_H
 
-#include "crail_inputstream.h"
 #include "crail_node.h"
-#include "crail_outputstream.h"
+#include "metadata/file_info.h"
 #include "namenode/namenode_client.h"
 
-using namespace std;
-
-namespace crail {
-
-enum class FileType { File = 0, Directory = 1 };
-
-class CrailStore {
+class CrailDirectory : public CrailNode {
 public:
-  CrailStore();
-  virtual ~CrailStore();
+  CrailDirectory(shared_ptr<FileInfo> file_info,
+                 shared_ptr<NamenodeClient> namenode_client);
+  virtual ~CrailDirectory();
 
-  int Initialize(string address, int port);
-
-  unique_ptr<CrailNode> Create(string &name, FileType type);
-  unique_ptr<CrailNode> Lookup(string &name);
-  int Remove(string &name);
+  int Enumerate();
 
 private:
-  unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
-
   shared_ptr<NamenodeClient> namenode_client_;
 };
-} // crail
+
+#endif /* CRAIL_DIRECTORY_H */

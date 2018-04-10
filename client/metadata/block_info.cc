@@ -1,5 +1,7 @@
 #include "block_info.h"
 
+#include <iostream>
+
 BlockInfo::BlockInfo() { this->datanode_info_ = new DatanodeInfo(); }
 
 BlockInfo::~BlockInfo() { delete datanode_info_; }
@@ -21,5 +23,12 @@ int BlockInfo::Update(ByteBuffer &buf) {
   length_ = buf.GetInt();
   lkey_ = buf.GetInt();
 
+  return 0;
+}
+
+int BlockInfo::Dump() const {
+  datanode_info_->Dump();
+  cout << "lba " << lba_ << ", addr " << addr_ << ", length_ " << length_
+       << ", lkey " << lkey_ << endl;
   return 0;
 }

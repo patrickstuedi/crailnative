@@ -17,34 +17,36 @@
 * limitations under the License.
 */
 
-#include <memory>
+#ifndef LOOKUP_REQUEST_H
+#define LOOKUP_REQUEST_H
+
 #include <string>
 
-#include "crail_inputstream.h"
-#include "crail_node.h"
-#include "crail_outputstream.h"
-#include "namenode/namenode_client.h"
+#include "metadata/filename.h"
+#include "namenode_request.h"
+#include "rpc/rpc_message.h"
 
 using namespace std;
 
-namespace crail {
-
-enum class FileType { File = 0, Directory = 1 };
-
-class CrailStore {
+class LookupRequest : public NamenodeRequest, public RpcMessage {
 public:
-  CrailStore();
-  virtual ~CrailStore();
+  LookupRequest(Filename &name);
+  virtual ~LookupRequest();
 
-  int Initialize(string address, int port);
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  unique_ptr<CrailNode> Create(string &name, FileType type);
-  unique_ptr<CrailNode> Lookup(string &name);
-  int Remove(string &name);
+  int Size() const {
+    return NamenodeRequest::Size() + filename_.Size() + sizeof(int);
+  }
+  int Write(ByteBuffer &buf) const;
+  int Update(ByteBuffer &buf);
+
+  const Filename &filename() const { return filename_; }
+  bool writeable() const { return writeable_; }
 
 private:
-  unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
-
-  shared_ptr<NamenodeClient> namenode_client_;
+  Filename filename_;
+  bool writeable_;
 };
-} // crail
+
+#endif /* LOOKUP_REQUEST_H */

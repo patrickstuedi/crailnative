@@ -31,6 +31,9 @@ public:
   int Update(ByteBuffer &buf);
   int Size() const { return sizeof(int) * 2; }
 
+  int error() const { return error_; }
+  int type() const { return type_; }
+
 private:
   int error_;
   int type_;

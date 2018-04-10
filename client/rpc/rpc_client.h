@@ -52,8 +52,9 @@ public:
   const int kRpcHeader = 4;
 
   int Connect(int address, int port);
-  int issueRequest(RpcMessage &request, shared_ptr<RpcMessage> response);
-  int pollResponse();
+  int IssueRequest(RpcMessage &request, shared_ptr<RpcMessage> response);
+  int PollResponse();
+  int Close();
 
 private:
   int SendBytes(unsigned char *buf, int size);
@@ -65,6 +66,7 @@ private:
   int socket_;
   atomic<unsigned long long> counter_;
   unordered_map<long long, shared_ptr<RpcMessage>> responseMap;
+  bool isConnected;
 };
 }
 

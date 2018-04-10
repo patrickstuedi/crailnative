@@ -17,34 +17,35 @@
 * limitations under the License.
 */
 
+#ifndef LOOKUP_RESPONSE_H
+#define LOOKUP_RESPONSE_H
+
 #include <memory>
-#include <string>
 
-#include "crail_inputstream.h"
-#include "crail_node.h"
-#include "crail_outputstream.h"
-#include "namenode/namenode_client.h"
+#include "metadata/block_info.h"
+#include "metadata/file_info.h"
+#include "namenode_response.h"
+#include "rpc/rpc_message.h"
 
-using namespace std;
-
-namespace crail {
-
-enum class FileType { File = 0, Directory = 1 };
-
-class CrailStore {
+class LookupResponse : public NamenodeResponse, public RpcMessage {
 public:
-  CrailStore();
-  virtual ~CrailStore();
+  LookupResponse();
+  virtual ~LookupResponse();
 
-  int Initialize(string address, int port);
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  unique_ptr<CrailNode> Create(string &name, FileType type);
-  unique_ptr<CrailNode> Lookup(string &name);
-  int Remove(string &name);
+  int Size() const {
+    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
+  }
+  int Write(ByteBuffer &buf) const;
+  int Update(ByteBuffer &buf);
+
+  shared_ptr<FileInfo> file() const { return file_info_; }
+  shared_ptr<BlockInfo> file_block() const { return block_info_; }
 
 private:
-  unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
-
-  shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<FileInfo> file_info_;
+  shared_ptr<BlockInfo> block_info_;
 };
-} // crail
+
+#endif /* LOOKUP_RESPONSE_H */

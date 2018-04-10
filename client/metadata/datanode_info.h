@@ -33,9 +33,11 @@ public:
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  inline int Size() const {
+  int Size() const {
     return sizeof(int) * 3 + sizeof(unsigned char) * 4 + sizeof(int);
   }
+
+  int Dump() const;
 
   int storage_type() const { return storage_type_; }
   int storage_class() const { return storage_class_; }
