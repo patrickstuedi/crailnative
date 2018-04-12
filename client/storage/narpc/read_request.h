@@ -17,35 +17,35 @@
 * limitations under the License.
 */
 
-#ifndef LOOKUP_RESPONSE_H
-#define LOOKUP_RESPONSE_H
+#ifndef READ_REQUEST_H
+#define READ_REQUEST_H
 
 #include <memory>
+#include <vector>
 
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_message.h"
+#include "common/byte_buffer.h"
+#include "common/serializable.h"
+#include "narpc/rpc_client.h"
+#include "storage_request.h"
 
-class LookupResponse : public NamenodeResponse, public RpcMessage {
+class ReadRequest : public StorageRequest, public RpcMessage {
 public:
-  LookupResponse();
-  virtual ~LookupResponse();
+  ReadRequest(int key, long long address, int length);
+  virtual ~ReadRequest();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
+    return StorageRequest::Size() + sizeof(int) + sizeof(long long) +
+           sizeof(int) * 2;
   }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<BlockInfo> file_block() const { return block_info_; }
-
 private:
-  shared_ptr<FileInfo> file_info_;
-  shared_ptr<BlockInfo> block_info_;
+  int key_;
+  long long address_;
+  int length_;
 };
 
-#endif /* LOOKUP_RESPONSE_H */
+#endif /* READ_REQUEST_H */

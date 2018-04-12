@@ -26,13 +26,15 @@
 #include "crail_node.h"
 #include "crail_outputstream.h"
 #include "metadata/file_info.h"
+#include "storage/storage_cache.h"
 
 using namespace std;
 
 class CrailFile : public CrailNode {
 public:
   CrailFile(shared_ptr<FileInfo> file_info,
-            shared_ptr<NamenodeClient> namenode_client);
+            shared_ptr<NamenodeClient> namenode_client,
+            shared_ptr<StorageCache> storage_cache);
   virtual ~CrailFile();
 
   unique_ptr<CrailOutputstream> outputstream();
@@ -40,6 +42,7 @@ public:
 
 private:
   shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<StorageCache> storage_cache_;
 };
 
 #endif /* CRAIL_FILE_H */

@@ -17,35 +17,30 @@
 * limitations under the License.
 */
 
-#ifndef READ_REQUEST_H
-#define READ_REQUEST_H
+#ifndef READ_RESPONSE_H
+#define READ_RESPONSE_H
 
 #include <memory>
-#include <vector>
 
-#include "common/byte_buffer.h"
-#include "common/serializable.h"
-#include "rpc/rpc_client.h"
-#include "storage_request.h"
+#include "narpc/rpc_message.h"
+#include "storage_response.h"
 
-class ReadRequest : public StorageRequest, public RpcMessage {
+using namespace std;
+
+class ReadResponse : public StorageResponse, public RpcMessage {
 public:
-  ReadRequest(int key, long long address, int length);
-  virtual ~ReadRequest();
+  ReadResponse(shared_ptr<ByteBuffer> payload);
+  virtual ~ReadResponse();
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return payload_; }
 
-  int Size() const {
-    return StorageRequest::Size() + sizeof(int) + sizeof(long long) +
-           sizeof(int) * 2;
-  }
+  int Size() const { return length_; }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
 private:
-  int key_;
-  long long address_;
   int length_;
+  shared_ptr<ByteBuffer> payload_;
 };
 
-#endif /* READ_REQUEST_H */
+#endif /* READ_RESPONSE_H */

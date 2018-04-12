@@ -37,7 +37,7 @@
 using namespace std;
 using namespace crail;
 
-RpcClient::RpcClient() : isConnected(false) {
+RpcClient::RpcClient() : isConnected(false), buf_(1024) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
   this->counter_ = 1;
 }
@@ -46,7 +46,7 @@ RpcClient::~RpcClient() { Close(); }
 
 int RpcClient::Connect(int address, int port) {
   if (isConnected) {
-    return -1;
+    return 0;
   }
 
   struct sockaddr_in addr_;
@@ -86,16 +86,16 @@ int RpcClient::IssueRequest(RpcMessage &request,
                             shared_ptr<RpcMessage> response) {
   unsigned long long ticket = counter_++;
   responseMap.insert({ticket, response});
-  ByteBuffer buf(1024);
+  buf_.Clear();
 
   // narpc header (size, ticket)
-  AddNaRPCHeader(buf, request.Size(), ticket);
+  AddNaRPCHeader(buf_, request.Size(), ticket);
   // create file request
-  request.Write(buf);
+  request.Write(buf_);
 
   // issue request
-  buf.Flip();
-  if (SendBytes(buf.get_bytes(), buf.remaining()) < 0) {
+  buf_.Flip();
+  if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
     return -1;
   }
 
@@ -110,15 +110,15 @@ int RpcClient::IssueRequest(RpcMessage &request,
 
 int RpcClient::PollResponse() {
   // recv resp header
-  ByteBuffer buf(256);
-  buf.Clear();
-  if (RecvBytes(buf.get_bytes(), kNarpcHeader) < 0) {
+  buf_.Clear();
+  if (RecvBytes(buf_.get_bytes(), kNarpcHeader) < 0) {
     return -1;
   }
-  int size = buf.GetInt();
-  long long ticket = buf.GetLong();
+  int size = buf_.GetInt();
+  long long ticket = buf_.GetLong();
 
   shared_ptr<RpcMessage> response = responseMap[ticket];
+  responseMap.erase(ticket);
 
   shared_ptr<ByteBuffer> payload = response->Payload();
   int payload_size = 0;
@@ -127,13 +127,13 @@ int RpcClient::PollResponse() {
   }
 
   // recv resp obj
-  buf.Clear();
+  buf_.Clear();
   int header_size = size - payload_size;
-  if (RecvBytes(buf.get_bytes(), header_size) < 0) {
+  if (RecvBytes(buf_.get_bytes(), header_size) < 0) {
     return -1;
   }
 
-  response->Update(buf);
+  response->Update(buf_);
 
   if (payload) {
     if (RecvBytes(payload->get_bytes(), payload->remaining()) < 0) {

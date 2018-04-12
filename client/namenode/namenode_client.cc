@@ -17,6 +17,9 @@
 #include "getblock_request.h"
 #include "getblock_response.h"
 #include "lookup_request.h"
+#include "remove_request.h"
+#include "setfile_request.h"
+#include "void_response.h"
 
 NamenodeClient::NamenodeClient() { this->counter_ = 1; }
 
@@ -54,4 +57,24 @@ shared_ptr<GetblockResponse> NamenodeClient::GetBlock(long long fd,
   while (RpcClient::PollResponse() < 0)
     ;
   return getblockRes;
+}
+
+shared_ptr<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
+                                                 bool close) {
+  SetfileRequest setfileReq(file_info, close);
+  shared_ptr<VoidResponse> setfileRes = make_shared<VoidResponse>();
+  RpcClient::IssueRequest(setfileReq, setfileRes);
+  while (RpcClient::PollResponse() < 0)
+    ;
+  return setfileRes;
+}
+
+shared_ptr<RemoveResponse> NamenodeClient::Remove(Filename &name,
+                                                  bool recursive) {
+  RemoveRequest removeReq(name, recursive);
+  shared_ptr<RemoveResponse> removeRes = make_shared<RemoveResponse>();
+  RpcClient::IssueRequest(removeReq, removeRes);
+  while (RpcClient::PollResponse() < 0)
+    ;
+  return removeRes;
 }

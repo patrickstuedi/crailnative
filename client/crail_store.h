@@ -24,6 +24,7 @@
 #include "crail_node.h"
 #include "crail_outputstream.h"
 #include "namenode/namenode_client.h"
+#include "storage/storage_cache.h"
 
 using namespace std;
 
@@ -40,11 +41,12 @@ public:
 
   unique_ptr<CrailNode> Create(string &name, FileType type);
   unique_ptr<CrailNode> Lookup(string &name);
-  int Remove(string &name);
+  int Remove(string &name, bool recursive);
 
 private:
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
 
   shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<StorageCache> storage_cache_;
 };
 } // crail

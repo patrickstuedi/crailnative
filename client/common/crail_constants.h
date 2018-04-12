@@ -26,10 +26,9 @@ using namespace std;
 
 namespace crail {
 
-const int kNamenodePort = 9060;
-// const string kNamenodeAddr = "9.4.69.142";
-const string kNamenodeAddr = "192.168.1.106";
 const int kDirectoryDepth = 16;
+const int kBlockSize = 4096;
+const int kBufferSize = 1048576;
 }
 
 #endif /* CRAIL_CONSTANTS_H */

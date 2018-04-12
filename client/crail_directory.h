@@ -23,17 +23,20 @@
 #include "crail_node.h"
 #include "metadata/file_info.h"
 #include "namenode/namenode_client.h"
+#include "storage/storage_cache.h"
 
 class CrailDirectory : public CrailNode {
 public:
   CrailDirectory(shared_ptr<FileInfo> file_info,
-                 shared_ptr<NamenodeClient> namenode_client);
+                 shared_ptr<NamenodeClient> namenode_client,
+                 shared_ptr<StorageCache> storage_cache);
   virtual ~CrailDirectory();
 
   int Enumerate();
 
 private:
   shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<StorageCache> storage_cache_;
 };
 
 #endif /* CRAIL_DIRECTORY_H */

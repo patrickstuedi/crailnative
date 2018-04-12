@@ -17,35 +17,29 @@
 * limitations under the License.
 */
 
-#ifndef LOOKUP_RESPONSE_H
-#define LOOKUP_RESPONSE_H
+#ifndef WRITE_RESPONSE_H
+#define WRITE_RESPONSE_H
 
 #include <memory>
 
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
 #include "narpc/rpc_message.h"
+#include "storage_response.h"
 
-class LookupResponse : public NamenodeResponse, public RpcMessage {
+using namespace std;
+
+class WriteResponse : public StorageResponse, public RpcMessage {
 public:
-  LookupResponse();
-  virtual ~LookupResponse();
+  WriteResponse();
+  virtual ~WriteResponse();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
-  }
+  int Size() const { return sizeof(int); }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<BlockInfo> file_block() const { return block_info_; }
-
 private:
-  shared_ptr<FileInfo> file_info_;
-  shared_ptr<BlockInfo> block_info_;
+  int ret_;
 };
 
-#endif /* LOOKUP_RESPONSE_H */
+#endif /* WRITE_RESPONSE_H */

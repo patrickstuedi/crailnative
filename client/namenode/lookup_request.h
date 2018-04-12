@@ -24,7 +24,7 @@
 
 #include "metadata/filename.h"
 #include "namenode_request.h"
-#include "rpc/rpc_message.h"
+#include "narpc/rpc_message.h"
 
 using namespace std;
 

@@ -38,6 +38,7 @@ public:
   }
 
   int Dump() const;
+  long long Key() const;
 
   int storage_type() const { return storage_type_; }
   int storage_class() const { return storage_class_; }

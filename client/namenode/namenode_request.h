@@ -25,8 +25,20 @@
 
 using namespace crail;
 
-enum class RpcCommand : short { Create = 1, Lookup = 2, Getblock = 6 };
-enum class RequestType : short { Create = 1, Lookup = 2, Getblock = 6 };
+enum class RpcCommand : short {
+  Create = 1,
+  Lookup = 2,
+  Setfile = 3,
+  Removefile = 4,
+  Getblock = 6,
+};
+enum class RequestType : short {
+  Create = 1,
+  Lookup = 2,
+  Setfile = 3,
+  Removefile = 4,
+  Getblock = 6
+};
 
 class NamenodeRequest : public Serializable {
 public:

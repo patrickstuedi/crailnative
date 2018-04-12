@@ -58,6 +58,7 @@ public:
   int position() const { return position_; }
   void set_position(int new_position) { this->position_ = new_position; }
   int limit() const { return limit_; }
+  void set_limit(int new_limit) { this->limit_ = new_limit; }
   int remaining() const { return limit_ - position_; }
   unsigned char *get_bytes() const { return buf_ + position_; }
 

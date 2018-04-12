@@ -17,35 +17,34 @@
 * limitations under the License.
 */
 
-#ifndef LOOKUP_RESPONSE_H
-#define LOOKUP_RESPONSE_H
+#ifndef REMOVE_REQUEST_H
+#define REMOVE_REQUEST_H
 
-#include <memory>
+#include <string>
 
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
+#include "metadata/filename.h"
+#include "namenode_request.h"
 #include "narpc/rpc_message.h"
 
-class LookupResponse : public NamenodeResponse, public RpcMessage {
+class RemoveRequest : public NamenodeRequest, public RpcMessage {
 public:
-  LookupResponse();
-  virtual ~LookupResponse();
+  RemoveRequest(Filename &name, bool recursive);
+  virtual ~RemoveRequest();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
+    return NamenodeRequest::Size() + filename_.Size() + sizeof(int);
   }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<BlockInfo> file_block() const { return block_info_; }
+  const Filename &filename() const { return filename_; }
+  bool recursive() const { return recursive_; }
 
 private:
-  shared_ptr<FileInfo> file_info_;
-  shared_ptr<BlockInfo> block_info_;
+  Filename filename_;
+  bool recursive_;
 };
 
-#endif /* LOOKUP_RESPONSE_H */
+#endif /* REMOVE_REQUEST_H */

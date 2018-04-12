@@ -23,17 +23,16 @@
 #include <memory>
 
 #include "common/byte_buffer.h"
-#include "rpc/rpc_client.h"
 
-class StorageClient : public RpcClient {
+using namespace crail;
+
+class StorageClient {
 public:
-  StorageClient();
-  virtual ~StorageClient();
-
-  int WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
-  int ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
-
-private:
+  virtual int Connect(int address, int port) = 0;
+  virtual int WriteData(int key, long long address,
+                        shared_ptr<ByteBuffer> buf) = 0;
+  virtual int ReadData(int key, long long address,
+                       shared_ptr<ByteBuffer> buf) = 0;
 };
 
 #endif /* STORAGE_CLIENT_H */

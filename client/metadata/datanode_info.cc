@@ -49,3 +49,8 @@ int DatanodeInfo::Dump() const {
   cout << "address " << make_address(ip_address_, port_).c_str();
   return 0;
 }
+
+long long DatanodeInfo::Key() const {
+  long long key = (((long)ip_address_) << 32) | (port_ & 0xffffffffL);
+  return key;
+}

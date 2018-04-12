@@ -1,0 +1,6 @@
+set(CMAKE_CXX_FLAGS "-std=c++11 -g")
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${PROJECT_SOURCE_DIR})
+add_executable(pshell pshell.cc)
+target_link_libraries (pshell LINK_PUBLIC pocket)
+install(TARGETS pshell DESTINATION /bin)

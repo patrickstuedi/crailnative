@@ -26,7 +26,7 @@
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
-#include "rpc/rpc_message.h"
+#include "narpc/rpc_message.h"
 
 using namespace std;
 

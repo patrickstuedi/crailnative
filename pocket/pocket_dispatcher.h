@@ -26,10 +26,10 @@
 
 using namespace std;
 
-class CrailDispatcher {
+class PocketDispatcher {
 public:
-  CrailDispatcher();
-  virtual ~CrailDispatcher();
+  PocketDispatcher();
+  virtual ~PocketDispatcher();
 
   int Initialize(string address, int port);
 

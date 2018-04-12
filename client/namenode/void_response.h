@@ -17,8 +17,8 @@
 * limitations under the License.
 */
 
-#ifndef LOOKUP_RESPONSE_H
-#define LOOKUP_RESPONSE_H
+#ifndef VOID_RESPONSE_H
+#define VOID_RESPONSE_H
 
 #include <memory>
 
@@ -27,25 +27,19 @@
 #include "namenode_response.h"
 #include "narpc/rpc_message.h"
 
-class LookupResponse : public NamenodeResponse, public RpcMessage {
+class VoidResponse : public NamenodeResponse, public RpcMessage {
 public:
-  LookupResponse();
-  virtual ~LookupResponse();
+  VoidResponse();
+  virtual ~VoidResponse();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
-  }
+  int Size() const { return NamenodeResponse::Size() + sizeof(error_); }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<BlockInfo> file_block() const { return block_info_; }
-
 private:
-  shared_ptr<FileInfo> file_info_;
-  shared_ptr<BlockInfo> block_info_;
+  short error_;
 };
 
-#endif /* LOOKUP_RESPONSE_H */
+#endif /* VOID_RESPONSE_H */

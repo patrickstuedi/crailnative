@@ -9,7 +9,8 @@ add_library (cppcrail SHARED
 	crail_inputstream.cc
 	directory_record.cc
 	common/byte_buffer.cc
-	rpc/rpc_client.cc
+	common/crail_utils.cc
+	narpc/rpc_client.cc
 	namenode/namenode_request.cc
 	namenode/namenode_response.cc
 	namenode/create_request.cc
@@ -18,14 +19,19 @@ add_library (cppcrail SHARED
 	namenode/lookup_response.cc
 	namenode/getblock_request.cc
 	namenode/getblock_response.cc
+	namenode/setfile_request.cc
+	namenode/void_response.cc
+	namenode/remove_request.cc
+	namenode/remove_response.cc
 	namenode/namenode_client.cc
-	storage/storage_client.cc
-	storage/storage_request.cc
-	storage/storage_response.cc
-	storage/write_request.cc
-	storage/write_response.cc
-	storage/read_request.cc
-	storage/read_response.cc
+	storage/storage_cache.cc
+	storage/narpc/narpc_storage_client.cc
+	storage/narpc/storage_request.cc
+	storage/narpc/storage_response.cc
+	storage/narpc/write_request.cc
+	storage/narpc/write_response.cc
+	storage/narpc/read_request.cc
+	storage/narpc/read_response.cc
 	metadata/filename.cc
 	metadata/file_info.cc
 	metadata/datanode_info.cc

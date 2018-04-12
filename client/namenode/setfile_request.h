@@ -17,35 +17,37 @@
 * limitations under the License.
 */
 
-#ifndef LOOKUP_RESPONSE_H
-#define LOOKUP_RESPONSE_H
+#ifndef SETFILE_REQUEST_H
+#define SETFILE_REQUEST_H
 
 #include <memory>
+#include <string>
 
-#include "metadata/block_info.h"
+#include "common/byte_buffer.h"
+#include "common/serializable.h"
 #include "metadata/file_info.h"
-#include "namenode_response.h"
+#include "metadata/filename.h"
+#include "namenode_request.h"
 #include "narpc/rpc_message.h"
 
-class LookupResponse : public NamenodeResponse, public RpcMessage {
+class SetfileRequest : public NamenodeRequest, public RpcMessage {
 public:
-  LookupResponse();
-  virtual ~LookupResponse();
+  SetfileRequest(shared_ptr<FileInfo> file_info, bool close);
+  virtual ~SetfileRequest();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
+    return NamenodeRequest::Size() + file_info_->Size() + sizeof(int);
   }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<BlockInfo> file_block() const { return block_info_; }
+  const shared_ptr<FileInfo> file_info() const { return file_info_; }
 
 private:
   shared_ptr<FileInfo> file_info_;
-  shared_ptr<BlockInfo> block_info_;
+  bool close_;
 };
 
-#endif /* LOOKUP_RESPONSE_H */
+#endif /* SETFILE_REQUEST_H */

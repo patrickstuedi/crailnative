@@ -24,6 +24,7 @@
 
 #include "common/byte_buffer.h"
 #include "namenode/namenode_client.h"
+#include "storage/storage_cache.h"
 
 using namespace crail;
 using namespace std;
@@ -31,6 +32,7 @@ using namespace std;
 class CrailOutputstream {
 public:
   CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
+                    shared_ptr<StorageCache> storage_cache,
                     shared_ptr<FileInfo> file_info, int position);
   virtual ~CrailOutputstream();
 
@@ -43,6 +45,7 @@ public:
 private:
   shared_ptr<FileInfo> file_info_;
   shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<StorageCache> storage_cache_;
   int position_;
 };
 

@@ -31,13 +31,15 @@
 #include "crail_file.h"
 #include "directory_record.h"
 #include "metadata/filename.h"
+#include "storage/narpc/write_request.h"
+#include "storage/narpc/write_response.h"
 #include "storage/storage_client.h"
-#include "storage/write_request.h"
-#include "storage/write_response.h"
 
 using namespace crail;
 
-CrailStore::CrailStore() : namenode_client_(new NamenodeClient()) {}
+CrailStore::CrailStore()
+    : namenode_client_(new NamenodeClient()),
+      storage_cache_(new StorageCache()) {}
 
 CrailStore::~CrailStore() {}
 
@@ -52,7 +54,7 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type) {
 
   if (create_res->file()->dir_offset() >= 0) {
     auto directory_stream = make_unique<CrailOutputstream>(
-        this->namenode_client_, create_res->parent(),
+        this->namenode_client_, storage_cache_, create_res->parent(),
         create_res->file()->dir_offset());
     string fname = filename.name();
     DirectoryRecord record(1, fname);
@@ -74,13 +76,29 @@ unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
   return DispatchType(file_info);
 }
 
-int CrailStore::Remove(string &name) { return 0; }
+int CrailStore::Remove(string &name, bool recursive) {
+  Filename filename(name);
+  auto remove_res = namenode_client_->Remove(filename, recursive);
+
+  auto directory_stream = make_unique<CrailOutputstream>(
+      this->namenode_client_, storage_cache_, remove_res->parent(),
+      remove_res->file()->dir_offset());
+  string fname = filename.name();
+  DirectoryRecord record(0, fname);
+  shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(1024);
+  record.Write(*buf);
+  buf->Flip();
+  directory_stream->Write(buf);
+
+  return 0;
+}
 
 unique_ptr<CrailNode> CrailStore::DispatchType(shared_ptr<FileInfo> file_info) {
   if (file_info->type() == static_cast<int>(FileType::File)) {
-    return make_unique<CrailFile>(file_info, namenode_client_);
+    return make_unique<CrailFile>(file_info, namenode_client_, storage_cache_);
   } else if (file_info->type() == static_cast<int>(FileType::Directory)) {
-    return make_unique<CrailDirectory>(file_info, namenode_client_);
+    return make_unique<CrailDirectory>(file_info, namenode_client_,
+                                       storage_cache_);
   } else {
     return nullptr;
   }

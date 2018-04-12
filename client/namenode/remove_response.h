@@ -17,35 +17,34 @@
 * limitations under the License.
 */
 
-#ifndef LOOKUP_RESPONSE_H
-#define LOOKUP_RESPONSE_H
+#ifndef REMOVE_RESPONSE_H
+#define REMOVE_RESPONSE_H
 
 #include <memory>
 
+#include "common/serializable.h"
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
 #include "narpc/rpc_message.h"
 
-class LookupResponse : public NamenodeResponse, public RpcMessage {
+class RemoveResponse : public NamenodeResponse, public RpcMessage {
 public:
-  LookupResponse();
-  virtual ~LookupResponse();
+  RemoveResponse();
+  virtual ~RemoveResponse();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
-  }
+  int Size() const { return NamenodeResponse::Size() + file_info_->Size() * 2; }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
   shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<BlockInfo> file_block() const { return block_info_; }
+  shared_ptr<FileInfo> parent() const { return parent_info_; }
 
 private:
   shared_ptr<FileInfo> file_info_;
-  shared_ptr<BlockInfo> block_info_;
+  shared_ptr<FileInfo> parent_info_;
 };
 
-#endif /* LOOKUP_RESPONSE_H */
+#endif /* REMOVE_RESPONSE_H */

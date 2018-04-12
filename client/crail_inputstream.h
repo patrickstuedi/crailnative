@@ -24,10 +24,12 @@
 
 #include "common/byte_buffer.h"
 #include "namenode/namenode_client.h"
+#include "storage/storage_cache.h"
 
 class CrailInputstream {
 public:
   CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
+                   shared_ptr<StorageCache> storage_cache,
                    shared_ptr<FileInfo> file_info, int position);
   virtual ~CrailInputstream();
 
@@ -40,6 +42,7 @@ public:
 private:
   shared_ptr<FileInfo> file_info_;
   shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<StorageCache> storage_cache_;
   int position_;
 };
 

@@ -17,29 +17,26 @@
 * limitations under the License.
 */
 
-#ifndef WRITE_RESPONSE_H
-#define WRITE_RESPONSE_H
+#ifndef STORAGE_CACHE_H
+#define STORAGE_CACHE_H
 
+#include "storage_client.h"
+#include <map>
 #include <memory>
 
-#include "rpc/rpc_message.h"
-#include "storage_response.h"
-
 using namespace std;
+using namespace crail;
 
-class WriteResponse : public StorageResponse, public RpcMessage {
+class StorageCache {
 public:
-  WriteResponse();
-  virtual ~WriteResponse();
+  StorageCache();
+  virtual ~StorageCache();
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
-
-  int Size() const { return sizeof(int); }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Put(long long key, shared_ptr<StorageClient> endpoint);
+  shared_ptr<StorageClient> Get(long long key);
 
 private:
-  int ret_;
+  map<long long, shared_ptr<StorageClient>> cache_;
 };
 
-#endif /* WRITE_RESPONSE_H */
+#endif /* STORAGE_CACHE_H */

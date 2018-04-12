@@ -40,7 +40,7 @@ Filename::Filename(string &name) {
     if (token.empty()) {
       continue;
     }
-    components_[index] = hashX(token);
+    components_[index] = file_hash(token);
     name_.push_back(token);
     index++;
   }

@@ -67,6 +67,7 @@ private:
   atomic<unsigned long long> counter_;
   unordered_map<long long, shared_ptr<RpcMessage>> responseMap;
   bool isConnected;
+  ByteBuffer buf_;
 };
 }
 

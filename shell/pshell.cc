@@ -22,7 +22,7 @@
 #include <string>
 #include <unistd.h>
 
-#include "crail_dispatcher.h"
+#include "pocket_dispatcher.h"
 
 using namespace std;
 
@@ -30,6 +30,10 @@ enum class Operation {
   MakeDir = 1,
   Lookup = 2,
   Enumerate = 3,
+  Put = 4,
+  Get = 5,
+  DeleteDir = 6,
+  DeleteFile = 7
 };
 
 struct Settings {
@@ -39,17 +43,24 @@ struct Settings {
   string filename;
   int loop;
   int size;
+  string dstfile;
 };
 
 Operation getOperation(string name) {
   if (name == "MakeDir") {
     return Operation::MakeDir;
-  }
-  if (name == "Lookup") {
+  } else if (name == "Lookup") {
     return Operation::Lookup;
-  }
-  if (name == "Enumerate") {
+  } else if (name == "Enumerate") {
     return Operation::Enumerate;
+  } else if (name == "Put") {
+    return Operation::Put;
+  } else if (name == "Get") {
+    return Operation::Get;
+  } else if (name == "DeleteDir") {
+    return Operation::DeleteDir;
+  } else if (name == "DeleteFile") {
+    return Operation::DeleteFile;
   } else {
     return Operation::MakeDir;
   }
@@ -59,14 +70,15 @@ void printSettings(Settings &settings) {
   cout << "Settings, address " << settings.address << ", port " << settings.port
        << ", operation " << static_cast<int>(settings.operation)
        << ", filename " << settings.filename << ", loop " << settings.loop
-       << ", size " << settings.size << endl;
+       << ", size " << settings.size << ", dstfile " << settings.dstfile
+       << endl;
 }
 
 int main(int argc, char *argv[]) {
   Settings settings;
 
   int opt = 0;
-  while ((opt = getopt(argc, argv, "t:f:k:s:a:p:")) != -1) {
+  while ((opt = getopt(argc, argv, "t:f:k:s:a:p:d:")) != -1) {
     switch (opt) {
     case 't':
       settings.operation = getOperation(optarg);
@@ -85,12 +97,16 @@ int main(int argc, char *argv[]) {
       break;
     case 'p':
       settings.port = atoi(optarg);
+      break;
+    case 'd':
+      settings.dstfile = optarg;
+      break;
     }
   }
 
   printSettings(settings);
 
-  CrailDispatcher benchmark;
+  PocketDispatcher benchmark;
   if (benchmark.Initialize(settings.address, settings.port)) {
     cout << "Cannot initialize benchmark" << endl;
     return -1;
@@ -102,6 +118,14 @@ int main(int argc, char *argv[]) {
     benchmark.Lookup(settings.filename);
   } else if (settings.operation == Operation::Enumerate) {
     benchmark.Enumerate(settings.filename);
+  } else if (settings.operation == Operation::Put) {
+    benchmark.PutFile(settings.filename, settings.dstfile);
+  } else if (settings.operation == Operation::Get) {
+    benchmark.GetFile(settings.filename, settings.dstfile);
+  } else if (settings.operation == Operation::DeleteDir) {
+    benchmark.DeleteDir(settings.filename);
+  } else if (settings.operation == Operation::DeleteFile) {
+    benchmark.DeleteFile(settings.filename);
   }
 
   return 0;

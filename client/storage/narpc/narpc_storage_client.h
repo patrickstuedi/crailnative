@@ -17,39 +17,24 @@
 * limitations under the License.
 */
 
-#ifndef WRITE_REQUEST_H
-#define WRITE_REQUEST_H
+#ifndef NARPC_STORAGE_CLIENT_H
+#define NARPC_STORAGE_CLIENT_H
 
-#include <memory>
-#include <vector>
+#include "narpc/rpc_client.h"
+#include "storage/storage_client.h"
 
-#include "common/byte_buffer.h"
-#include "common/serializable.h"
-#include "rpc/rpc_client.h"
-#include "storage_request.h"
-
-using namespace std;
-
-class WriteRequest : public StorageRequest, public RpcMessage {
+class NarpcStorageClient : public RpcClient, public StorageClient {
 public:
-  WriteRequest(int key, long long address, int length,
-               shared_ptr<ByteBuffer> buf);
-  virtual ~WriteRequest();
+  NarpcStorageClient();
+  virtual ~NarpcStorageClient();
 
-  shared_ptr<ByteBuffer> Payload() { return buf_; }
-
-  int Size() const {
-    return StorageRequest::Size() + sizeof(int) + sizeof(long long) +
-           sizeof(int) * 2 + length_;
+  int Connect(int address, int port) {
+    return RpcClient::Connect(address, port);
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
+  int ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 
 private:
-  int key_;
-  long long address_;
-  int length_;
-  shared_ptr<ByteBuffer> buf_;
 };
 
-#endif /* WRITE_REQUEST_H */
+#endif /* NARPC_STORAGE_CLIENT_H */
