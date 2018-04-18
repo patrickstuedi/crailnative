@@ -24,6 +24,7 @@
 #include <iostream>
 #include <memory>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <string>
 #include <sys/socket.h>
 #include <sys/socket.h>
@@ -48,6 +49,9 @@ int RpcClient::Connect(int address, int port) {
   if (isConnected) {
     return 0;
   }
+
+  int yes = 1;
+  setsockopt(socket_, IPPROTO_TCP, TCP_NODELAY, (char *)&yes, sizeof(int));
 
   struct sockaddr_in addr_;
   addr_.sin_family = AF_INET;
