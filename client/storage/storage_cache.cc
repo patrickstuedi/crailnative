@@ -11,7 +11,7 @@ int StorageCache::Put(long long key, shared_ptr<StorageClient> client) {
   return 0;
 }
 
-shared_ptr<StorageClient> StorageCache::Get(long long key) {
+shared_ptr<StorageClient> StorageCache::Get(long long key, int storage_class) {
   shared_ptr<StorageClient> client = cache_[key];
   if (!client) {
     client = make_shared<NarpcStorageClient>();

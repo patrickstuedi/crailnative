@@ -42,8 +42,8 @@ int CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   int address = block_info->datanode()->addr();
   int port = block_info->datanode()->port();
 
-  shared_ptr<StorageClient> storage_client =
-      storage_cache_->Get(block_info->datanode()->Key());
+  shared_ptr<StorageClient> storage_client = storage_cache_->Get(
+      block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
     return -1;
   }

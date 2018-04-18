@@ -33,7 +33,7 @@ public:
   virtual ~StorageCache();
 
   int Put(long long key, shared_ptr<StorageClient> endpoint);
-  shared_ptr<StorageClient> Get(long long key);
+  shared_ptr<StorageClient> Get(long long key, int storage_class);
 
 private:
   map<long long, shared_ptr<StorageClient>> cache_;
