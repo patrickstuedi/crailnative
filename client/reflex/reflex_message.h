@@ -29,7 +29,29 @@ using namespace std;
 
 class ReflexMessage : public Serializable {
 public:
-  virtual shared_ptr<ByteBuffer> Payload() = 0;
+  ReflexMessage(short magic, short type, long long ticket, long long lba,
+                int count);
+  ~ReflexMessage();
+
+  virtual int Write(ByteBuffer &buf) const = 0;
+  virtual int Update(ByteBuffer &buf) = 0;
+  virtual int Size() const = 0;
+
+  short magic() const { return magic_; }
+  short type() const { return type_; }
+  long long ticket() const { return ticket_; }
+  int count() const { return count_; }
+
+  shared_ptr<ByteBuffer> Payload() { return payload_; };
+
+private:
+  short magic_;
+  short type_;
+  long long ticket_;
+  long long lba_;
+  int count_;
+
+  shared_ptr<ByteBuffer> payload_;
 };
 
 #endif /* REFLEX_MESSAGE_H */
