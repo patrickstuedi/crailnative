@@ -31,11 +31,15 @@ class ReflexMessage : public Serializable {
 public:
   ReflexMessage(short magic, short type, long long ticket, long long lba,
                 int count);
+  ReflexMessage();
   ~ReflexMessage();
 
-  virtual int Write(ByteBuffer &buf) const = 0;
-  virtual int Update(ByteBuffer &buf) = 0;
-  virtual int Size() const = 0;
+  int Write(ByteBuffer &buf) const;
+  int Update(ByteBuffer &buf);
+  int Size() const {
+    return sizeof(magic_) + sizeof(type_) + sizeof(ticket_) + sizeof(lba_) +
+           sizeof(count_);
+  };
 
   short magic() const { return magic_; }
   short type() const { return type_; }

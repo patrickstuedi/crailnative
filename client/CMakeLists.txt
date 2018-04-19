@@ -11,6 +11,7 @@ add_library (cppcrail SHARED
 	common/byte_buffer.cc
 	common/crail_utils.cc
 	reflex/reflex_client.cc
+	reflex/reflex_message.cc
 	narpc/rpc_client.cc
 	namenode/namenode_request.cc
 	namenode/namenode_response.cc
