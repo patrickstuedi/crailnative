@@ -33,6 +33,7 @@ add_library (cppcrail SHARED
 	storage/narpc/write_response.cc
 	storage/narpc/read_request.cc
 	storage/narpc/read_response.cc
+	storage/reflex/reflex_storage_client.cc
 	metadata/filename.cc
 	metadata/file_info.cc
 	metadata/datanode_info.cc
