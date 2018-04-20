@@ -43,6 +43,8 @@ using namespace crail;
 
 namespace crail {
 
+const int kReflexSectorSize = 512;
+
 class ReflexClient {
 public:
   ReflexClient();
