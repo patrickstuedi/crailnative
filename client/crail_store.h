@@ -39,7 +39,7 @@ public:
 
   int Initialize(string address, int port);
 
-  unique_ptr<CrailNode> Create(string &name, FileType type);
+  unique_ptr<CrailNode> Create(string &name, FileType type, bool enumerable);
   unique_ptr<CrailNode> Lookup(string &name);
   int Remove(string &name, bool recursive);
 

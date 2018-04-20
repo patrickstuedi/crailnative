@@ -47,10 +47,12 @@ int CrailStore::Initialize(string address, int port) {
   return this->namenode_client_->Connect((int)inet_addr(address.c_str()), port);
 }
 
-unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type) {
+unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
+                                         bool enumerable) {
   Filename filename(name);
-  auto create_res =
-      namenode_client_->Create(filename, static_cast<int>(type), 0, 0, 1);
+  int _enumerable = enumerable ? 1 : 0;
+  auto create_res = namenode_client_->Create(filename, static_cast<int>(type),
+                                             0, 0, _enumerable);
 
   if (create_res->file()->dir_offset() >= 0) {
     auto directory_stream = make_unique<CrailOutputstream>(

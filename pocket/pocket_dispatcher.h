@@ -36,7 +36,7 @@ public:
   int MakeDir(string name);
   int Lookup(string name);
   int Enumerate(string name);
-  int PutFile(string local_file, string dst_file);
+  int PutFile(string local_file, string dst_file, bool enumerable);
   int GetFile(string src_file, string local_file);
   int DeleteFile(string file);
   int DeleteDir(string directory);

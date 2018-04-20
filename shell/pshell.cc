@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
   } else if (settings.operation == Operation::Enumerate) {
     benchmark.Enumerate(settings.filename);
   } else if (settings.operation == Operation::Put) {
-    benchmark.PutFile(settings.filename, settings.dstfile);
+    benchmark.PutFile(settings.filename, settings.dstfile, true);
   } else if (settings.operation == Operation::Get) {
     benchmark.GetFile(settings.filename, settings.dstfile);
   } else if (settings.operation == Operation::DeleteDir) {
