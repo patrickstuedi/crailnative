@@ -57,23 +57,32 @@ void ByteBuffer::PutBytes(const char value[], int length) {
 
 short ByteBuffer::GetShort() {
   short *_tmp = (short *)get_bytes();
-  short value = ntohs(*_tmp);
-  this->position_ += sizeof(value);
-  return value;
+  this->position_ += sizeof(short);
+  if (order_ == ByteOrder::BigEndian) {
+    return ntohs(*_tmp);
+  } else {
+    return *_tmp;
+  }
 }
 
 int ByteBuffer::GetInt() {
   int *_tmp = (int *)get_bytes();
-  int value = ntohl(*_tmp);
-  this->position_ += sizeof(value);
-  return value;
+  this->position_ += sizeof(int);
+  if (order_ == ByteOrder::BigEndian) {
+    return ntohl(*_tmp);
+  } else {
+    return *_tmp;
+  }
 }
 
 long long ByteBuffer::GetLong() {
   long long *_tmp = (long long *)get_bytes();
-  long long value = be64toh(*_tmp);
-  this->position_ += sizeof(value);
-  return value;
+  this->position_ += sizeof(long long);
+  if (order_ == ByteOrder::BigEndian) {
+    return be64toh(*_tmp);
+  } else {
+    return *_tmp;
+  }
 }
 
 void ByteBuffer::GetBytes(char value[], int length) {

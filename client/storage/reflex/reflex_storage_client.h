@@ -23,6 +23,10 @@
 #include "reflex/reflex_client.h"
 #include "storage/storage_client.h"
 
+const int kReflexBlockSize = 512;
+const short kCmdGet = 0;
+const short kCmdPut = 1;
+
 class ReflexStorageClient : public ReflexClient, public StorageClient {
 public:
   ReflexStorageClient();
@@ -37,6 +41,7 @@ public:
 private:
   long long linearBlockAddress(long long address, long long offset,
                                int sectorSize);
+  atomic<unsigned long long> counter_;
 };
 
 #endif /* REFLEX_STORAGE_CLIENT_H */
