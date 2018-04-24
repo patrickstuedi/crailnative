@@ -13,6 +13,7 @@ ByteBuffer::ByteBuffer(int size) {
   this->size_ = size;
   this->limit_ = size;
   this->position_ = 0;
+  this->order_ = ByteOrder::BigEndian;
   Zero();
 }
 
@@ -20,19 +21,31 @@ ByteBuffer::~ByteBuffer() { delete[] buf_; }
 
 void ByteBuffer::PutInt(int value) {
   int *_tmp = (int *)get_bytes();
-  *_tmp = htonl(value);
+  if (order_ == ByteOrder::BigEndian) {
+    *_tmp = htonl(value);
+  } else {
+    *_tmp = value;
+  }
   this->position_ += sizeof(value);
 }
 
 void ByteBuffer::PutShort(short value) {
   short *_tmp = (short *)get_bytes();
-  *_tmp = htons(value);
+  if (order_ == ByteOrder::BigEndian) {
+    *_tmp = htons(value);
+  } else {
+    *_tmp = value;
+  }
   this->position_ += sizeof(value);
 }
 
 void ByteBuffer::PutLong(long long value) {
   long long *_tmp = (long long *)get_bytes();
-  *_tmp = htobe64(value);
+  if (order_ == ByteOrder::BigEndian) {
+    *_tmp = htobe64(value);
+  } else {
+    *_tmp = value;
+  }
   this->position_ += sizeof(value);
 }
 
