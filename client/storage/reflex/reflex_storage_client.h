@@ -39,8 +39,7 @@ public:
   int ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 
 private:
-  long long linearBlockAddress(long long address, long long offset,
-                               int sectorSize);
+  long long linearBlockAddress(long long address, int sectorSize);
   atomic<unsigned long long> counter_;
 };
 

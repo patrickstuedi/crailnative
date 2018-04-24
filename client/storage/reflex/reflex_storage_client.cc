@@ -11,7 +11,7 @@ ReflexStorageClient::~ReflexStorageClient() {}
 
 int ReflexStorageClient::WriteData(int key, long long address,
                                    shared_ptr<ByteBuffer> buf) {
-  long long lba = linearBlockAddress(address, 0, kReflexBlockSize);
+  long long lba = linearBlockAddress(address, kReflexBlockSize);
   long long ticket = counter_++;
   int count = buf->remaining() / kReflexBlockSize;
   ReflexMessage reflex_request(kCmdPut, ticket, lba, count, buf);
@@ -25,7 +25,7 @@ int ReflexStorageClient::WriteData(int key, long long address,
 
 int ReflexStorageClient::ReadData(int key, long long address,
                                   shared_ptr<ByteBuffer> buf) {
-  long long lba = linearBlockAddress(address, 0, kReflexBlockSize);
+  long long lba = linearBlockAddress(address, kReflexBlockSize);
   long long ticket = counter_++;
   int count = buf->remaining() / kReflexBlockSize;
   ReflexMessage reflex_request(kCmdGet, ticket, lba, count);
@@ -38,7 +38,6 @@ int ReflexStorageClient::ReadData(int key, long long address,
 }
 
 long long ReflexStorageClient::linearBlockAddress(long long address,
-                                                  long long remoteOffset,
                                                   int sectorSize) {
-  return (address + remoteOffset) / (long)sectorSize;
+  return address / (long)sectorSize;
 }
