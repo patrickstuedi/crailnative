@@ -4,7 +4,7 @@ ReflexMessage::ReflexMessage(short type, long long ticket, long long lba,
                              int count)
     : type_(type), ticket_(ticket), lba_(lba), count_(count),
       payload_(nullptr) {
-  this->magic_ = sizeof(short) * 2 + sizeof(long long) * +sizeof(count);
+  this->magic_ = sizeof(short) * 2 + sizeof(long long) * 2 + sizeof(count);
 }
 
 ReflexMessage::ReflexMessage(short type, long long ticket, long long lba,
