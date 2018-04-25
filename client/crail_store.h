@@ -21,12 +21,15 @@
 #include <string>
 
 #include "crail_inputstream.h"
+#include "crail_inputstream.h"
 #include "crail_node.h"
+#include "crail_outputstream.h"
 #include "crail_outputstream.h"
 #include "namenode/namenode_client.h"
 #include "storage/storage_cache.h"
 
 using namespace std;
+using namespace crail;
 
 namespace crail {
 
@@ -39,13 +42,19 @@ public:
 
   int Initialize(string address, int port);
 
-  unique_ptr<CrailNode> Create(string &name, FileType type, bool enumerable);
+  unique_ptr<CrailNode> Create(string &name, FileType type, int storage_class,
+                               int location_class, bool enumerable);
   unique_ptr<CrailNode> Lookup(string &name);
   int Remove(string &name, bool recursive);
 
 private:
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
   shared_ptr<BlockCache> GetBlockCache(int fd);
+  int AddBlock(int fd, long long offset, shared_ptr<BlockInfo> block);
+  unique_ptr<CrailOutputstream> DirectoryOuput(shared_ptr<FileInfo> fileInfo,
+                                               long long position);
+  int WriteDirectoryRecord(shared_ptr<FileInfo> directory, string &fname,
+                           long long offset, int valid);
 
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;

@@ -18,7 +18,7 @@ int PocketDispatcher::Initialize(string address, int port) {
 
 int PocketDispatcher::MakeDir(string name) {
   unique_ptr<CrailNode> crail_node =
-      crail_.Create(name, FileType::Directory, true);
+      crail_.Create(name, FileType::Directory, 0, 0, true);
   if (!crail_node) {
     cout << "create node failed " << endl;
     return -1;
@@ -61,7 +61,7 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
   }
 
   unique_ptr<CrailNode> crail_node =
-      crail_.Create(dst_file, FileType::File, enumerable);
+      crail_.Create(dst_file, FileType::File, 0, 0, enumerable);
   if (!crail_node) {
     cout << "create node failed" << endl;
     return -1;

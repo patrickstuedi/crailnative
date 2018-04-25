@@ -44,6 +44,7 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
         file_info_->fd(), file_info_->token(), position_, position_);
     block_info = get_block_res->block_info();
   }
+
   int address = block_info->datanode()->addr();
   int port = block_info->datanode()->port();
 

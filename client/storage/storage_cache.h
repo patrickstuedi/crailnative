@@ -36,6 +36,8 @@ public:
   shared_ptr<StorageClient> Get(long long key, int storage_class);
 
 private:
+  shared_ptr<StorageClient> CreateClient(int storage_class);
+
   unordered_map<long long, shared_ptr<StorageClient>> cache_;
 };
 
