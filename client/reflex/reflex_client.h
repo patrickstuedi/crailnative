@@ -61,8 +61,6 @@ public:
 private:
   int SendBytes(unsigned char *buf, int size);
   int RecvBytes(unsigned char *buf, int size);
-  void AddNaRPCHeader(ByteBuffer &buf, int size, unsigned long long ticket);
-  long long RemoveNaRPCHeader(ByteBuffer &buf);
   void Debug(int address, int port);
 
   int socket_;

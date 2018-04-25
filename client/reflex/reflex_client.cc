@@ -41,6 +41,7 @@ using namespace crail;
 ReflexClient::ReflexClient() : isConnected(false), buf_(1024) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
   this->counter_ = 1;
+  buf_.set_order(ByteOrder::LittleEndian);
 }
 
 ReflexClient::~ReflexClient() { Close(); }
@@ -92,8 +93,6 @@ int ReflexClient::IssueRequest(ReflexMessage &request,
   responseMap.insert({ticket, response});
   buf_.Clear();
 
-  // narpc header (size, ticket)
-  AddNaRPCHeader(buf_, request.Size(), ticket);
   // create file request
   request.Write(buf_);
 
@@ -115,11 +114,14 @@ int ReflexClient::IssueRequest(ReflexMessage &request,
 int ReflexClient::PollResponse() {
   // recv resp header
   buf_.Clear();
-  if (RecvBytes(buf_.get_bytes(), kNarpcHeader) < 0) {
+  if (RecvBytes(buf_.get_bytes(), 16) < 0) {
     return -1;
   }
-  int size = buf_.GetInt();
+  buf_.GetShort();
+  buf_.GetShort();
   long long ticket = buf_.GetLong();
+  buf_.GetLong();
+  buf_.GetInt();
 
   shared_ptr<ReflexMessage> response = responseMap[ticket];
   responseMap.erase(ticket);
@@ -130,15 +132,6 @@ int ReflexClient::PollResponse() {
     payload_size = payload->remaining();
   }
 
-  // recv resp obj
-  buf_.Clear();
-  int header_size = size - payload_size;
-  if (RecvBytes(buf_.get_bytes(), header_size) < 0) {
-    return -1;
-  }
-
-  response->Update(buf_);
-
   if (payload) {
     if (RecvBytes(payload->get_bytes(), payload->remaining()) < 0) {
       return -1;
@@ -146,18 +139,6 @@ int ReflexClient::PollResponse() {
   }
 
   return 0;
-}
-
-void ReflexClient::AddNaRPCHeader(ByteBuffer &buf, int size,
-                                  unsigned long long ticket) {
-  buf.PutInt(size);
-  buf.PutLong(ticket);
-}
-
-long long ReflexClient::RemoveNaRPCHeader(ByteBuffer &buf) {
-  buf.GetInt();
-  long long ticket = buf.GetLong();
-  return ticket;
 }
 
 int ReflexClient::SendBytes(unsigned char *buf, int size) {
