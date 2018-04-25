@@ -45,8 +45,10 @@ public:
 
 private:
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
+  shared_ptr<BlockCache> GetBlockCache(int fd);
 
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
+  unordered_map<int, shared_ptr<BlockCache>> block_cache_;
 };
 } // crail

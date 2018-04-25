@@ -29,7 +29,8 @@ class CrailDirectory : public CrailNode {
 public:
   CrailDirectory(shared_ptr<FileInfo> file_info,
                  shared_ptr<NamenodeClient> namenode_client,
-                 shared_ptr<StorageCache> storage_cache);
+                 shared_ptr<StorageCache> storage_cache,
+                 shared_ptr<BlockCache> block_cache);
   virtual ~CrailDirectory();
 
   int Enumerate();
@@ -37,6 +38,7 @@ public:
 private:
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
+  shared_ptr<BlockCache> block_cache_;
 };
 
 #endif /* CRAIL_DIRECTORY_H */

@@ -17,35 +17,26 @@
 * limitations under the License.
 */
 
-#ifndef CRAIL_FILE_H
-#define CRAIL_FILE_H
+#ifndef BLOCK_CACHE_H
+#define BLOCK_CACHE_H
 
-#include <memory>
-
-#include "common/block_cache.h"
-#include "crail_inputstream.h"
-#include "crail_node.h"
-#include "crail_outputstream.h"
-#include "metadata/file_info.h"
-#include "storage/storage_cache.h"
+#include "metadata/block_info.h"
+#include <unordered_map>
 
 using namespace std;
+using namespace crail;
 
-class CrailFile : public CrailNode {
+class BlockCache {
 public:
-  CrailFile(shared_ptr<FileInfo> file_info,
-            shared_ptr<NamenodeClient> namenode_client,
-            shared_ptr<StorageCache> storage_cache,
-            shared_ptr<BlockCache> block_cache);
-  virtual ~CrailFile();
+  BlockCache(int fd);
+  virtual ~BlockCache();
 
-  unique_ptr<CrailOutputstream> outputstream();
-  unique_ptr<CrailInputstream> inputstream();
+  int PutBlock(long long offset, shared_ptr<BlockInfo> block);
+  shared_ptr<BlockInfo> GetBlock(long long offset);
 
 private:
-  shared_ptr<NamenodeClient> namenode_client_;
-  shared_ptr<StorageCache> storage_cache_;
-  shared_ptr<BlockCache> block_cache_;
+  int fd_;
+  unordered_map<long long, shared_ptr<BlockInfo>> cache_;
 };
 
-#endif /* CRAIL_FILE_H */
+#endif /* BLOCK_CACHE_H */

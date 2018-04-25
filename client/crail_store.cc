@@ -55,9 +55,11 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
                                              0, 0, _enumerable);
 
   if (create_res->file()->dir_offset() >= 0) {
+    shared_ptr<BlockCache> dir_block_cache =
+        GetBlockCache(create_res->parent()->fd());
     auto directory_stream = make_unique<CrailOutputstream>(
-        this->namenode_client_, storage_cache_, create_res->parent(),
-        create_res->file()->dir_offset());
+        this->namenode_client_, storage_cache_, dir_block_cache,
+        create_res->parent(), create_res->file()->dir_offset());
     string fname = filename.name();
     DirectoryRecord record(1, fname);
     shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(1024);
@@ -67,14 +69,18 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
   }
 
   auto file_info = create_res->file();
+  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+  file_block_cache->PutBlock(0, create_res->file_block());
   return DispatchType(file_info);
 }
 
 unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
   Filename filename(name);
   auto lookup_res = namenode_client_->Lookup(filename);
-  auto file_info = lookup_res->file();
 
+  auto file_info = lookup_res->file();
+  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+  file_block_cache->PutBlock(0, lookup_res->file_block());
   return DispatchType(file_info);
 }
 
@@ -82,9 +88,12 @@ int CrailStore::Remove(string &name, bool recursive) {
   Filename filename(name);
   auto remove_res = namenode_client_->Remove(filename, recursive);
 
+  shared_ptr<BlockCache> file_block_cache =
+      GetBlockCache(remove_res->parent()->fd());
+
   auto directory_stream = make_unique<CrailOutputstream>(
-      this->namenode_client_, storage_cache_, remove_res->parent(),
-      remove_res->file()->dir_offset());
+      this->namenode_client_, storage_cache_, file_block_cache,
+      remove_res->parent(), remove_res->file()->dir_offset());
   string fname = filename.name();
   DirectoryRecord record(0, fname);
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(1024);
@@ -96,12 +105,23 @@ int CrailStore::Remove(string &name, bool recursive) {
 }
 
 unique_ptr<CrailNode> CrailStore::DispatchType(shared_ptr<FileInfo> file_info) {
+  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
   if (file_info->type() == static_cast<int>(FileType::File)) {
-    return make_unique<CrailFile>(file_info, namenode_client_, storage_cache_);
+    return make_unique<CrailFile>(file_info, namenode_client_, storage_cache_,
+                                  file_block_cache);
   } else if (file_info->type() == static_cast<int>(FileType::Directory)) {
     return make_unique<CrailDirectory>(file_info, namenode_client_,
-                                       storage_cache_);
+                                       storage_cache_, file_block_cache);
   } else {
     return nullptr;
   }
+}
+
+shared_ptr<BlockCache> CrailStore::GetBlockCache(int fd) {
+  shared_ptr<BlockCache> cache = block_cache_[fd];
+  if (!cache) {
+    cache = make_shared<BlockCache>(fd);
+    this->block_cache_.insert({fd, cache});
+  }
+  return cache;
 }

@@ -10,6 +10,7 @@ add_library (cppcrail SHARED
 	directory_record.cc
 	common/byte_buffer.cc
 	common/crail_utils.cc
+	common/block_cache.cc
 	reflex/reflex_client.cc
 	reflex/reflex_message.cc
 	narpc/rpc_client.cc

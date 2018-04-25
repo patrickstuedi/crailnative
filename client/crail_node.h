@@ -22,6 +22,7 @@
 
 #include <memory>
 
+#include "common/block_cache.h"
 #include "metadata/file_info.h"
 
 using namespace std;

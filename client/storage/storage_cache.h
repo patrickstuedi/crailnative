@@ -21,8 +21,8 @@
 #define STORAGE_CACHE_H
 
 #include "storage_client.h"
-#include <map>
 #include <memory>
+#include <unordered_map>
 
 using namespace std;
 using namespace crail;
@@ -36,7 +36,7 @@ public:
   shared_ptr<StorageClient> Get(long long key, int storage_class);
 
 private:
-  map<long long, shared_ptr<StorageClient>> cache_;
+  unordered_map<long long, shared_ptr<StorageClient>> cache_;
 };
 
 #endif /* STORAGE_CACHE_H */

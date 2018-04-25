@@ -13,11 +13,13 @@ using namespace std;
 
 CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
                                      shared_ptr<StorageCache> storage_cache,
+                                     shared_ptr<BlockCache> block_cache,
                                      shared_ptr<FileInfo> file_info,
                                      int position) {
   this->file_info_ = file_info;
   this->namenode_client_ = namenode_client;
   this->storage_cache_ = storage_cache;
+  this->block_cache_ = block_cache;
   this->position_ = position;
 }
 
@@ -36,9 +38,12 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
     buf->set_limit(buf->position() + block_remaining);
   }
 
-  shared_ptr<GetblockResponse> get_block_res = namenode_client_->GetBlock(
-      file_info_->fd(), file_info_->token(), position_, position_);
-  shared_ptr<BlockInfo> block_info = get_block_res->block_info();
+  shared_ptr<BlockInfo> block_info = block_cache_->GetBlock(position_);
+  if (!block_info) {
+    shared_ptr<GetblockResponse> get_block_res = namenode_client_->GetBlock(
+        file_info_->fd(), file_info_->token(), position_, position_);
+    block_info = get_block_res->block_info();
+  }
   int address = block_info->datanode()->addr();
   int port = block_info->datanode()->port();
 
