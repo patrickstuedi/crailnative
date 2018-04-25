@@ -29,8 +29,9 @@ using namespace std;
 
 class ReflexMessage : public Serializable {
 public:
-  ReflexMessage(short magic, short type, long long ticket, long long lba,
-                int count);
+  ReflexMessage(short type, long long ticket, long long lba, int count);
+  ReflexMessage(short type, long long ticket, long long lba, int count,
+                shared_ptr<ByteBuffer> payload);
   ReflexMessage();
   ~ReflexMessage();
 
