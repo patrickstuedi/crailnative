@@ -40,7 +40,6 @@ using namespace crail;
 
 ReflexClient::ReflexClient() : isConnected(false), buf_(1024) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
-  this->counter_ = 1;
   buf_.set_order(ByteOrder::LittleEndian);
 }
 
@@ -89,7 +88,7 @@ void ReflexClient::Debug(int address, int port) {
 
 int ReflexClient::IssueRequest(ReflexMessage &request,
                                shared_ptr<ReflexMessage> response) {
-  unsigned long long ticket = counter_++;
+  unsigned long long ticket = request.ticket();
   responseMap.insert({ticket, response});
   buf_.Clear();
 
