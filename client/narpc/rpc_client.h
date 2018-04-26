@@ -45,7 +45,7 @@ namespace crail {
 
 class RpcClient {
 public:
-  RpcClient();
+  RpcClient(bool nodelay);
   virtual ~RpcClient();
 
   const int kNarpcHeader = 12;
@@ -68,6 +68,7 @@ private:
   unordered_map<long long, shared_ptr<RpcMessage>> responseMap;
   bool isConnected;
   ByteBuffer buf_;
+  bool nodelay_;
 };
 }
 

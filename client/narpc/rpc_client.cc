@@ -38,9 +38,10 @@
 using namespace std;
 using namespace crail;
 
-RpcClient::RpcClient() : isConnected(false), buf_(1024) {
+RpcClient::RpcClient(bool nodelay) : isConnected(false), buf_(1024) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
   this->counter_ = 1;
+  this->nodelay_ = nodelay;
 }
 
 RpcClient::~RpcClient() { Close(); }
@@ -50,7 +51,10 @@ int RpcClient::Connect(int address, int port) {
     return 0;
   }
 
-  int yes = 1;
+  int yes = 0;
+  if (nodelay_) {
+    yes = 1;
+  }
   setsockopt(socket_, IPPROTO_TCP, TCP_NODELAY, (char *)&yes, sizeof(int));
 
   struct sockaddr_in addr_;

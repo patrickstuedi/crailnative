@@ -9,7 +9,7 @@
 
 using namespace std;
 
-NarpcStorageClient::NarpcStorageClient() {}
+NarpcStorageClient::NarpcStorageClient() : RpcClient(true) {}
 
 NarpcStorageClient::~NarpcStorageClient() {}
 

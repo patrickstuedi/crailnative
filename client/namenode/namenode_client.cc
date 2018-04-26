@@ -21,7 +21,7 @@
 #include "setfile_request.h"
 #include "void_response.h"
 
-NamenodeClient::NamenodeClient() { this->counter_ = 1; }
+NamenodeClient::NamenodeClient() : RpcClient(true) { this->counter_ = 1; }
 
 NamenodeClient::~NamenodeClient() {}
 
