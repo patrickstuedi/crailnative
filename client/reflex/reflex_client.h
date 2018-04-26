@@ -57,14 +57,14 @@ public:
   const int kRpcHeader = 4;
 
   int Connect(int address, int port);
-  shared_ptr<ReflexFuture> Put(long long lba, shared_ptr<ByteBuffer> buffer);
-  shared_ptr<ReflexFuture> Get(long long lba, shared_ptr<ByteBuffer> buffer);
-  // int IssueRequest(ReflexMessage &request, shared_ptr<ReflexMessage>
-  // response);
+  shared_ptr<ReflexFuture> Put(long long lba, shared_ptr<ByteBuffer> payload);
+  shared_ptr<ReflexFuture> Get(long long lba, shared_ptr<ByteBuffer> payload);
   int PollResponse();
   int Close();
 
 private:
+  shared_ptr<ReflexFuture> IssueOperation(int type, long long lba,
+                                          shared_ptr<ByteBuffer> payload);
   int SendBytes(unsigned char *buf, int size);
   int RecvBytes(unsigned char *buf, int size);
   void Debug(int address, int port);

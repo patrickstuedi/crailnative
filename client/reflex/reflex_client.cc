@@ -89,56 +89,52 @@ void ReflexClient::Debug(int address, int port) {
 
 shared_ptr<ReflexFuture> ReflexClient::Put(long long lba,
                                            shared_ptr<ByteBuffer> payload) {
-  unsigned long long ticket = counter_++;
-  int remaining = payload->remaining();
-  if (remaining < kReflexBlockSize &&
-      payload->size() - payload->position() >= kReflexBlockSize) {
-    cout << "adjusting remaining " << endl;
-    remaining = kReflexBlockSize;
-  }
-  long long count = remaining / kReflexBlockSize;
-  cout << "reflexclient, put, lba " << lba << ", buffer.rem "
-       << payload->remaining() << ", remaining " << remaining << ", count "
-       << count << endl;
-
-  ReflexHeader request(kCmdPut, ticket, lba, count);
-
-  // create file request
-  buf_.Clear();
-  request.Write(buf_);
-
-  // issue request
-  buf_.Flip();
-  if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
-    return nullptr;
-  }
-  if (SendBytes(payload->get_bytes(), remaining) < 0) {
-    return nullptr;
-  }
-
-  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, payload);
-  responseMap.insert({ticket, future});
-  return future;
+  return IssueOperation(kCmdPut, lba, payload);
 }
 
 shared_ptr<ReflexFuture> ReflexClient::Get(long long lba,
                                            shared_ptr<ByteBuffer> payload) {
+  return IssueOperation(kCmdGet, lba, payload);
+}
+
+shared_ptr<ReflexFuture>
+ReflexClient::IssueOperation(int type, long long lba,
+                             shared_ptr<ByteBuffer> payload) {
+  if (lba % kReflexBlockSize != 0) {
+    return nullptr;
+  }
+
+  int remaining = payload->remaining();
+  long long count = remaining / kReflexBlockSize;
+  if (payload->remaining() % kReflexBlockSize != 0) {
+    count++;
+    remaining = count * kReflexBlockSize;
+  }
+
+  if (remaining > payload->size() - payload->position()) {
+    return nullptr;
+  }
+
+  cout << "reflexclient, issueOperation, type " << type << ", lba " << lba
+       << ", buffer.rem " << payload->remaining() << ", remaining " << remaining
+       << ", count " << count << endl;
+
   unsigned long long ticket = counter_++;
-  long long count = payload->remaining() / kReflexBlockSize;
-
-  cout << "reflexclient, get, lba " << lba << ", payload.rem "
-       << payload->remaining() << ", count " << count << endl;
-
-  ReflexHeader request(kCmdGet, ticket, lba, count);
+  ReflexHeader request(type, ticket, lba, count);
 
   // create file request
   buf_.Clear();
   request.Write(buf_);
 
-  // issue request
+  // send header
   buf_.Flip();
   if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
     return nullptr;
+  }
+  if (type == kCmdPut) {
+    if (SendBytes(payload->get_bytes(), remaining) < 0) {
+      return nullptr;
+    }
   }
 
   shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, payload);
@@ -155,12 +151,13 @@ int ReflexClient::PollResponse() {
   header_.Update(buf_);
   long long ticket = header_.ticket();
 
-  shared_ptr<ReflexFuture> response = responseMap[ticket];
+  shared_ptr<ReflexFuture> future = responseMap[ticket];
   responseMap.erase(ticket);
 
   if (header_.type() == kCmdGet) {
-    shared_ptr<ByteBuffer> payload = response->buffer();
-    if (RecvBytes(payload->get_bytes(), payload->remaining()) < 0) {
+    shared_ptr<ByteBuffer> payload = future->buffer();
+    int remaining = header_.count() * kReflexBlockSize;
+    if (RecvBytes(payload->get_bytes(), remaining) < 0) {
       return -1;
     }
   }
