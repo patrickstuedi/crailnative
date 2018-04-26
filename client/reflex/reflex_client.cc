@@ -115,9 +115,11 @@ ReflexClient::IssueOperation(int type, long long lba,
     return nullptr;
   }
 
-  cout << "reflexclient, issueOperation, type " << type << ", lba " << lba
-       << ", buffer.rem " << payload->remaining() << ", remaining " << remaining
-       << ", count " << count << endl;
+  /*
+cout << "reflexclient, issueOperation, type " << type << ", lba " << lba
+ << ", buffer.rem " << payload->remaining() << ", remaining " << remaining
+ << ", count " << count << endl;
+  */
 
   unsigned long long ticket = counter_++;
   ReflexHeader request(type, ticket, lba, count);
