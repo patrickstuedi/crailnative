@@ -35,7 +35,7 @@ public:
   int ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 
 private:
-  long long linearBlockAddress(long long address, int sectorSize);
+  long long linearBlockAddress(long long address, int sector_size);
 };
 
 #endif /* REFLEX_STORAGE_CLIENT_H */

@@ -51,7 +51,7 @@ private:
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
   shared_ptr<BlockCache> GetBlockCache(int fd);
   int AddBlock(int fd, long long offset, shared_ptr<BlockInfo> block);
-  unique_ptr<CrailOutputstream> DirectoryOuput(shared_ptr<FileInfo> fileInfo,
+  unique_ptr<CrailOutputstream> DirectoryOuput(shared_ptr<FileInfo> file_info,
                                                long long position);
   int WriteDirectoryRecord(shared_ptr<FileInfo> directory, string &fname,
                            long long offset, int valid);

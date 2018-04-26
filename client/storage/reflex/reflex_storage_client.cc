@@ -27,6 +27,6 @@ int ReflexStorageClient::ReadData(int key, long long address,
 }
 
 long long ReflexStorageClient::linearBlockAddress(long long address,
-                                                  int sectorSize) {
+                                                  int sector_size) {
   return address / (long)sectorSize;
 }
