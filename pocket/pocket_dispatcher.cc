@@ -80,6 +80,7 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
     buf->set_position(len);
     buf->Flip();
     while (buf->remaining() > 0) {
+      cout << "about write buffer, remaining " << buf->remaining() << endl;
       outputstream->Write(buf);
     }
     buf->Clear();

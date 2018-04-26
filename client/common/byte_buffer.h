@@ -57,6 +57,7 @@ public:
     return *this;
   }
 
+  int size() const { return size_; }
   int position() const { return position_; }
   void set_position(int new_position) { this->position_ = new_position; }
   int limit() const { return limit_; }

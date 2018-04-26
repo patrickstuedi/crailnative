@@ -44,7 +44,6 @@ using namespace crail;
 
 namespace crail {
 
-const int kReflexSectorSize = 512;
 const int kReflexBlockSize = 512;
 const short kCmdGet = 0;
 const short kCmdPut = 1;

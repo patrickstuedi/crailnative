@@ -88,14 +88,19 @@ void ReflexClient::Debug(int address, int port) {
 }
 
 shared_ptr<ReflexFuture> ReflexClient::Put(long long lba,
-                                           shared_ptr<ByteBuffer> buffer) {
+                                           shared_ptr<ByteBuffer> payload) {
   unsigned long long ticket = counter_++;
-  long long count = buffer->remaining() / kReflexBlockSize;
-
+  int remaining = payload->remaining();
+  if (remaining < kReflexBlockSize &&
+      payload->size() - payload->position() >= kReflexBlockSize) {
+    cout << "adjusting remaining " << endl;
+    remaining = kReflexBlockSize;
+  }
+  long long count = remaining / kReflexBlockSize;
   cout << "reflexclient, put, lba " << lba << ", buffer.rem "
-       << buffer->remaining() << ", count " << count << endl;
+       << payload->remaining() << ", remaining " << remaining << ", count "
+       << count << endl;
 
-  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, buffer);
   ReflexHeader request(kCmdPut, ticket, lba, count);
 
   // create file request
@@ -107,23 +112,23 @@ shared_ptr<ReflexFuture> ReflexClient::Put(long long lba,
   if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
     return nullptr;
   }
-  if (SendBytes(buffer->get_bytes(), buffer->remaining()) < 0) {
+  if (SendBytes(payload->get_bytes(), remaining) < 0) {
     return nullptr;
   }
 
+  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, payload);
   responseMap.insert({ticket, future});
   return future;
 }
 
 shared_ptr<ReflexFuture> ReflexClient::Get(long long lba,
-                                           shared_ptr<ByteBuffer> buffer) {
+                                           shared_ptr<ByteBuffer> payload) {
   unsigned long long ticket = counter_++;
-  long long count = buffer->remaining() / kReflexBlockSize;
+  long long count = payload->remaining() / kReflexBlockSize;
 
-  cout << "reflexclient, get, lba " << lba << ", buffer.rem "
-       << buffer->remaining() << ", count " << count << endl;
+  cout << "reflexclient, get, lba " << lba << ", payload.rem "
+       << payload->remaining() << ", count " << count << endl;
 
-  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, buffer);
   ReflexHeader request(kCmdGet, ticket, lba, count);
 
   // create file request
@@ -136,6 +141,7 @@ shared_ptr<ReflexFuture> ReflexClient::Get(long long lba,
     return nullptr;
   }
 
+  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, payload);
   responseMap.insert({ticket, future});
   return future;
 }
