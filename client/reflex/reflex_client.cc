@@ -41,6 +41,7 @@ using namespace crail;
 ReflexClient::ReflexClient() : isConnected(false), buf_(1024) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
   buf_.set_order(ByteOrder::LittleEndian);
+  this->counter_ = 1;
 }
 
 ReflexClient::~ReflexClient() { Close(); }
@@ -86,52 +87,67 @@ void ReflexClient::Debug(int address, int port) {
   cout << ", port " << port << endl;
 }
 
-int ReflexClient::IssueRequest(ReflexMessage &request,
-                               shared_ptr<ReflexMessage> response) {
-  unsigned long long ticket = request.ticket();
-  responseMap.insert({ticket, response});
-  buf_.Clear();
+shared_ptr<ReflexFuture> ReflexClient::Put(long long lba,
+                                           shared_ptr<ByteBuffer> buffer) {
+  unsigned long long ticket = counter_++;
+  long long count = buffer->remaining() / kReflexBlockSize;
+
+  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, buffer);
+  ReflexHeader request(kCmdPut, ticket, lba, count);
 
   // create file request
+  buf_.Clear();
   request.Write(buf_);
 
   // issue request
   buf_.Flip();
   if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
-    return -1;
+    return nullptr;
+  }
+  if (SendBytes(buffer->get_bytes(), buffer->remaining()) < 0) {
+    return nullptr;
   }
 
-  shared_ptr<ByteBuffer> payload = request.Payload();
-  if (payload) {
-    if (SendBytes(payload->get_bytes(), payload->remaining()) < 0) {
-      return -1;
-    }
+  responseMap.insert({ticket, future});
+  return future;
+}
+
+shared_ptr<ReflexFuture> ReflexClient::Get(long long lba,
+                                           shared_ptr<ByteBuffer> buffer) {
+  unsigned long long ticket = counter_++;
+  long long count = buffer->remaining() / kReflexBlockSize;
+
+  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, buffer);
+  ReflexHeader request(kCmdGet, ticket, lba, count);
+
+  // create file request
+  buf_.Clear();
+  request.Write(buf_);
+
+  // issue request
+  buf_.Flip();
+  if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
+    return nullptr;
   }
-  return 0;
+
+  responseMap.insert({ticket, future});
+  return future;
 }
 
 int ReflexClient::PollResponse() {
   // recv resp header
   buf_.Clear();
-  if (RecvBytes(buf_.get_bytes(), 16) < 0) {
+  if (RecvBytes(buf_.get_bytes(), header_.Size()) < 0) {
     return -1;
   }
-  buf_.GetShort();
-  buf_.GetShort();
-  long long ticket = buf_.GetLong();
-  buf_.GetLong();
-  buf_.GetInt();
+  header_.Update(buf_);
+  long long ticket = header_.ticket();
 
-  shared_ptr<ReflexMessage> response = responseMap[ticket];
+  shared_ptr<ReflexFuture> response = responseMap[ticket];
   responseMap.erase(ticket);
 
-  shared_ptr<ByteBuffer> payload = response->Payload();
-  int payload_size = 0;
-  if (payload) {
-    payload_size = payload->remaining();
-  }
-
-  if (payload) {
+  if (header_.type() == kCmdGet) {
+    shared_ptr<ByteBuffer> payload = response->buffer();
     if (RecvBytes(payload->get_bytes(), payload->remaining()) < 0) {
       return -1;
     }

@@ -17,46 +17,28 @@
 * limitations under the License.
 */
 
-#ifndef REFLEX_MESSAGE_H
-#define REFLEX_MESSAGE_H
-
-#include <memory>
+#ifndef REFLEX_FUTURE_H
+#define REFLEX_FUTURE_H
 
 #include "common/byte_buffer.h"
-#include "common/serializable.h"
+#include <memory>
 
 using namespace std;
+using namespace crail;
 
-class ReflexMessage : public Serializable {
+class ReflexFuture {
 public:
-  ReflexMessage(short type, long long ticket, long long lba, int count);
-  ReflexMessage(short type, long long ticket, long long lba, int count,
-                shared_ptr<ByteBuffer> payload);
-  ReflexMessage();
-  ~ReflexMessage();
+  ReflexFuture(long long ticket, shared_ptr<ByteBuffer> buffer);
+  virtual ~ReflexFuture();
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-  int Size() const {
-    return sizeof(magic_) + sizeof(type_) + sizeof(ticket_) + sizeof(lba_) +
-           sizeof(count_);
-  };
-
-  short magic() const { return magic_; }
-  short type() const { return type_; }
   long long ticket() const { return ticket_; }
-  int count() const { return count_; }
-
-  shared_ptr<ByteBuffer> Payload() { return payload_; };
+  bool is_done() const { return done_; }
+  shared_ptr<ByteBuffer> buffer() { return buffer_; }
 
 private:
-  short magic_;
-  short type_;
+  shared_ptr<ByteBuffer> buffer_;
   long long ticket_;
-  long long lba_;
-  int count_;
-
-  shared_ptr<ByteBuffer> payload_;
+  bool done_;
 };
 
-#endif /* REFLEX_MESSAGE_H */
+#endif /* REFLEX_FUTURE_H */

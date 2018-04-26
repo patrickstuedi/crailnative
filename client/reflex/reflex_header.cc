@@ -1,23 +1,23 @@
-#include "reflex_message.h"
+#include "reflex_header.h"
 
-ReflexMessage::ReflexMessage(short type, long long ticket, long long lba,
-                             int count)
+ReflexHeader::ReflexHeader(short type, long long ticket, long long lba,
+                           int count)
     : type_(type), ticket_(ticket), lba_(lba), count_(count),
       payload_(nullptr) {
   this->magic_ = sizeof(short) * 2 + sizeof(long long) * 2 + sizeof(count);
 }
 
-ReflexMessage::ReflexMessage(short type, long long ticket, long long lba,
-                             int count, shared_ptr<ByteBuffer> payload)
-    : ReflexMessage(type, ticket, lba, count) {
+ReflexHeader::ReflexHeader(short type, long long ticket, long long lba,
+                           int count, shared_ptr<ByteBuffer> payload)
+    : ReflexHeader(type, ticket, lba, count) {
   this->payload_ = payload;
 }
 
-ReflexMessage::ReflexMessage() : payload_(nullptr) {}
+ReflexHeader::ReflexHeader() : payload_(nullptr) {}
 
-ReflexMessage::~ReflexMessage() {}
+ReflexHeader::~ReflexHeader() {}
 
-int ReflexMessage::Write(ByteBuffer &buf) const {
+int ReflexHeader::Write(ByteBuffer &buf) const {
   buf.set_order(ByteOrder::LittleEndian);
   buf.PutShort(magic_);
   buf.PutShort(type_);
@@ -28,7 +28,7 @@ int ReflexMessage::Write(ByteBuffer &buf) const {
   return 0;
 }
 
-int ReflexMessage::Update(ByteBuffer &buf) {
+int ReflexHeader::Update(ByteBuffer &buf) {
   buf.set_order(ByteOrder::LittleEndian);
   this->magic_ = buf.GetShort();
   this->type_ = buf.GetShort();
