@@ -92,6 +92,9 @@ shared_ptr<ReflexFuture> ReflexClient::Put(long long lba,
   unsigned long long ticket = counter_++;
   long long count = buffer->remaining() / kReflexBlockSize;
 
+  cout << "reflexclient, put, lba " << lba << ", buffer.rem "
+       << buffer->remaining() << ", count " << count << endl;
+
   shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, buffer);
   ReflexHeader request(kCmdPut, ticket, lba, count);
 
@@ -116,6 +119,9 @@ shared_ptr<ReflexFuture> ReflexClient::Get(long long lba,
                                            shared_ptr<ByteBuffer> buffer) {
   unsigned long long ticket = counter_++;
   long long count = buffer->remaining() / kReflexBlockSize;
+
+  cout << "reflexclient, get, lba " << lba << ", buffer.rem "
+       << buffer->remaining() << ", count " << count << endl;
 
   shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, buffer);
   ReflexHeader request(kCmdGet, ticket, lba, count);

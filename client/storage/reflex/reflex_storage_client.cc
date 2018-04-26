@@ -10,7 +10,6 @@ ReflexStorageClient::~ReflexStorageClient() {}
 
 int ReflexStorageClient::WriteData(int key, long long address,
                                    shared_ptr<ByteBuffer> buf) {
-  cout << "writing using reflex client " << endl;
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Put(lba, buf);
   while (ReflexClient::PollResponse() < 0)
@@ -20,7 +19,6 @@ int ReflexStorageClient::WriteData(int key, long long address,
 
 int ReflexStorageClient::ReadData(int key, long long address,
                                   shared_ptr<ByteBuffer> buf) {
-  cout << "reading using reflex client " << endl;
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Get(lba, buf);
   while (ReflexClient::PollResponse() < 0)
