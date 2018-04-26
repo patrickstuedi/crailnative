@@ -11,6 +11,7 @@ ReflexStorageClient::~ReflexStorageClient() {}
 
 int ReflexStorageClient::WriteData(int key, long long address,
                                    shared_ptr<ByteBuffer> buf) {
+  cout << "writing using reflex client " << endl;
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   long long ticket = counter_++;
   int count = buf->remaining() / kReflexBlockSize;
@@ -25,6 +26,7 @@ int ReflexStorageClient::WriteData(int key, long long address,
 
 int ReflexStorageClient::ReadData(int key, long long address,
                                   shared_ptr<ByteBuffer> buf) {
+  cout << "reading using reflex client " << endl;
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   long long ticket = counter_++;
   int count = buf->remaining() / kReflexBlockSize;
