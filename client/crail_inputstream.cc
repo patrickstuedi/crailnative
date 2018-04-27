@@ -57,7 +57,6 @@ int CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
 
   long long block_addr = block_info->addr() + block_offset;
   storage_client->ReadData(block_info->lkey(), block_addr, buf);
-  storage_cache_->Put(block_info->datanode()->Key(), storage_client);
 
   int len = buf->remaining();
   this->position_ += buf->remaining();

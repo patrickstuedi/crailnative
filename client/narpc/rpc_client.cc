@@ -76,7 +76,6 @@ int RpcClient::Connect(int address, int port) {
 
 int RpcClient::Close() {
   if (isConnected) {
-    cout << "closing connection, remote port " << port_ << endl;
     close(socket_);
     isConnected = false;
   }

@@ -73,7 +73,6 @@ int ReflexClient::Connect(int address, int port) {
 
 int ReflexClient::Close() {
   if (isConnected) {
-    cout << "closing reflex client, port " << port_ << endl;
     close(socket_);
     isConnected = false;
   }
@@ -105,8 +104,6 @@ shared_ptr<ReflexFuture>
 ReflexClient::IssueOperation(int type, long long lba,
                              shared_ptr<ByteBuffer> payload) {
   if (lba % kReflexBlockSize != 0) {
-    cout << "reflex operation, type " << type << ", invalid lba " << lba
-         << endl;
     return nullptr;
   }
 
@@ -115,7 +112,6 @@ ReflexClient::IssueOperation(int type, long long lba,
   if (payload->remaining() % kReflexBlockSize != 0) {
     count++;
     remaining = count * kReflexBlockSize;
-    cout << "adjusting count " << count << endl;
   }
 
   if (remaining > payload->size() - payload->position()) {

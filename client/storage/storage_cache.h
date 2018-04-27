@@ -32,10 +32,10 @@ public:
   StorageCache();
   virtual ~StorageCache();
 
-  int Put(long long key, shared_ptr<StorageClient> endpoint);
   shared_ptr<StorageClient> Get(long long key, int storage_class);
 
 private:
+  int Put(long long key, shared_ptr<StorageClient> endpoint);
   shared_ptr<StorageClient> CreateClient(int storage_class);
   long long ComputeKey(long long position);
 
