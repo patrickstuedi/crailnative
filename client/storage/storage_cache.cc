@@ -11,6 +11,13 @@ StorageCache::StorageCache() {}
 
 StorageCache::~StorageCache() {}
 
+void StorageCache::Close() {
+  for (std::pair<long long, shared_ptr<StorageClient>> element : cache_) {
+    element.second->Close();
+    // std::cout << element.first << " :: " << element.second << std::endl;
+  }
+}
+
 int StorageCache::Put(long long position, shared_ptr<StorageClient> client) {
   long long key = ComputeKey(position);
   cache_.insert({key, client});

@@ -41,7 +41,10 @@ CrailStore::CrailStore()
     : namenode_client_(new NamenodeClient()),
       storage_cache_(new StorageCache()) {}
 
-CrailStore::~CrailStore() {}
+CrailStore::~CrailStore() {
+  this->namenode_client_->Close();
+  storage_cache_->Close();
+}
 
 int CrailStore::Initialize(string address, int port) {
   return this->namenode_client_->Connect((int)inet_addr(address.c_str()), port);

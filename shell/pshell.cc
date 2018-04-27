@@ -106,26 +106,26 @@ int main(int argc, char *argv[]) {
 
   printSettings(settings);
 
-  PocketDispatcher benchmark;
-  if (benchmark.Initialize(settings.address, settings.port)) {
-    cout << "Cannot initialize benchmark" << endl;
+  PocketDispatcher dispatcher;
+  if (dispatcher.Initialize(settings.address, settings.port)) {
+    cout << "Cannot initialize dispatcher" << endl;
     return -1;
   }
 
   if (settings.operation == Operation::MakeDir) {
-    benchmark.MakeDir(settings.filename);
+    dispatcher.MakeDir(settings.filename);
   } else if (settings.operation == Operation::Lookup) {
-    benchmark.Lookup(settings.filename);
+    dispatcher.Lookup(settings.filename);
   } else if (settings.operation == Operation::Enumerate) {
-    benchmark.Enumerate(settings.filename);
+    dispatcher.Enumerate(settings.filename);
   } else if (settings.operation == Operation::Put) {
-    benchmark.PutFile(settings.filename, settings.dstfile, true);
+    dispatcher.PutFile(settings.filename, settings.dstfile, true);
   } else if (settings.operation == Operation::Get) {
-    benchmark.GetFile(settings.filename, settings.dstfile);
+    dispatcher.GetFile(settings.filename, settings.dstfile);
   } else if (settings.operation == Operation::DeleteDir) {
-    benchmark.DeleteDir(settings.filename);
+    dispatcher.DeleteDir(settings.filename);
   } else if (settings.operation == Operation::DeleteFile) {
-    benchmark.DeleteFile(settings.filename);
+    dispatcher.DeleteFile(settings.filename);
   }
 
   return 0;

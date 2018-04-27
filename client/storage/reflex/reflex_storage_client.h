@@ -31,6 +31,7 @@ public:
   int Connect(int address, int port) {
     return ReflexClient::Connect(address, port);
   }
+  int Close() { return ReflexClient::Close(); }
   int WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
   int ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 

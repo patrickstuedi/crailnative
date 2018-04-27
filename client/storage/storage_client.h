@@ -29,6 +29,7 @@ using namespace crail;
 class StorageClient {
 public:
   virtual int Connect(int address, int port) = 0;
+  virtual int Close() = 0;
   virtual int WriteData(int key, long long address,
                         shared_ptr<ByteBuffer> buf) = 0;
   virtual int ReadData(int key, long long address,

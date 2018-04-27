@@ -31,6 +31,7 @@ public:
   int Connect(int address, int port) {
     return RpcClient::Connect(address, port);
   }
+  int Close() { return RpcClient::Close(); }
   int WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
   int ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 
