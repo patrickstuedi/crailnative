@@ -77,13 +77,25 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
   while (size_t len = fread(buf->get_bytes(), 1, buf->remaining(), fp)) {
-    buf->set_position(len);
+    buf->set_position(buf->position() + len);
+    if (buf->remaining() > 0) {
+      continue;
+    }
+
     buf->Flip();
     while (buf->remaining() > 0) {
       outputstream->Write(buf);
     }
     buf->Clear();
   }
+
+  if (buf->position() > 0) {
+    buf->Flip();
+    while (buf->remaining() > 0) {
+      outputstream->Write(buf);
+    }
+  }
+
   fclose(fp);
   outputstream->Close();
 
