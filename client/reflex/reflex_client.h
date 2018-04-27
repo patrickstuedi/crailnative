@@ -75,6 +75,8 @@ private:
   ByteBuffer buf_;
   ReflexHeader header_;
   atomic<unsigned long long> counter_;
+  int port_;
+  int address_;
 };
 }
 

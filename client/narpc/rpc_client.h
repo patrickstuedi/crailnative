@@ -69,6 +69,8 @@ private:
   bool isConnected;
   ByteBuffer buf_;
   bool nodelay_;
+  int address_;
+  int port_;
 };
 }
 

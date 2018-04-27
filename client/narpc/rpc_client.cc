@@ -51,6 +51,9 @@ int RpcClient::Connect(int address, int port) {
     return 0;
   }
 
+  this->address_ = address;
+  this->port_ = port;
+
   int yes = 0;
   if (nodelay_) {
     yes = 1;
@@ -73,6 +76,7 @@ int RpcClient::Connect(int address, int port) {
 
 int RpcClient::Close() {
   if (isConnected) {
+    cout << "closing connection, remote port " << port_ << endl;
     close(socket_);
     isConnected = false;
   }
