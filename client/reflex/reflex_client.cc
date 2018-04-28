@@ -104,6 +104,8 @@ shared_ptr<ReflexFuture>
 ReflexClient::IssueOperation(int type, long long lba,
                              shared_ptr<ByteBuffer> payload) {
   if (lba % kReflexBlockSize != 0) {
+    cout << "incorrect lba " << lba << ", should be a multiples of blocksize "
+         << kReflexBlockSize << endl;
     return nullptr;
   }
 
@@ -115,6 +117,10 @@ ReflexClient::IssueOperation(int type, long long lba,
   }
 
   if (remaining > payload->size() - payload->position()) {
+    cout << "not enough data remaining after adjusting, payload.size "
+         << payload->size() << ", payload.pos " << payload->position()
+         << ", payload.rem " << payload->remaining() << ", adjusted remaining "
+         << remaining << endl;
     return nullptr;
   }
 
@@ -134,10 +140,13 @@ cout << "reflexclient, issueOperation, type " << type << ", lba " << lba
   // send header
   buf_.Flip();
   if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
+    cout << "transmitting header failed, remaining " << buf_.remaining()
+         << endl;
     return nullptr;
   }
   if (type == kCmdPut) {
     if (SendBytes(payload->get_bytes(), remaining) < 0) {
+      cout << "transmitting payload failed, remaining " << remaining << endl;
       return nullptr;
     }
   }

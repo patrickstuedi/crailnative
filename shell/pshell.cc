@@ -129,7 +129,9 @@ int main(int argc, char *argv[]) {
     res = dispatcher.DeleteFile(settings.filename);
   }
 
-  if (res < 0) {
+  if (res == 0) {
+    cout << "pocket operation successful" << endl;
+  } else {
     cout << "pocket operation failed " << endl;
   }
 
