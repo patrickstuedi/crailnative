@@ -1,8 +1,8 @@
 #include "remove_request.h"
 
 RemoveRequest::RemoveRequest(Filename &name, bool recursive)
-    : NamenodeRequest(static_cast<short>(RpcCommand::Lookup),
-                      static_cast<short>(RequestType::Lookup)),
+    : NamenodeRequest(static_cast<short>(RpcCommand::Removefile),
+                      static_cast<short>(RequestType::Removefile)),
       filename_(name) {
   this->filename_ = std::move(name);
   this->recursive_ = recursive;
