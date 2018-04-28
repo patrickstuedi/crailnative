@@ -84,7 +84,9 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
 
     buf->Flip();
     while (buf->remaining() > 0) {
-      outputstream->Write(buf);
+      if (outputstream->Write(buf) < 0) {
+        return -1;
+      }
     }
     buf->Clear();
   }
@@ -92,7 +94,9 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
   if (buf->position() > 0) {
     buf->Flip();
     while (buf->remaining() > 0) {
-      outputstream->Write(buf);
+      if (outputstream->Write(buf) < 0) {
+        return -1;
+      }
     }
   }
 

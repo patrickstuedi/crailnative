@@ -29,6 +29,9 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (buf->remaining() < 0) {
     return -1;
   }
+  if (buf->remaining() == 0) {
+    return 0;
+  }
 
   int buf_original_limit = buf->limit();
   int block_offset = position_ % kBlockSize;
@@ -56,7 +59,9 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  storage_client->WriteData(block_info->lkey(), block_addr, buf);
+  if (storage_client->WriteData(block_info->lkey(), block_addr, buf) < 0) {
+    return -1;
+  }
 
   int len = buf->remaining();
   this->position_ += buf->remaining();

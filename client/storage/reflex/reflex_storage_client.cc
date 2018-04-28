@@ -12,18 +12,26 @@ int ReflexStorageClient::WriteData(int key, long long address,
                                    shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Put(lba, buf);
-  while (ReflexClient::PollResponse() < 0)
-    ;
-  return 0;
+  if (future != nullptr) {
+    while (ReflexClient::PollResponse() < 0)
+      ;
+    return 0;
+  } else {
+    return -1;
+  }
 }
 
 int ReflexStorageClient::ReadData(int key, long long address,
                                   shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Get(lba, buf);
-  while (ReflexClient::PollResponse() < 0)
-    ;
-  return 0;
+  if (future != nullptr) {
+    while (ReflexClient::PollResponse() < 0)
+      ;
+    return 0;
+  } else {
+    return -1;
+  }
 }
 
 long long ReflexStorageClient::linearBlockAddress(long long address,

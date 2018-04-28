@@ -112,20 +112,25 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
+  int res = -1;
   if (settings.operation == Operation::MakeDir) {
-    dispatcher.MakeDir(settings.filename);
+    res = dispatcher.MakeDir(settings.filename);
   } else if (settings.operation == Operation::Lookup) {
-    dispatcher.Lookup(settings.filename);
+    res = dispatcher.Lookup(settings.filename);
   } else if (settings.operation == Operation::Enumerate) {
-    dispatcher.Enumerate(settings.filename);
+    res = dispatcher.Enumerate(settings.filename);
   } else if (settings.operation == Operation::Put) {
-    dispatcher.PutFile(settings.filename, settings.dstfile, true);
+    res = dispatcher.PutFile(settings.filename, settings.dstfile, true);
   } else if (settings.operation == Operation::Get) {
-    dispatcher.GetFile(settings.filename, settings.dstfile);
+    res = dispatcher.GetFile(settings.filename, settings.dstfile);
   } else if (settings.operation == Operation::DeleteDir) {
-    dispatcher.DeleteDir(settings.filename);
+    res = dispatcher.DeleteDir(settings.filename);
   } else if (settings.operation == Operation::DeleteFile) {
-    dispatcher.DeleteFile(settings.filename);
+    res = dispatcher.DeleteFile(settings.filename);
+  }
+
+  if (res < 0) {
+    cout << "pocket operation failed " << endl;
   }
 
   return 0;
