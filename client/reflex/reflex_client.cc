@@ -103,10 +103,15 @@ shared_ptr<ReflexFuture> ReflexClient::Get(long long lba,
 shared_ptr<ReflexFuture>
 ReflexClient::IssueOperation(int type, long long lba,
                              shared_ptr<ByteBuffer> payload) {
-  if (lba % kReflexBlockSize != 0) {
-    cout << "incorrect lba " << lba << ", should be a multiples of blocksize "
-         << kReflexBlockSize << endl;
-    return nullptr;
+  /*
+if (lba % kReflexBlockSize != 0) {
+cout << "incorrect lba " << lba << ", should be a multiples of blocksize "
+   << kReflexBlockSize << endl;
+return nullptr;
+}
+  */
+  if (lba < 0) {
+    cout << "invalid lba " << lba << endl;
   }
 
   int remaining = payload->remaining();
