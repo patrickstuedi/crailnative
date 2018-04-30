@@ -109,7 +109,7 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
 int PocketDispatcher::GetFile(string src_file, string local_file) {
   unique_ptr<CrailNode> crail_node = crail_.Lookup(src_file);
   if (!crail_node) {
-    cout << "create node failed" << endl;
+    cout << "lookup node failed" << endl;
     return -1;
   }
   if (crail_node->type() != static_cast<int>(FileType::File)) {
