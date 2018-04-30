@@ -136,9 +136,9 @@ int main(int argc, char *argv[]) {
   }
 
   if (res >= 0) {
-    cout << "pocket operation successful" << endl;
+    cout << "pocket operation successful, res " << res << endl;
   } else {
-    cout << "pocket operation failed " << endl;
+    cout << "pocket operation failed, res " << res << endl;
   }
 
   return 0;
