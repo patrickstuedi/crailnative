@@ -31,11 +31,13 @@ enum class Operation {
   MakeDir = 1,
   Lookup = 2,
   Enumerate = 3,
-  Put = 4,
-  Get = 5,
+  PutFile = 4,
+  GetFile = 5,
   DeleteDir = 6,
   DeleteFile = 7,
-  Ioctl = 8
+  Ioctl = 8,
+  PutBuffer = 9,
+  GetBuffer = 10
 };
 
 struct Settings {
@@ -55,16 +57,20 @@ Operation getOperation(string name) {
     return Operation::Lookup;
   } else if (name == "Enumerate") {
     return Operation::Enumerate;
-  } else if (name == "Put") {
-    return Operation::Put;
+  } else if (name == "PutFile") {
+    return Operation::PutFile;
   } else if (name == "Get") {
-    return Operation::Get;
+    return Operation::GetFile;
   } else if (name == "DeleteDir") {
     return Operation::DeleteDir;
   } else if (name == "DeleteFile") {
     return Operation::DeleteFile;
   } else if (name == "Ioctl") {
     return Operation::Ioctl;
+  } else if (name == "PutBuffer") {
+    return Operation::PutBuffer;
+  } else if (name == "GetBuffer") {
+    return Operation::GetBuffer;
   } else {
     return Operation::Undefined;
   }
@@ -123,9 +129,9 @@ int main(int argc, char *argv[]) {
     res = dispatcher.Lookup(settings.filename);
   } else if (settings.operation == Operation::Enumerate) {
     res = dispatcher.Enumerate(settings.filename);
-  } else if (settings.operation == Operation::Put) {
+  } else if (settings.operation == Operation::PutFile) {
     res = dispatcher.PutFile(settings.filename, settings.dstfile, true);
-  } else if (settings.operation == Operation::Get) {
+  } else if (settings.operation == Operation::GetFile) {
     res = dispatcher.GetFile(settings.filename, settings.dstfile);
   } else if (settings.operation == Operation::DeleteDir) {
     res = dispatcher.DeleteDir(settings.filename);
@@ -133,6 +139,12 @@ int main(int argc, char *argv[]) {
     res = dispatcher.DeleteFile(settings.filename);
   } else if (settings.operation == Operation::Ioctl) {
     res = dispatcher.CountFiles(settings.filename);
+  } else if (settings.operation == Operation::PutBuffer) {
+    char data[settings.size];
+    res = dispatcher.PutBuffer(data, settings.size, settings.filename, false);
+  } else if (settings.operation == Operation::GetBuffer) {
+    char data[settings.size];
+    res = dispatcher.GetBuffer(data, settings.size, settings.filename);
   }
 
   if (res >= 0) {
