@@ -25,6 +25,7 @@
 
 #include "create_response.h"
 #include "getblock_response.h"
+#include "ioctl_response.h"
 #include "lookup_response.h"
 #include "metadata/filename.h"
 #include "narpc/rpc_client.h"
@@ -43,6 +44,7 @@ public:
                                         long long position, long long capacity);
   shared_ptr<VoidResponse> SetFile(shared_ptr<FileInfo> file_info, bool close);
   shared_ptr<RemoveResponse> Remove(Filename &name, bool recursive);
+  shared_ptr<IoctlResponse> Ioctl(unsigned char op, Filename &name);
 
 private:
   atomic<unsigned long long> counter_;

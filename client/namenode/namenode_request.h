@@ -31,13 +31,15 @@ enum class RpcCommand : short {
   Setfile = 3,
   Removefile = 4,
   Getblock = 6,
+  Ioctl = 13,
 };
 enum class RequestType : short {
   Create = 1,
   Lookup = 2,
   Setfile = 3,
   Removefile = 4,
-  Getblock = 6
+  Getblock = 6,
+  Ioctl = 13
 };
 
 class NamenodeRequest : public Serializable {

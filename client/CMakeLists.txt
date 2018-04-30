@@ -27,6 +27,8 @@ add_library (cppcrail SHARED
 	namenode/void_response.cc
 	namenode/remove_request.cc
 	namenode/remove_response.cc
+	namenode/ioctl_request.cc
+	namenode/ioctl_response.cc
 	namenode/namenode_client.cc
 	storage/storage_cache.cc
 	storage/narpc/narpc_storage_client.cc

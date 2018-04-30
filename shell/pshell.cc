@@ -34,7 +34,8 @@ enum class Operation {
   Put = 4,
   Get = 5,
   DeleteDir = 6,
-  DeleteFile = 7
+  DeleteFile = 7,
+  Ioctl = 8
 };
 
 struct Settings {
@@ -62,6 +63,8 @@ Operation getOperation(string name) {
     return Operation::DeleteDir;
   } else if (name == "DeleteFile") {
     return Operation::DeleteFile;
+  } else if (name == "Ioctl") {
+    return Operation::Ioctl;
   } else {
     return Operation::Undefined;
   }
@@ -128,6 +131,8 @@ int main(int argc, char *argv[]) {
     res = dispatcher.DeleteDir(settings.filename);
   } else if (settings.operation == Operation::DeleteFile) {
     res = dispatcher.DeleteFile(settings.filename);
+  } else if (settings.operation == Operation::Ioctl) {
+    res = dispatcher.CountFiles(settings.filename);
   }
 
   if (res >= 0) {

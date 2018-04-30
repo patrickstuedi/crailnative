@@ -17,33 +17,35 @@
 * limitations under the License.
 */
 
-#ifndef CRAIL_DISPATCHER_H
-#define CRAIL_DISPATCHER_H
+#ifndef IOCTL_REQUEST_H
+#define IOCTL_REQUEST_H
 
-#include <string>
+#include "common/byte_buffer.h"
+#include "common/serializable.h"
+#include "metadata/filename.h"
+#include "namenode_request.h"
+#include "narpc/rpc_message.h"
 
-#include "crail_store.h"
+using namespace crail;
 
-using namespace std;
-
-class PocketDispatcher {
+class IoctlRequest : public NamenodeRequest, public RpcMessage {
 public:
-  PocketDispatcher();
-  virtual ~PocketDispatcher();
+  IoctlRequest(unsigned char op, Filename &name);
+  virtual ~IoctlRequest();
 
-  int Initialize(string address, int port);
+  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
-  int MakeDir(string name);
-  int Lookup(string name);
-  int Enumerate(string name);
-  int PutFile(string local_file, string dst_file, bool enumerable);
-  int GetFile(string src_file, string local_file);
-  int DeleteFile(string file);
-  int DeleteDir(string directory);
-  int CountFiles(string directory);
+  int Size() const {
+    return NamenodeRequest::Size() + sizeof(op_) + filename_.Size();
+  }
+  int Write(ByteBuffer &buf) const;
+  int Update(ByteBuffer &buf);
+
+  const Filename &filename() const { return filename_; }
 
 private:
-  CrailStore crail_;
+  unsigned char op_;
+  Filename filename_;
 };
 
-#endif /* CRAIL_DISPATCHER_H */
+#endif /* IOCTL_REQUEST_H */

@@ -161,3 +161,15 @@ int CrailStore::WriteDirectoryRecord(shared_ptr<FileInfo> parent_info,
   directory_stream->Write(buf);
   return 0;
 }
+
+int CrailStore::Ioctl(unsigned char op, string &name) {
+  Filename filename(name);
+  shared_ptr<IoctlResponse> ioctl_res = namenode_client_->Ioctl(0, filename);
+  if (!ioctl_res) {
+    return -1;
+  }
+  if (ioctl_res->error() != 0) {
+    return -1;
+  }
+  return ioctl_res->count();
+}

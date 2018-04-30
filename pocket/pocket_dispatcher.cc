@@ -152,3 +152,8 @@ int PocketDispatcher::DeleteDir(string directory) {
 int PocketDispatcher::DeleteFile(string file) {
   return crail_.Remove(file, false);
 }
+
+int PocketDispatcher::CountFiles(string directory) {
+  int op = 5;
+  return crail_.Ioctl((unsigned char)op, directory);
+}

@@ -33,11 +33,13 @@ public:
   ByteBuffer(int size);
   virtual ~ByteBuffer();
 
+  void PutByte(unsigned char value);
   void PutShort(short value);
   void PutInt(int value);
   void PutLong(long long value);
   void PutBytes(const char value[], int length);
 
+  unsigned char GetByte();
   short GetShort();
   int GetInt();
   long long GetLong();

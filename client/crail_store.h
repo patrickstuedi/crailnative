@@ -46,6 +46,7 @@ public:
                                int location_class, bool enumerable);
   unique_ptr<CrailNode> Lookup(string &name);
   int Remove(string &name, bool recursive);
+  int Ioctl(unsigned char op, string &name);
 
 private:
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);

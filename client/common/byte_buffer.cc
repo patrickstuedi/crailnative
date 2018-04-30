@@ -19,6 +19,12 @@ ByteBuffer::ByteBuffer(int size) {
 
 ByteBuffer::~ByteBuffer() { delete[] buf_; }
 
+void ByteBuffer::PutByte(unsigned char value) {
+  unsigned char *_tmp = (unsigned char *)get_bytes();
+  *_tmp = value;
+  this->position_ += sizeof(value);
+}
+
 void ByteBuffer::PutInt(int value) {
   int *_tmp = (int *)get_bytes();
   if (order_ == ByteOrder::BigEndian) {
@@ -53,6 +59,12 @@ void ByteBuffer::PutBytes(const char value[], int length) {
   unsigned char *_tmp = (unsigned char *)get_bytes();
   memcpy(_tmp, value, length);
   this->position_ += length;
+}
+
+unsigned char ByteBuffer::GetByte() {
+  unsigned char *_tmp = (unsigned char *)get_bytes();
+  this->position_ += sizeof(unsigned char);
+  return *_tmp;
 }
 
 short ByteBuffer::GetShort() {
