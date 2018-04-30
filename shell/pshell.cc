@@ -27,6 +27,7 @@
 using namespace std;
 
 enum class Operation {
+  Undefined = 0,
   MakeDir = 1,
   Lookup = 2,
   Enumerate = 3,
@@ -62,7 +63,7 @@ Operation getOperation(string name) {
   } else if (name == "DeleteFile") {
     return Operation::DeleteFile;
   } else {
-    return Operation::MakeDir;
+    return Operation::Undefined;
   }
 }
 
@@ -129,7 +130,7 @@ int main(int argc, char *argv[]) {
     res = dispatcher.DeleteFile(settings.filename);
   }
 
-  if (res == 0) {
+  if (res >= 0) {
     cout << "pocket operation successful" << endl;
   } else {
     cout << "pocket operation failed " << endl;

@@ -20,7 +20,7 @@ int PocketDispatcher::MakeDir(string name) {
   unique_ptr<CrailNode> crail_node =
       crail_.Create(name, FileType::Directory, 0, 0, true);
   if (!crail_node) {
-    cout << "create node failed " << endl;
+    cout << "makedir failed " << endl;
     return -1;
   }
   return 0;
@@ -107,12 +107,6 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
 }
 
 int PocketDispatcher::GetFile(string src_file, string local_file) {
-  FILE *fp = fopen(local_file.c_str(), "w");
-  if (!fp) {
-    cout << "could not open local file " << local_file.c_str() << endl;
-    return -1;
-  }
-
   unique_ptr<CrailNode> crail_node = crail_.Lookup(src_file);
   if (!crail_node) {
     cout << "create node failed" << endl;
@@ -120,6 +114,12 @@ int PocketDispatcher::GetFile(string src_file, string local_file) {
   }
   if (crail_node->type() != static_cast<int>(FileType::File)) {
     cout << "node is not a file" << endl;
+    return -1;
+  }
+
+  FILE *fp = fopen(local_file.c_str(), "w");
+  if (!fp) {
+    cout << "could not open local file " << local_file.c_str() << endl;
     return -1;
   }
 
@@ -146,11 +146,9 @@ int PocketDispatcher::GetFile(string src_file, string local_file) {
 }
 
 int PocketDispatcher::DeleteDir(string directory) {
-  crail_.Remove(directory, true);
-  return 0;
+  return crail_.Remove(directory, true);
 }
 
 int PocketDispatcher::DeleteFile(string file) {
-  crail_.Remove(file, false);
-  return 0;
+  return crail_.Remove(file, false);
 }
