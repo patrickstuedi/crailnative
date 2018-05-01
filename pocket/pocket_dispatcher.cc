@@ -210,6 +210,7 @@ int PocketDispatcher::GetBuffer(char data[], int len, string src_file) {
       return -1;
     }
   }
+  buf->Clear();
   memcpy(data, buf->get_bytes(), len);
 
   inputstream->Close();
