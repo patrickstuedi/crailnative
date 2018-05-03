@@ -37,7 +37,9 @@ enum class Operation {
   DeleteFile = 7,
   Ioctl = 8,
   PutBuffer = 9,
-  GetBuffer = 10
+  GetBuffer = 10,
+  PutBenchmark = 11,
+  GetBenchmark = 12
 };
 
 struct Settings {
@@ -71,6 +73,10 @@ Operation getOperation(string name) {
     return Operation::PutBuffer;
   } else if (name == "GetBuffer") {
     return Operation::GetBuffer;
+  } else if (name == "PutBenchmark") {
+    return Operation::PutBenchmark;
+  } else if (name == "GetBenchmark") {
+    return Operation::GetBenchmark;
   } else {
     return Operation::Undefined;
   }
@@ -145,6 +151,11 @@ int main(int argc, char *argv[]) {
   } else if (settings.operation == Operation::GetBuffer) {
     char data[settings.size];
     res = dispatcher.GetBuffer(data, settings.size, settings.filename);
+  } else if (settings.operation == Operation::GetBenchmark) {
+    char data[settings.size];
+    for (int i = 0; i < settings.loop; i++) {
+      res = dispatcher.GetBuffer(data, settings.size, settings.filename);
+    }
   }
 
   if (res >= 0) {
