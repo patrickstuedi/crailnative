@@ -12,7 +12,7 @@ int LookupRequest::Write(ByteBuffer &buf) const {
   NamenodeRequest::Write(buf);
 
   filename_.Write(buf);
-  buf.PutInt(1);
+  buf.PutInt(0);
 
   return Size();
 }
