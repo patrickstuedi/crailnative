@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2015-2018, IBM Corporation
-*
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  See the NOTICE file distributed with
-* this work for additional information regarding copyright ownership.
-* The ASF licenses this file to You under the Apache License, Version 2.0
-* (the "License"); you may not use this file except in compliance with
-* the License.  You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2015-2018, IBM Corporation
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "crail_store.h"
 
@@ -31,8 +31,6 @@
 #include "crail_file.h"
 #include "directory_record.h"
 #include "metadata/filename.h"
-#include "storage/narpc/write_request.h"
-#include "storage/narpc/write_response.h"
 #include "storage/storage_client.h"
 
 using namespace crail;
@@ -58,28 +56,45 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
   auto create_res =
       namenode_client_->Create(filename, static_cast<int>(type), storage_class,
                                location_class, _enumerable);
+
   if (!create_res) {
     return nullptr;
   }
+
+  if (create_res->Get() < 0) {
+    return nullptr;
+  }
+
   if (create_res->error() != 0) {
     return nullptr;
   }
 
   auto file_info = create_res->file();
-  auto parent_info = create_res->parent();
-  long long dir_offset = file_info->dir_offset();
-  string _name = filename.name();
-  WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
   AddBlock(file_info->fd(), 0, create_res->file_block());
+
+  long long dir_offset = file_info->dir_offset();
+  if (dir_offset >= 0) {
+    auto parent_info = create_res->parent();
+    AddBlock(parent_info->fd(), dir_offset, create_res->parent_block());
+    string _name = filename.name();
+    WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
+  }
+
   return DispatchType(file_info);
 }
 
 unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
   Filename filename(name);
   auto lookup_res = namenode_client_->Lookup(filename);
+
   if (!lookup_res) {
     return nullptr;
   }
+
+  if (lookup_res->Get() < 0) {
+    return nullptr;
+  }
+
   if (lookup_res->error() != 0) {
     return nullptr;
   }
@@ -92,9 +107,15 @@ unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
 int CrailStore::Remove(string &name, bool recursive) {
   Filename filename(name);
   auto remove_res = namenode_client_->Remove(filename, recursive);
+
   if (!remove_res) {
     return -1;
   }
+
+  if (remove_res->Get() < 0) {
+    return -1;
+  }
+
   if (remove_res->error() != 0) {
     return -1;
   }
@@ -105,6 +126,24 @@ int CrailStore::Remove(string &name, bool recursive) {
   WriteDirectoryRecord(parent_info, _name, dir_offset, 0);
 
   return 0;
+}
+
+int CrailStore::Ioctl(unsigned char op, string &name) {
+  Filename filename(name);
+  shared_ptr<IoctlResponse> ioctl_res = namenode_client_->Ioctl(op, filename);
+
+  if (!ioctl_res) {
+    return -1;
+  }
+
+  if (ioctl_res->Get() < 0) {
+    return -1;
+  }
+
+  if (ioctl_res->error() != 0) {
+    return -1;
+  }
+  return ioctl_res->count();
 }
 
 unique_ptr<CrailNode> CrailStore::DispatchType(shared_ptr<FileInfo> file_info) {
@@ -160,16 +199,4 @@ int CrailStore::WriteDirectoryRecord(shared_ptr<FileInfo> parent_info,
   buf->Flip();
   directory_stream->Write(buf);
   return 0;
-}
-
-int CrailStore::Ioctl(unsigned char op, string &name) {
-  Filename filename(name);
-  shared_ptr<IoctlResponse> ioctl_res = namenode_client_->Ioctl(op, filename);
-  if (!ioctl_res) {
-    return -1;
-  }
-  if (ioctl_res->error() != 0) {
-    return -1;
-  }
-  return ioctl_res->count();
 }

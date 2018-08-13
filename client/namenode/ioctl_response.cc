@@ -1,6 +1,7 @@
 #include "ioctl_response.h"
 
-IoctlResponse::IoctlResponse() : NamenodeResponse() {}
+IoctlResponse::IoctlResponse(RpcClient *rpc_client)
+    : NamenodeResponse(rpc_client) {}
 
 IoctlResponse::~IoctlResponse() {}
 

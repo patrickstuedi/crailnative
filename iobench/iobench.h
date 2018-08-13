@@ -16,36 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef GETBLOCK_RESPONSE_H
-#define GETBLOCK_RESPONSE_H
 
-#include <memory>
+#ifndef IOBENCH_H
+#define IOBENCH_H
 
-#include "metadata/block_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
+#include <string>
+
+#include "crail_store.h"
 
 using namespace std;
 
-class GetblockResponse : public NamenodeResponse {
+class Iobench {
 public:
-  GetblockResponse(RpcClient *rpc_client);
-  virtual ~GetblockResponse();
+  Iobench(string address, int port);
+  virtual ~Iobench();
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
-
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  shared_ptr<BlockInfo> block_info() { return block_info_; }
+  int GetFile(string &filename, const int loop);
+  int WriteFile(string local_file, string dst_file, bool enumerable);
+  int ReadFile(string src_file, string local_file);
+  int Write(string dst_file, int len, int loop);
+  int Read(string src_file, int len, int loop);
+  int PutKey(const char data[], int len, string dst_file, bool enumerable);
+  int GetKey(char data[], int len, string src_file);
 
 private:
-  shared_ptr<BlockInfo> block_info_;
-  short error_;
+  CrailStore crail_;
 };
 
-#endif /* GETBLOCK_RESPONSE_H */
+#endif /* IOBENCH_H */

@@ -8,28 +8,30 @@ ReflexStorageClient::ReflexStorageClient() {}
 
 ReflexStorageClient::~ReflexStorageClient() {}
 
-int ReflexStorageClient::WriteData(int key, long long address,
-                                   shared_ptr<ByteBuffer> buf) {
+shared_ptr<StorageResponse>
+ReflexStorageClient::WriteData(int key, long long address,
+                               shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Put(lba, buf);
   if (!future) {
-    return -1;
+    return nullptr;
   }
-  if (ReflexClient::PollResponse() < 0) {
-    return -1;
+  if (PollResponse() < 0) {
+    return nullptr;
   }
   return 0;
 }
 
-int ReflexStorageClient::ReadData(int key, long long address,
-                                  shared_ptr<ByteBuffer> buf) {
+shared_ptr<StorageResponse>
+ReflexStorageClient::ReadData(int key, long long address,
+                              shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Get(lba, buf);
   if (!future) {
-    return -1;
+    return nullptr;
   }
-  if (ReflexClient::PollResponse() < 0) {
-    return -1;
+  if (PollResponse() < 0) {
+    return nullptr;
   }
   return 0;
 }

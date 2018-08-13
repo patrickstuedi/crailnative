@@ -16,36 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef GETBLOCK_RESPONSE_H
-#define GETBLOCK_RESPONSE_H
 
-#include <memory>
-
-#include "metadata/block_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
+#include "micro_clock.h"
+#include <iostream>
 
 using namespace std;
 
-class GetblockResponse : public NamenodeResponse {
-public:
-  GetblockResponse(RpcClient *rpc_client);
-  virtual ~GetblockResponse();
+MicroClock::MicroClock() {}
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
+MicroClock::~MicroClock() {}
 
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+void MicroClock::Start() { start_ = steady_clock::now(); }
 
-  shared_ptr<BlockInfo> block_info() { return block_info_; }
+void MicroClock::Stop() { end_ = steady_clock::now(); }
 
-private:
-  shared_ptr<BlockInfo> block_info_;
-  short error_;
-};
-
-#endif /* GETBLOCK_RESPONSE_H */
+double MicroClock::Duration() {
+  auto diff = end_ - start_;
+  auto micros = duration<double, nano>(diff).count() / 1000;
+  return micros;
+}

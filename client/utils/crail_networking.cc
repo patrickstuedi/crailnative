@@ -16,36 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef GETBLOCK_RESPONSE_H
-#define GETBLOCK_RESPONSE_H
 
-#include <memory>
+#include "crail_networking.h"
 
-#include "metadata/block_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
+#include <sstream>
 
-using namespace std;
-
-class GetblockResponse : public NamenodeResponse {
-public:
-  GetblockResponse(RpcClient *rpc_client);
-  virtual ~GetblockResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
-
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);
+string GetAddress(int address, int port) {
+  int tmp = address;
+  unsigned char *_tmp = (unsigned char *)&tmp;
+  stringstream addressport;
+  for (int i = 0; i < 4; i++) {
+    unsigned int ch = (unsigned int)_tmp[i];
+    addressport << ch;
+    if (i < 3) {
+      addressport << ".";
+    }
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  addressport << ":" << port;
 
-  shared_ptr<BlockInfo> block_info() { return block_info_; }
-
-private:
-  shared_ptr<BlockInfo> block_info_;
-  short error_;
-};
-
-#endif /* GETBLOCK_RESPONSE_H */
+  return addressport.str();
+}

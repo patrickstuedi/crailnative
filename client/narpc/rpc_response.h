@@ -16,36 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef GETBLOCK_RESPONSE_H
-#define GETBLOCK_RESPONSE_H
 
-#include <memory>
+#ifndef RPC_RESPONSE_H
+#define RPC_RESPONSE_H
 
-#include "metadata/block_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
+#include "rpc_checker.h"
+#include "rpc_message.h"
 
-using namespace std;
-
-class GetblockResponse : public NamenodeResponse {
+class RpcResponse : public RpcMessage {
 public:
-  GetblockResponse(RpcClient *rpc_client);
-  virtual ~GetblockResponse();
+  RpcResponse(RpcChecker *rpc_checker);
+  virtual ~RpcResponse();
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
-
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  shared_ptr<BlockInfo> block_info() { return block_info_; }
+  int Get();
 
 private:
-  shared_ptr<BlockInfo> block_info_;
-  short error_;
+  RpcChecker *rpc_checker_;
 };
 
-#endif /* GETBLOCK_RESPONSE_H */
+#endif /* RPC_RESPONSE_H */

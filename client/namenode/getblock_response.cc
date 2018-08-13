@@ -1,7 +1,7 @@
 #include "getblock_response.h"
 
-GetblockResponse::GetblockResponse()
-    : NamenodeResponse(), block_info_(new BlockInfo()) {}
+GetblockResponse::GetblockResponse(RpcClient *rpc_client)
+    : NamenodeResponse(rpc_client), block_info_(new BlockInfo()) {}
 
 GetblockResponse::~GetblockResponse() {}
 

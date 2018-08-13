@@ -17,46 +17,33 @@
  * limitations under the License.
  */
 
-#ifndef CREATE_RESPONSE_H
-#define CREATE_RESPONSE_H
+#ifndef NARPC_READ_RESPONSE_H
+#define NARPC_READ_RESPONSE_H
 
 #include <memory>
 
-#include "common/serializable.h"
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_client.h"
+#include "narpc/rpc_checker.h"
 #include "narpc/rpc_message.h"
+#include "narpc/rpc_response.h"
+#include "narpc_storage_response.h"
+#include "storage/storage_response.h"
 
 using namespace std;
 
-class NamenodeClient;
-
-class CreateResponse : public NamenodeResponse {
+class NarpcReadResponse : public NarpcStorageResponse {
 public:
-  CreateResponse(RpcClient *rpc_client);
-  virtual ~CreateResponse();
+  NarpcReadResponse(RpcChecker *rpc_checker, shared_ptr<ByteBuffer> payload);
+  virtual ~NarpcReadResponse();
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
+  shared_ptr<ByteBuffer> Payload() { return payload_; }
 
-  int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() * 2 +
-           file_block_->Size() * 2;
-  }
+  int Size() const { return length_; }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<FileInfo> parent() const { return parent_info_; }
-  shared_ptr<BlockInfo> file_block() const { return file_block_; }
-  shared_ptr<BlockInfo> parent_block() const { return parent_block_; }
-
 private:
-  shared_ptr<FileInfo> file_info_;
-  shared_ptr<FileInfo> parent_info_;
-  shared_ptr<BlockInfo> file_block_;
-  shared_ptr<BlockInfo> parent_block_;
+  int length_;
+  shared_ptr<ByteBuffer> payload_;
 };
 
-#endif /* CREATE_RESPONSE_H */
+#endif /* NARPC_READ_RESPONSE_H */

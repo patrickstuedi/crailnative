@@ -16,36 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef GETBLOCK_RESPONSE_H
-#define GETBLOCK_RESPONSE_H
 
-#include <memory>
+#ifndef CRAIL_HASH_H
+#define CRAIL_HASH_H
 
-#include "metadata/block_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
+#include <math.h>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
-class GetblockResponse : public NamenodeResponse {
-public:
-  GetblockResponse(RpcClient *rpc_client);
-  virtual ~GetblockResponse();
+int file_hash(string name);
+int file_hash(string &name, int &start);
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
-
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  shared_ptr<BlockInfo> block_info() { return block_info_; }
-
-private:
-  shared_ptr<BlockInfo> block_info_;
-  short error_;
-};
-
-#endif /* GETBLOCK_RESPONSE_H */
+#endif /* CRAIL_HASH_H */

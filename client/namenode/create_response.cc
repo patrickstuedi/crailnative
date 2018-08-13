@@ -1,7 +1,7 @@
 #include "create_response.h"
 
-CreateResponse::CreateResponse()
-    : NamenodeResponse(), file_info_(new FileInfo()),
+CreateResponse::CreateResponse(RpcClient *rpc_client)
+    : NamenodeResponse(rpc_client), file_info_(new FileInfo()),
       parent_info_(new FileInfo()), file_block_(new BlockInfo()),
       parent_block_(new BlockInfo()) {}
 

@@ -1,6 +1,7 @@
 #include "namenode_response.h"
 
-NamenodeResponse::NamenodeResponse() : type_(-1), error_(-1) {}
+NamenodeResponse::NamenodeResponse(RpcChecker *rpc_checker)
+    : RpcResponse(rpc_checker), type_(-1), error_(-1) {}
 
 NamenodeResponse::~NamenodeResponse() {}
 
@@ -17,3 +18,5 @@ int NamenodeResponse::Update(ByteBuffer &buf) {
 
   return Size();
 }
+
+// int NamenodeResponse::Get() { return this->rpc_client_->PollResponse(); }

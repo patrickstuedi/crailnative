@@ -16,36 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef GETBLOCK_RESPONSE_H
-#define GETBLOCK_RESPONSE_H
 
-#include <memory>
+#include "narpc_storage_request.h"
 
-#include "metadata/block_info.h"
-#include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
+NarpcStorageRequest::NarpcStorageRequest(int type) : type_(type) {}
 
-using namespace std;
+NarpcStorageRequest::~NarpcStorageRequest() {}
 
-class GetblockResponse : public NamenodeResponse {
-public:
-  GetblockResponse(RpcClient *rpc_client);
-  virtual ~GetblockResponse();
+int NarpcStorageRequest::Write(ByteBuffer &buf) const {
+  buf.PutInt(type_);
 
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
+  return Size();
+}
 
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+int NarpcStorageRequest::Update(ByteBuffer &buf) {
+  this->type_ = buf.GetInt();
 
-  shared_ptr<BlockInfo> block_info() { return block_info_; }
-
-private:
-  shared_ptr<BlockInfo> block_info_;
-  short error_;
-};
-
-#endif /* GETBLOCK_RESPONSE_H */
+  return Size();
+}

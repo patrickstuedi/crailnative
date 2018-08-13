@@ -4,8 +4,8 @@
 
 using namespace std;
 
-LookupResponse::LookupResponse()
-    : NamenodeResponse(), file_info_(new FileInfo()),
+LookupResponse::LookupResponse(RpcClient *rpc_client)
+    : NamenodeResponse(rpc_client), file_info_(new FileInfo()),
       block_info_(new BlockInfo()) {}
 
 LookupResponse::~LookupResponse() {}

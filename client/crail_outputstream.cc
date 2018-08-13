@@ -5,9 +5,8 @@
 
 #include "namenode/getblock_response.h"
 #include "storage/narpc/narpc_storage_client.h"
-#include "storage/narpc/write_request.h"
-#include "storage/narpc/write_response.h"
 #include "storage/storage_client.h"
+#include "utils/crail_networking.h"
 
 using namespace std;
 
@@ -15,7 +14,7 @@ CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
                                      shared_ptr<StorageCache> storage_cache,
                                      shared_ptr<BlockCache> block_cache,
                                      shared_ptr<FileInfo> file_info,
-                                     int position) {
+                                     unsigned long long position) {
   this->file_info_ = file_info;
   this->namenode_client_ = namenode_client;
   this->storage_cache_ = storage_cache;
@@ -45,6 +44,15 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (!block_info) {
     shared_ptr<GetblockResponse> get_block_res = namenode_client_->GetBlock(
         file_info_->fd(), file_info_->token(), position_, position_);
+
+    if (!get_block_res) {
+      return -1;
+    }
+
+    if (get_block_res->Get() < 0) {
+      return -1;
+    }
+
     block_info = get_block_res->block_info();
     block_cache_->PutBlock(position_, block_info);
   }
@@ -59,7 +67,13 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  if (storage_client->WriteData(block_info->lkey(), block_addr, buf) < 0) {
+  shared_ptr<StorageResponse> storage_response =
+      storage_client->WriteData(block_info->lkey(), block_addr, buf);
+  if (!storage_response) {
+    return -1;
+  }
+
+  if (storage_response->Get() < 0) {
     return -1;
   }
 
@@ -73,6 +87,16 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 
 int CrailOutputstream::Close() {
   file_info_->set_capacity(position_);
-  namenode_client_->SetFile(file_info_, true);
+  shared_ptr<VoidResponse> set_file_res =
+      namenode_client_->SetFile(file_info_, true);
+
+  if (!set_file_res) {
+    return -1;
+  }
+
+  if (set_file_res->Get() < 0) {
+    return -1;
+  }
+
   return 0;
 }
