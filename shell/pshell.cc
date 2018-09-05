@@ -62,7 +62,7 @@ Operation getOperation(string name) {
     return Operation::Enumerate;
   } else if (name == "PutFile") {
     return Operation::PutFile;
-  } else if (name == "Get") {
+  } else if (name == "GetFile") {
     return Operation::GetFile;
   } else if (name == "DeleteDir") {
     return Operation::DeleteDir;
