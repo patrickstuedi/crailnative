@@ -1,4 +1,8 @@
 /*
+ * CppCrail: Native Crail
+ *
+ * Author: Patrick Stuedi  <stu@zurich.ibm.com>
+ *
  * Copyright (C) 2015-2018, IBM Corporation
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more

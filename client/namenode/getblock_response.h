@@ -1,4 +1,8 @@
 /*
+ * CppCrail: Native Crail
+ *
+ * Author: Patrick Stuedi  <stu@zurich.ibm.com>
+ *
  * Copyright (C) 2015-2018, IBM Corporation
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -16,6 +20,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef GETBLOCK_RESPONSE_H
 #define GETBLOCK_RESPONSE_H
 
