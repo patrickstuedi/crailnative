@@ -26,7 +26,6 @@
 
 #include "narpc/rpc_client.h"
 #include "storage/storage_client.h"
-#include "storage/storage_response.h"
 
 class NarpcStorageClient : public RpcClient, public StorageClient {
 public:

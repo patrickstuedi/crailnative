@@ -28,7 +28,6 @@
 
 #include "common/byte_buffer.h"
 #include "common/future.h"
-#include "storage_response.h"
 
 using namespace crail;
 

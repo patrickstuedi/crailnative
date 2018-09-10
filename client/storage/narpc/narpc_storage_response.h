@@ -27,7 +27,6 @@
 #include "common/byte_buffer.h"
 #include "narpc/rpc_checker.h"
 #include "narpc/rpc_response.h"
-#include "storage/storage_response.h"
 
 using namespace crail;
 

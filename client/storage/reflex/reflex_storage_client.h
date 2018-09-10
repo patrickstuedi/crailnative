@@ -26,7 +26,6 @@
 
 #include "reflex/reflex_client.h"
 #include "storage/storage_client.h"
-#include "storage/storage_response.h"
 
 class ReflexStorageClient : public ReflexClient, public StorageClient {
 public:
