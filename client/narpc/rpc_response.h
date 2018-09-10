@@ -24,10 +24,11 @@
 #ifndef RPC_RESPONSE_H
 #define RPC_RESPONSE_H
 
+#include "common/future.h"
 #include "rpc_checker.h"
 #include "rpc_message.h"
 
-class RpcResponse : public RpcMessage {
+class RpcResponse : public RpcMessage, public Future {
 public:
   RpcResponse(RpcChecker *rpc_checker);
   virtual ~RpcResponse();

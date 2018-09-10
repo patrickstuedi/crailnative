@@ -39,6 +39,7 @@
 
 #include "common/byte_buffer.h"
 #include "common/serializable.h"
+#include "reflex_checker.h"
 #include "reflex_future.h"
 #include "reflex_header.h"
 
@@ -51,7 +52,7 @@ const int kReflexBlockSize = 512;
 const short kCmdGet = 0;
 const short kCmdPut = 1;
 
-class ReflexClient {
+class ReflexClient : public ReflexChecker {
 public:
   ReflexClient();
   virtual ~ReflexClient();

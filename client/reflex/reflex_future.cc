@@ -23,9 +23,12 @@
 
 #include "reflex_future.h"
 
-ReflexFuture::ReflexFuture(long long ticket, shared_ptr<ByteBuffer> buffer)
-    : ticket_(ticket) {
+ReflexFuture::ReflexFuture(ReflexChecker *reflex_checker, long long ticket,
+                           shared_ptr<ByteBuffer> buffer)
+    : reflex_checker_(reflex_checker), ticket_(ticket) {
   this->buffer_ = buffer;
 }
 
 ReflexFuture::~ReflexFuture() {}
+
+int ReflexFuture::Get() { return reflex_checker_->PollResponse(); }

@@ -139,7 +139,8 @@ ReflexClient::IssueOperation(int type, long long lba,
     }
   }
 
-  shared_ptr<ReflexFuture> future = make_shared<ReflexFuture>(ticket, payload);
+  shared_ptr<ReflexFuture> future =
+      make_shared<ReflexFuture>(this, ticket, payload);
   responseMap.insert({ticket, future});
   return future;
 }

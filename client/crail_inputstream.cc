@@ -98,7 +98,7 @@ int CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  shared_ptr<StorageResponse> storage_response =
+  shared_ptr<Future> storage_response =
       storage_client->ReadData(block_info->lkey(), block_addr, buf);
   if (!storage_response) {
     return -1;

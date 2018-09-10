@@ -25,21 +25,27 @@
 #define REFLEX_FUTURE_H
 
 #include "common/byte_buffer.h"
+#include "common/future.h"
+#include "reflex_checker.h"
 #include <memory>
 
 using namespace std;
 using namespace crail;
 
-class ReflexFuture {
+class ReflexFuture : public Future {
 public:
-  ReflexFuture(long long ticket, shared_ptr<ByteBuffer> buffer);
+  ReflexFuture(ReflexChecker *reflex_checker, long long ticket,
+               shared_ptr<ByteBuffer> buffer);
   virtual ~ReflexFuture();
+
+  int Get();
 
   long long ticket() const { return ticket_; }
   bool is_done() const { return done_; }
   shared_ptr<ByteBuffer> buffer() { return buffer_; }
 
 private:
+  ReflexChecker *reflex_checker_;
   shared_ptr<ByteBuffer> buffer_;
   long long ticket_;
   bool done_;

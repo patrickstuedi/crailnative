@@ -90,7 +90,7 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  shared_ptr<StorageResponse> storage_response =
+  shared_ptr<Future> storage_response =
       storage_client->WriteData(block_info->lkey(), block_addr, buf);
   if (!storage_response) {
     return -1;

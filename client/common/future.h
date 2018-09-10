@@ -21,33 +21,12 @@
  * limitations under the License.
  */
 
-#ifndef NARPC_STORAGE_RESPONSE_H
-#define NARPC_STORAGE_RESPONSE_H
+#ifndef FUTURE_H
+#define FUTURE_H
 
-#include "common/byte_buffer.h"
-#include "narpc/rpc_checker.h"
-#include "narpc/rpc_response.h"
-#include "storage/storage_response.h"
-
-using namespace crail;
-
-class NarpcStorageResponse : public RpcResponse {
+class Future {
 public:
-  NarpcStorageResponse(RpcChecker *rpc_checker, int error, int type);
-  virtual ~NarpcStorageResponse();
-
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-  int Size() const { return sizeof(int) * 2; }
-
-  int Get();
-
-  int error() const { return error_; }
-  int type() const { return type_; }
-
-private:
-  int error_;
-  int type_;
+  virtual int Get() = 0;
 };
 
-#endif /* NARPC_STORAGE_RESPONSE_H */
+#endif /* FUTURE_H */

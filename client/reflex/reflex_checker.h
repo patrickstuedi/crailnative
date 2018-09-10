@@ -21,33 +21,14 @@
  * limitations under the License.
  */
 
-#ifndef NARPC_STORAGE_RESPONSE_H
-#define NARPC_STORAGE_RESPONSE_H
+#ifndef REFLEX_CHECKER_H
+#define REFLEX_CHECKER_H
 
-#include "common/byte_buffer.h"
-#include "narpc/rpc_checker.h"
-#include "narpc/rpc_response.h"
-#include "storage/storage_response.h"
-
-using namespace crail;
-
-class NarpcStorageResponse : public RpcResponse {
+class ReflexChecker {
 public:
-  NarpcStorageResponse(RpcChecker *rpc_checker, int error, int type);
-  virtual ~NarpcStorageResponse();
-
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-  int Size() const { return sizeof(int) * 2; }
-
-  int Get();
-
-  int error() const { return error_; }
-  int type() const { return type_; }
+  virtual int PollResponse() = 0;
 
 private:
-  int error_;
-  int type_;
 };
 
-#endif /* NARPC_STORAGE_RESPONSE_H */
+#endif /* REFLEX_CHECKER_H */

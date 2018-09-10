@@ -37,10 +37,10 @@ public:
     return ReflexClient::Connect(address, port);
   }
   int Close() { return ReflexClient::Close(); }
-  shared_ptr<StorageResponse> WriteData(int key, long long address,
-                                        shared_ptr<ByteBuffer> buf);
-  shared_ptr<StorageResponse> ReadData(int key, long long address,
-                                       shared_ptr<ByteBuffer> buf);
+  shared_ptr<Future> WriteData(int key, long long address,
+                               shared_ptr<ByteBuffer> buf);
+  shared_ptr<Future> ReadData(int key, long long address,
+                              shared_ptr<ByteBuffer> buf);
 
 private:
   long long linearBlockAddress(long long address, int sector_size);
