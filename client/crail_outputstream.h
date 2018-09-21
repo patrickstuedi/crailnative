@@ -24,6 +24,7 @@
 #ifndef CRAIL_OUTPUTSTREAM_H
 #define CRAIL_OUTPUTSTREAM_H
 
+#include <future>
 #include <memory>
 
 #include "common/block_cache.h"
@@ -43,13 +44,15 @@ public:
                     unsigned long long position);
   virtual ~CrailOutputstream();
 
-  int Write(shared_ptr<ByteBuffer> buf);
+  future<int> Write(shared_ptr<ByteBuffer> buf);
   int Close();
 
   unsigned long long position() const { return position_; }
   int capacity() const { return file_info_->capacity(); }
 
 private:
+  int error();
+
   shared_ptr<FileInfo> file_info_;
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;

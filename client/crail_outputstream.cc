@@ -47,12 +47,12 @@ CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
 
 CrailOutputstream::~CrailOutputstream() {}
 
-int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
+future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (buf->remaining() < 0) {
-    return -1;
+    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
   }
   if (buf->remaining() == 0) {
-    return 0;
+    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
   }
 
   int buf_original_limit = buf->limit();
@@ -69,11 +69,11 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
         file_info_->fd(), file_info_->token(), position_, position_);
 
     if (!get_block_res) {
-      return -1;
+      return std::async(std::launch::deferred, &CrailOutputstream::error, this);
     }
 
     if (get_block_res->Get() < 0) {
-      return -1;
+      return std::async(std::launch::deferred, &CrailOutputstream::error, this);
     }
 
     block_info = get_block_res->block_info();
@@ -86,18 +86,18 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
       block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
-    return -1;
+    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
   }
 
   long long block_addr = block_info->addr() + block_offset;
   shared_ptr<Future> storage_response =
       storage_client->WriteData(block_info->lkey(), block_addr, buf);
   if (!storage_response) {
-    return -1;
+    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
   }
 
   if (storage_response->Get() < 0) {
-    return -1;
+    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
   }
 
   int len = buf->remaining();
@@ -105,7 +105,8 @@ int CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   buf->set_position(buf->position() + buf->remaining());
   buf->set_limit(buf_original_limit);
 
-  return len;
+  // return len;
+  return std::async(std::launch::deferred, &CrailOutputstream::error, this);
 }
 
 int CrailOutputstream::Close() {
@@ -123,3 +124,5 @@ int CrailOutputstream::Close() {
 
   return 0;
 }
+
+int CrailOutputstream::error() { return -1; }
