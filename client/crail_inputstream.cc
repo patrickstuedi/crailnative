@@ -26,6 +26,7 @@
 #include <iostream>
 #include <memory>
 
+#include "common/async_result.h"
 #include "namenode/getblock_response.h"
 #include "storage/narpc/narpc_storage_client.h"
 #include "storage/storage_client.h"
@@ -45,9 +46,9 @@ CrailInputstream::CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
 
 CrailInputstream::~CrailInputstream() {}
 
-int CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
+future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   if (position_ >= file_info_->capacity()) {
-    return -1;
+    AsyncResult::value(-1);
   }
 
   int buf_original_limit = buf->limit();
@@ -68,24 +69,15 @@ int CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
         file_info_->fd(), file_info_->token(), position_, 0);
 
     if (!get_block_res) {
-      return -1;
+      AsyncResult::value(-1);
     }
 
     if (get_block_res->Get() < 0) {
-      return -1;
+      AsyncResult::value(-1);
     }
 
     block_info = get_block_res->block_info();
     block_cache_->PutBlock(position_, block_info);
-    /*
-        cout << "got new block info, address "
-             << GetAddress(block_info->datanode()->addr(),
-                           block_info->datanode()->port())
-             << ", position " << position_ << ", addr " << block_info->addr()
-             << ", lba " << block_info->lba() << ", length " <<
-       block_info->length()
-             << endl;
-    */
   }
 
   int address = block_info->datanode()->addr();
@@ -94,26 +86,18 @@ int CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
       block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
-    return -1;
+    AsyncResult::value(-1);
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  shared_ptr<Future> storage_response =
+  future<int> storage_response =
       storage_client->ReadData(block_info->lkey(), block_addr, buf);
-  if (!storage_response) {
-    return -1;
-  }
 
-  if (storage_response->Get() < 0) {
-    return -1;
-  }
-
-  int len = buf->remaining();
   this->position_ += buf->remaining();
   buf->set_position(buf->position() + buf->remaining());
   buf->set_limit(buf_original_limit);
 
-  return len;
+  return storage_response;
 }
 
-int CrailInputstream::Close() {}
+future<int> CrailInputstream::Close() { return AsyncResult::value(0); }

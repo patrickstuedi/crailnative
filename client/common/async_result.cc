@@ -21,33 +21,10 @@
  * limitations under the License.
  */
 
-#ifndef REFLEX_FUTURE_H
-#define REFLEX_FUTURE_H
+#include "async_result.h"
 
-#include "common/byte_buffer.h"
-#include "reflex_checker.h"
-#include <memory>
-
-using namespace std;
-using namespace crail;
-
-class ReflexFuture {
-public:
-  ReflexFuture(ReflexChecker *reflex_checker, long long ticket,
-               shared_ptr<ByteBuffer> buffer);
-  virtual ~ReflexFuture();
-
-  int Get();
-
-  long long ticket() const { return ticket_; }
-  bool is_done() const { return done_; }
-  shared_ptr<ByteBuffer> buffer() { return buffer_; }
-
-private:
-  ReflexChecker *reflex_checker_;
-  shared_ptr<ByteBuffer> buffer_;
-  long long ticket_;
-  bool done_;
-};
-
-#endif /* REFLEX_FUTURE_H */
+future<int> AsyncResult::value(int ret) {
+  promise<int> pro;
+  pro.set_value(ret);
+  return pro.get_future();
+}

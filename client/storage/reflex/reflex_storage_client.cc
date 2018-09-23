@@ -23,6 +23,7 @@
 
 #include <iostream>
 
+#include "common/async_result.h"
 #include "storage/reflex/reflex_storage_client.h"
 
 using namespace std;
@@ -31,18 +32,18 @@ ReflexStorageClient::ReflexStorageClient() {}
 
 ReflexStorageClient::~ReflexStorageClient() {}
 
-shared_ptr<Future> ReflexStorageClient::WriteData(int key, long long address,
-                                                  shared_ptr<ByteBuffer> buf) {
+future<int> ReflexStorageClient::WriteData(int key, long long address,
+                                           shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Put(lba, buf);
-  return future;
+  return AsyncResult::value(-1);
 }
 
-shared_ptr<Future> ReflexStorageClient::ReadData(int key, long long address,
-                                                 shared_ptr<ByteBuffer> buf) {
+future<int> ReflexStorageClient::ReadData(int key, long long address,
+                                          shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Get(lba, buf);
-  return future;
+  return AsyncResult::value(-1);
 }
 
 long long ReflexStorageClient::linearBlockAddress(long long address,

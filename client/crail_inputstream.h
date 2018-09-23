@@ -24,6 +24,7 @@
 #ifndef CRAIL_INPUTSTREAM_H
 #define CRAIL_INPUTSTREAM_H
 
+#include <future>
 #include <memory>
 
 #include "common/block_cache.h"
@@ -39,8 +40,8 @@ public:
                    shared_ptr<FileInfo> file_info, unsigned long long position);
   virtual ~CrailInputstream();
 
-  int Read(shared_ptr<ByteBuffer> buf);
-  int Close();
+  future<int> Read(shared_ptr<ByteBuffer> buf);
+  future<int> Close();
 
   int position() const { return position_; }
   int capacity() const { return file_info_->capacity(); }

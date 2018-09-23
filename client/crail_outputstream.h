@@ -45,7 +45,7 @@ public:
   virtual ~CrailOutputstream();
 
   future<int> Write(shared_ptr<ByteBuffer> buf);
-  int Close();
+  future<int> Close();
 
   unsigned long long position() const { return position_; }
   int capacity() const { return file_info_->capacity(); }

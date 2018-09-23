@@ -26,6 +26,7 @@
 #include <iostream>
 #include <memory>
 
+#include "common/async_result.h"
 #include "namenode/getblock_response.h"
 #include "storage/narpc/narpc_storage_client.h"
 #include "storage/storage_client.h"
@@ -49,10 +50,10 @@ CrailOutputstream::~CrailOutputstream() {}
 
 future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (buf->remaining() < 0) {
-    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
+    return AsyncResult::value(-1);
   }
   if (buf->remaining() == 0) {
-    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
+    return AsyncResult::value(-1);
   }
 
   int buf_original_limit = buf->limit();
@@ -69,11 +70,11 @@ future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
         file_info_->fd(), file_info_->token(), position_, position_);
 
     if (!get_block_res) {
-      return std::async(std::launch::deferred, &CrailOutputstream::error, this);
+      return AsyncResult::value(-1);
     }
 
     if (get_block_res->Get() < 0) {
-      return std::async(std::launch::deferred, &CrailOutputstream::error, this);
+      return AsyncResult::value(-1);
     }
 
     block_info = get_block_res->block_info();
@@ -86,43 +87,34 @@ future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
       block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
-    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
+    return AsyncResult::value(-1);
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  shared_ptr<Future> storage_response =
+  future<int> storage_response =
       storage_client->WriteData(block_info->lkey(), block_addr, buf);
-  if (!storage_response) {
-    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
-  }
 
-  if (storage_response->Get() < 0) {
-    return std::async(std::launch::deferred, &CrailOutputstream::error, this);
-  }
-
-  int len = buf->remaining();
   this->position_ += buf->remaining();
   buf->set_position(buf->position() + buf->remaining());
   buf->set_limit(buf_original_limit);
 
-  // return len;
-  return std::async(std::launch::deferred, &CrailOutputstream::error, this);
+  return storage_response;
 }
 
-int CrailOutputstream::Close() {
+future<int> CrailOutputstream::Close() {
   file_info_->set_capacity(position_);
   shared_ptr<VoidResponse> set_file_res =
       namenode_client_->SetFile(file_info_, true);
 
   if (!set_file_res) {
-    return -1;
+    return AsyncResult::value(-1);
   }
 
   if (set_file_res->Get() < 0) {
-    return -1;
+    return AsyncResult::value(-1);
   }
 
-  return 0;
+  return AsyncResult::value(0);
 }
 
 int CrailOutputstream::error() { return -1; }

@@ -125,7 +125,7 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
   }
 
   fclose(fp);
-  outputstream->Close();
+  outputstream->Close().get();
 
   return 0;
 }
@@ -152,7 +152,7 @@ int PocketDispatcher::GetFile(string src_file, string local_file) {
   unique_ptr<CrailInputstream> inputstream = file->inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
-  while (inputstream->Read(buf) > 0) {
+  while (inputstream->Read(buf).get() > 0) {
     buf->Flip();
     while (buf->remaining()) {
       if (size_t len = fwrite(buf->get_bytes(), 1, buf->remaining(), fp)) {
@@ -164,7 +164,7 @@ int PocketDispatcher::GetFile(string src_file, string local_file) {
     buf->Clear();
   }
   fclose(fp);
-  inputstream->Close();
+  inputstream->Close().get();
 
   return 0;
 }
@@ -207,7 +207,7 @@ int PocketDispatcher::PutBuffer(const char data[], int len, string dst_file,
       return -1;
     }
   }
-  outputstream->Close();
+  outputstream->Close().get();
 
   return 0;
 }
@@ -229,14 +229,14 @@ int PocketDispatcher::GetBuffer(char data[], int len, string src_file) {
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
   while (buf->remaining()) {
-    if (inputstream->Read(buf) < 0) {
+    if (inputstream->Read(buf).get() < 0) {
       return -1;
     }
   }
   buf->Clear();
   memcpy(data, buf->get_bytes(), len);
 
-  inputstream->Close();
+  inputstream->Close().get();
 
   return 0;
 }

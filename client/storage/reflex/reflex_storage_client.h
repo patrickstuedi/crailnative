@@ -24,6 +24,8 @@
 #ifndef REFLEX_STORAGE_CLIENT_H
 #define REFLEX_STORAGE_CLIENT_H
 
+#include <memory>
+
 #include "reflex/reflex_client.h"
 #include "storage/storage_client.h"
 
@@ -36,10 +38,8 @@ public:
     return ReflexClient::Connect(address, port);
   }
   int Close() { return ReflexClient::Close(); }
-  shared_ptr<Future> WriteData(int key, long long address,
-                               shared_ptr<ByteBuffer> buf);
-  shared_ptr<Future> ReadData(int key, long long address,
-                              shared_ptr<ByteBuffer> buf);
+  future<int> WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
+  future<int> ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 
 private:
   long long linearBlockAddress(long long address, int sector_size);

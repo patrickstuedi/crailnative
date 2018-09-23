@@ -21,12 +21,21 @@
  * limitations under the License.
  */
 
-#ifndef FUTURE_H
-#define FUTURE_H
+#ifndef ASYNC_RESULT_H
+#define ASYNC_RESULT_H
 
-class Future {
+#include <future>
+
+using namespace std;
+
+class AsyncResult {
 public:
-  virtual int Get() = 0;
+  AsyncResult() = delete;
+  virtual ~AsyncResult() = delete;
+
+  static future<int> value(int ret);
+
+private:
 };
 
-#endif /* FUTURE_H */
+#endif /* ASYNC_RESULT_H */

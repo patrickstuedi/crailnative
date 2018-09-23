@@ -10,6 +10,7 @@ add_library (cppcrail SHARED
 	directory_record.cc
 	common/byte_buffer.cc
 	common/block_cache.cc
+	common/async_result.cc
 	reflex/reflex_client.cc
 	reflex/reflex_header.cc
 	reflex/reflex_future.cc
@@ -48,6 +49,7 @@ add_library (cppcrail SHARED
 	utils/crail_networking.cc
 	)
 #target_link_libraries(cppcrail proto ${PROTOBUF_LIBRARY})
+target_link_libraries(cppcrail LINK_PUBLIC pthread)
 
 install(TARGETS cppcrail DESTINATION /lib)
 install (FILES 

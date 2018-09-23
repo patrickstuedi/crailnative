@@ -149,7 +149,7 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
 
     buf->Flip();
     while (buf->remaining() > 0) {
-      if (outputstream->Write(buf) < 0) {
+      if (outputstream->Write(buf).get() < 0) {
         return -1;
       }
     }
@@ -159,14 +159,14 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
   if (buf->position() > 0) {
     buf->Flip();
     while (buf->remaining() > 0) {
-      if (outputstream->Write(buf) < 0) {
+      if (outputstream->Write(buf).get() < 0) {
         return -1;
       }
     }
   }
 
   fclose(fp);
-  outputstream->Close();
+  outputstream->Close().get();
 
   return 0;
 }
@@ -193,7 +193,7 @@ int Iobench::ReadFile(string src_file, string local_file) {
   unique_ptr<CrailInputstream> inputstream = file->inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
-  while (inputstream->Read(buf) > 0) {
+  while (inputstream->Read(buf).get() > 0) {
     buf->Flip();
     while (buf->remaining()) {
       if (size_t len = fwrite(buf->get_bytes(), 1, buf->remaining(), fp)) {
@@ -238,13 +238,13 @@ int Iobench::Write(string dst_file, int len, int loop) {
     buf->Clear();
     // cout << "buf->remaining " << buf->remaining() << endl;
     while (buf->remaining() > 0) {
-      if (outputstream->Write(buf) < 0) {
+      if (outputstream->Write(buf).get() < 0) {
         cout << "error while writing " << endl;
         break;
       }
     }
   }
-  outputstream->Close();
+  outputstream->Close().get();
 
   clock.Stop();
 
@@ -284,14 +284,14 @@ int Iobench::Read(string src_file, int len, int loop) {
   for (int i = 0; i < loop; i++) {
     buf->Clear();
     while (buf->remaining()) {
-      if (inputstream->Read(buf) < 0) {
+      if (inputstream->Read(buf).get() < 0) {
         return -1;
       }
     }
     // buf->Clear();
     // memcpy(data, buf->get_bytes(), len);
   }
-  inputstream->Close();
+  inputstream->Close().get();
 
   clock.Stop();
 
@@ -329,11 +329,11 @@ int Iobench::PutKey(const char data[], int len, string dst_file,
   buf->PutBytes(data, len);
   buf->Flip();
   while (buf->remaining() > 0) {
-    if (outputstream->Write(buf) < 0) {
+    if (outputstream->Write(buf).get() < 0) {
       return -1;
     }
   }
-  outputstream->Close();
+  outputstream->Close().get();
 
   return 0;
 }
@@ -355,14 +355,14 @@ int Iobench::GetKey(char data[], int len, string src_file) {
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
   while (buf->remaining()) {
-    if (inputstream->Read(buf) < 0) {
+    if (inputstream->Read(buf).get() < 0) {
       return -1;
     }
   }
   buf->Clear();
   memcpy(data, buf->get_bytes(), len);
 
-  inputstream->Close();
+  inputstream->Close().get();
 
   return 0;
 }
