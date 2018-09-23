@@ -47,9 +47,9 @@ future<int> NarpcStorageClient::WriteData(int key, long long address,
   if (IssueRequest(write_request, write_response) < 0) {
     return AsyncResult::value(-1);
   }
-  // return std::async(std::launch::deferred, &NarpcWriteResponse::Get,
-  //                  write_response, this);
-  return AsyncResult::value(-1);
+  return std::async(std::launch::deferred, &shared_ptr<NarpcWriteResponse>::Get,
+                    write_response);
+  // return AsyncResult::value(-1);
 }
 
 future<int> NarpcStorageClient::ReadData(int key, long long address,
