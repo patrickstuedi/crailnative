@@ -24,10 +24,10 @@
 #ifndef STORAGE_CLIENT_H
 #define STORAGE_CLIENT_H
 
-#include <future>
 #include <memory>
 
 #include "common/byte_buffer.h"
+#include "common/future.h"
 
 using namespace crail;
 using namespace std;
@@ -36,9 +36,9 @@ class StorageClient {
 public:
   virtual int Connect(int address, int port) = 0;
   virtual int Close() = 0;
-  virtual future<int> WriteData(int key, long long address,
+  virtual Future<int> WriteData(int key, long long address,
                                 shared_ptr<ByteBuffer> buf) = 0;
-  virtual future<int> ReadData(int key, long long address,
+  virtual Future<int> ReadData(int key, long long address,
                                shared_ptr<ByteBuffer> buf) = 0;
 };
 

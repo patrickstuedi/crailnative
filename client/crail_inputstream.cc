@@ -46,7 +46,7 @@ CrailInputstream::CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
 
 CrailInputstream::~CrailInputstream() {}
 
-future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
+Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   if (position_ >= file_info_->capacity()) {
     AsyncResult::value(-1);
   }
@@ -90,7 +90,7 @@ future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  future<int> storage_response =
+  Future<int> storage_response =
       storage_client->ReadData(block_info->lkey(), block_addr, buf);
 
   this->position_ += buf->remaining();
@@ -100,4 +100,4 @@ future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   return storage_response;
 }
 
-future<int> CrailInputstream::Close() { return AsyncResult::value(0); }
+Future<int> CrailInputstream::Close() { return AsyncResult::value(0); }

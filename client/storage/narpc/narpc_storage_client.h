@@ -38,8 +38,8 @@ public:
     return RpcClient::Connect(address, port);
   }
   int Close() { return RpcClient::Close(); }
-  future<int> WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
-  future<int> ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
+  Future<int> WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
+  Future<int> ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 };
 
 #endif /* NARPC_STORAGE_CLIENT_H */

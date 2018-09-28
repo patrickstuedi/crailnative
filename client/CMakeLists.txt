@@ -49,7 +49,6 @@ add_library (cppcrail SHARED
 	utils/crail_networking.cc
 	)
 #target_link_libraries(cppcrail proto ${PROTOBUF_LIBRARY})
-target_link_libraries(cppcrail LINK_PUBLIC pthread)
 
 install(TARGETS cppcrail DESTINATION /lib)
 install (FILES 

@@ -21,21 +21,28 @@
  * limitations under the License.
  */
 
-#ifndef ASYNC_RESULT_H
-#define ASYNC_RESULT_H
+#ifndef FUTURE_H
+#define FUTURE_H
 
-#include "future.h"
+#include "narpc/rpc_response.h"
 
-using namespace std;
-
-class AsyncResult {
+template <typename T> class Future {
 public:
-  AsyncResult() = delete;
-  virtual ~AsyncResult() = delete;
+  Future(shared_ptr<RpcResponse> rpc_response, T result)
+      : rpc_response_(rpc_response) {
+    result_ = result;
+  }
 
-  static Future<int> value(int ret);
+  virtual ~Future<T>() {}
+
+  T get() {
+    rpc_response_->Get();
+    return result_;
+  }
 
 private:
+  T result_;
+  shared_ptr<RpcResponse> rpc_response_;
 };
 
-#endif /* ASYNC_RESULT_H */
+#endif /* FUTURE_H */

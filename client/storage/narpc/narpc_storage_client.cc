@@ -39,7 +39,7 @@ NarpcStorageClient::NarpcStorageClient()
 
 NarpcStorageClient::~NarpcStorageClient() {}
 
-future<int> NarpcStorageClient::WriteData(int key, long long address,
+Future<int> NarpcStorageClient::WriteData(int key, long long address,
                                           shared_ptr<ByteBuffer> buf) {
   NarpcWriteRequest write_request(key, address, buf->remaining(), buf);
   shared_ptr<NarpcWriteResponse> write_response =
@@ -47,12 +47,11 @@ future<int> NarpcStorageClient::WriteData(int key, long long address,
   if (IssueRequest(write_request, write_response) < 0) {
     return AsyncResult::value(-1);
   }
-  return std::async(std::launch::deferred, &shared_ptr<NarpcWriteResponse>::Get,
-                    write_response);
-  // return AsyncResult::value(-1);
+  Future<int> future(write_response, buf->remaining());
+  return future;
 }
 
-future<int> NarpcStorageClient::ReadData(int key, long long address,
+Future<int> NarpcStorageClient::ReadData(int key, long long address,
                                          shared_ptr<ByteBuffer> buf) {
   NarpcReadRequest read_request(key, address, buf->remaining());
   shared_ptr<NarpcReadResponse> read_response =
@@ -60,5 +59,5 @@ future<int> NarpcStorageClient::ReadData(int key, long long address,
   if (IssueRequest(read_request, read_response) < 0) {
     return AsyncResult::value(-1);
   }
-  return AsyncResult::value(0);
+  Future<int> future(read_response, buf->remaining());
 }

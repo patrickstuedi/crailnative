@@ -23,8 +23,7 @@
 
 #include "async_result.h"
 
-future<int> AsyncResult::value(int ret) {
-  promise<int> pro;
-  pro.set_value(ret);
-  return pro.get_future();
+Future<int> AsyncResult::value(int ret) {
+  Future<int> future(nullptr, ret);
+  return future;
 }
