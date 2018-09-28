@@ -94,7 +94,7 @@ void printSettings(Settings &settings) {
 void setDefaults(Settings &settings) {
   settings.address = "127.0.0.1";
   settings.port = 9060;
-  settings.operation = Operation::PutKey;
+  settings.operation = Operation::Undefined;
   settings.filename = "/tmp";
   settings.loop = 1;
   settings.size = 1024;
@@ -398,6 +398,11 @@ int main(int argc, char *argv[]) {
       settings.enumerable = true;
       break;
     }
+  }
+
+  if (settings.operation == Operation::Undefined) {
+    cout << "Operation undefined " << endl;
+    return -1;
   }
 
   printSettings(settings);
