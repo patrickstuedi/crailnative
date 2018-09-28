@@ -448,7 +448,7 @@ int main(int argc, char *argv[]) {
         break;
       }
       if (res < 0) {
-        cout << "Error when putting file" << endl;
+        cout << "Operation failed " << endl;
         break;
       }
     }
