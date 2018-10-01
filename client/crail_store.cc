@@ -178,6 +178,7 @@ int CrailStore::AddBlock(int fd, long long offset,
                          shared_ptr<BlockInfo> block) {
   shared_ptr<BlockCache> cache = GetBlockCache(fd);
   cache->PutBlock(offset, block);
+  return 0;
 }
 
 unique_ptr<CrailOutputstream>

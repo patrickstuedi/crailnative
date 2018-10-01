@@ -115,5 +115,3 @@ Future<int> CrailOutputstream::Close() {
 
   return Future<int>::error(-1);
 }
-
-int CrailOutputstream::error() { return -1; }

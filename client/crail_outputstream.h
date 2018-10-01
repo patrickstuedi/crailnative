@@ -51,8 +51,6 @@ public:
   int capacity() const { return file_info_->capacity(); }
 
 private:
-  int error();
-
   shared_ptr<FileInfo> file_info_;
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
