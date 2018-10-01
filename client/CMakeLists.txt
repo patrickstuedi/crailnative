@@ -10,7 +10,6 @@ add_library (cppcrail SHARED
 	directory_record.cc
 	common/byte_buffer.cc
 	common/block_cache.cc
-	common/async_result.cc
 	reflex/reflex_client.cc
 	reflex/reflex_header.cc
 	reflex/reflex_future.cc

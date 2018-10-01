@@ -21,21 +21,25 @@
  * limitations under the License.
  */
 
-#ifndef ASYNC_RESULT_H
-#define ASYNC_RESULT_H
+#ifndef NARPC_STORAGE_FUTURE_H
+#define NARPC_STORAGE_FUTURE_H
 
-#include "future.h"
+#include "common/future.h"
 
-using namespace std;
-
-class AsyncResult {
+template <typename T> class NarpcStorageFuture : public Future<T> {
 public:
-  AsyncResult() = delete;
-  virtual ~AsyncResult() = delete;
+  NarpcStorageFuture(shared_ptr<RpcResponse> rpc_response, T result)
+      : Future<T>(result), rpc_response_(rpc_response) {}
 
-  static Future<int> value(int ret);
+  virtual ~NarpcStorageFuture<T>() {}
+
+  T get() {
+    rpc_response_->Get();
+    return Future<T>::get();
+  }
 
 private:
+  shared_ptr<RpcResponse> rpc_response_;
 };
 
-#endif /* ASYNC_RESULT_H */
+#endif /* NARPC_STORAGE_FUTURE_H */

@@ -26,7 +26,6 @@
 #include <iostream>
 #include <memory>
 
-#include "common/async_result.h"
 #include "namenode/getblock_response.h"
 #include "storage/narpc/narpc_storage_client.h"
 #include "storage/storage_client.h"
@@ -48,7 +47,7 @@ CrailInputstream::~CrailInputstream() {}
 
 Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   if (position_ >= file_info_->capacity()) {
-    AsyncResult::value(-1);
+    Future<int>::error(-1);
   }
 
   int buf_original_limit = buf->limit();
@@ -69,11 +68,11 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
         file_info_->fd(), file_info_->token(), position_, 0);
 
     if (!get_block_res) {
-      AsyncResult::value(-1);
+      Future<int>::error(-1);
     }
 
     if (get_block_res->Get() < 0) {
-      AsyncResult::value(-1);
+      Future<int>::error(-1);
     }
 
     block_info = get_block_res->block_info();
@@ -86,7 +85,7 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
       block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
-    AsyncResult::value(-1);
+    Future<int>::error(-1);
   }
 
   long long block_addr = block_info->addr() + block_offset;
@@ -100,4 +99,4 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   return storage_response;
 }
 
-Future<int> CrailInputstream::Close() { return AsyncResult::value(0); }
+Future<int> CrailInputstream::Close() { return Future<int>::error(0); }

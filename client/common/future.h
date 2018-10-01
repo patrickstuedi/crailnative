@@ -28,21 +28,19 @@
 
 template <typename T> class Future {
 public:
-  Future(shared_ptr<RpcResponse> rpc_response, T result)
-      : rpc_response_(rpc_response) {
-    result_ = result;
-  }
+  Future(T result) { result_ = result; }
 
   virtual ~Future<T>() {}
 
-  T get() {
-    rpc_response_->Get();
-    return result_;
+  static Future<T> error(T ret) {
+    Future<T> future(ret);
+    return future;
   }
+
+  T get() { return result_; }
 
 private:
   T result_;
-  shared_ptr<RpcResponse> rpc_response_;
 };
 
 #endif /* FUTURE_H */
