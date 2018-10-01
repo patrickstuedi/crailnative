@@ -39,6 +39,7 @@ class NamenodeClient;
 
 class CreateResponse : public NamenodeResponse {
 public:
+  CreateResponse() = default;
   CreateResponse(RpcClient *rpc_client);
   virtual ~CreateResponse();
 

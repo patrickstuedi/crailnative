@@ -57,29 +57,23 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
                                          bool enumerable) {
   Filename filename(name);
   int _enumerable = enumerable ? 1 : 0;
-  auto create_res =
+  auto future =
       namenode_client_->Create(filename, static_cast<int>(type), storage_class,
                                location_class, _enumerable);
 
-  if (!create_res) {
+  auto create_res = future.get();
+
+  if (create_res.error() != 0) {
     return nullptr;
   }
 
-  if (create_res->Get() < 0) {
-    return nullptr;
-  }
-
-  if (create_res->error() != 0) {
-    return nullptr;
-  }
-
-  auto file_info = create_res->file();
-  AddBlock(file_info->fd(), 0, create_res->file_block());
+  auto file_info = create_res.file();
+  AddBlock(file_info->fd(), 0, create_res.file_block());
 
   long long dir_offset = file_info->dir_offset();
   if (dir_offset >= 0) {
-    auto parent_info = create_res->parent();
-    AddBlock(parent_info->fd(), dir_offset, create_res->parent_block());
+    auto parent_info = create_res.parent();
+    AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
     string _name = filename.name();
     WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
   }
@@ -89,43 +83,31 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
 
 unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
   Filename filename(name);
-  auto lookup_res = namenode_client_->Lookup(filename);
+  auto future = namenode_client_->Lookup(filename);
 
-  if (!lookup_res) {
+  LookupResponse lookup_res = future.get();
+
+  if (lookup_res.error() != 0) {
     return nullptr;
   }
 
-  if (lookup_res->Get() < 0) {
-    return nullptr;
-  }
-
-  if (lookup_res->error() != 0) {
-    return nullptr;
-  }
-
-  auto file_info = lookup_res->file();
-  AddBlock(file_info->fd(), 0, lookup_res->file_block());
+  auto file_info = lookup_res.file();
+  AddBlock(file_info->fd(), 0, lookup_res.file_block());
   return DispatchType(file_info);
 }
 
 int CrailStore::Remove(string &name, bool recursive) {
   Filename filename(name);
-  auto remove_res = namenode_client_->Remove(filename, recursive);
+  auto future = namenode_client_->Remove(filename, recursive);
 
-  if (!remove_res) {
+  auto remove_res = future.get();
+
+  if (remove_res.error() != 0) {
     return -1;
   }
 
-  if (remove_res->Get() < 0) {
-    return -1;
-  }
-
-  if (remove_res->error() != 0) {
-    return -1;
-  }
-
-  auto parent_info = remove_res->parent();
-  long long dir_offset = remove_res->file()->dir_offset();
+  auto parent_info = remove_res.parent();
+  long long dir_offset = remove_res.file()->dir_offset();
   string _name = filename.name();
   WriteDirectoryRecord(parent_info, _name, dir_offset, 0);
 
@@ -134,20 +116,14 @@ int CrailStore::Remove(string &name, bool recursive) {
 
 int CrailStore::Ioctl(unsigned char op, string &name) {
   Filename filename(name);
-  shared_ptr<IoctlResponse> ioctl_res = namenode_client_->Ioctl(op, filename);
+  auto future = namenode_client_->Ioctl(op, filename);
 
-  if (!ioctl_res) {
+  auto ioctl_res = future.get();
+
+  if (ioctl_res.error() != 0) {
     return -1;
   }
-
-  if (ioctl_res->Get() < 0) {
-    return -1;
-  }
-
-  if (ioctl_res->error() != 0) {
-    return -1;
-  }
-  return ioctl_res->count();
+  return ioctl_res.count();
 }
 
 unique_ptr<CrailNode> CrailStore::DispatchType(shared_ptr<FileInfo> file_info) {

@@ -49,67 +49,64 @@ NamenodeClient::NamenodeClient() : RpcClient(NamenodeClient::kNodelay) {
 
 NamenodeClient::~NamenodeClient() {}
 
-shared_ptr<CreateResponse> NamenodeClient::Create(Filename &name, int type,
-                                                  int storage_class,
-                                                  int location_class,
-                                                  int enumerable) {
+Future<CreateResponse> NamenodeClient::Create(Filename &name, int type,
+                                              int storage_class,
+                                              int location_class,
+                                              int enumerable) {
   Createrequest createReq(name, type, storage_class, location_class,
                           enumerable);
   shared_ptr<CreateResponse> getblockRes = make_shared<CreateResponse>(this);
   if (RpcClient::IssueRequest(createReq, getblockRes) < 0) {
-    return nullptr;
+    return Future<CreateResponse>::error(*getblockRes);
   }
-  return getblockRes;
+  return Future<CreateResponse>::error(*getblockRes);
 }
 
-shared_ptr<LookupResponse> NamenodeClient::Lookup(Filename &name) {
+Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
   LookupRequest lookupReq(name);
   shared_ptr<LookupResponse> lookupRes = make_shared<LookupResponse>(this);
   if (RpcClient::IssueRequest(lookupReq, lookupRes) < 0) {
-    return nullptr;
+    return Future<LookupResponse>::error(*lookupRes);
   }
-  return lookupRes;
+  return Future<LookupResponse>::error(*lookupRes);
 }
 
-shared_ptr<GetblockResponse> NamenodeClient::GetBlock(long long fd,
-                                                      long long token,
-                                                      long long position,
-                                                      long long capacity) {
+Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
+                                                  long long position,
+                                                  long long capacity) {
   GetblockRequest get_block_req(fd, token, position, capacity);
   shared_ptr<GetblockResponse> get_block_res =
       make_shared<GetblockResponse>(this);
   if (RpcClient::IssueRequest(get_block_req, get_block_res) < 0) {
-    return nullptr;
+    return Future<GetblockResponse>::error(*get_block_res);
   }
-  return get_block_res;
+  return Future<GetblockResponse>::error(*get_block_res);
 }
 
-shared_ptr<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
-                                                 bool close) {
+Future<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
+                                             bool close) {
   SetfileRequest set_file_req(file_info, close);
   shared_ptr<VoidResponse> set_file_res = make_shared<VoidResponse>(this);
   if (RpcClient::IssueRequest(set_file_req, set_file_res) < 0) {
-    return nullptr;
+    return Future<VoidResponse>::error(*set_file_res);
   }
-  return set_file_res;
+  return Future<VoidResponse>::error(*set_file_res);
 }
 
-shared_ptr<RemoveResponse> NamenodeClient::Remove(Filename &name,
-                                                  bool recursive) {
+Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
   RemoveRequest remove_req(name, recursive);
   shared_ptr<RemoveResponse> remove_res = make_shared<RemoveResponse>(this);
   if (RpcClient::IssueRequest(remove_req, remove_res) < 0) {
-    return nullptr;
+    return Future<RemoveResponse>::error(*remove_res);
   }
-  return remove_res;
+  return Future<RemoveResponse>::error(*remove_res);
 }
 
-shared_ptr<IoctlResponse> NamenodeClient::Ioctl(unsigned char op,
-                                                Filename &name) {
+Future<IoctlResponse> NamenodeClient::Ioctl(unsigned char op, Filename &name) {
   IoctlRequest ioctl_request(op, name);
   shared_ptr<IoctlResponse> ioctl_response = make_shared<IoctlResponse>(this);
   if (RpcClient::IssueRequest(ioctl_request, ioctl_response) < 0) {
-    return nullptr;
+    return Future<IoctlResponse>::error(*ioctl_response);
   }
-  return ioctl_response;
+  return Future<IoctlResponse>::error(*ioctl_response);
 }

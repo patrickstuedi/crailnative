@@ -64,18 +64,16 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
 
   shared_ptr<BlockInfo> block_info = block_cache_->GetBlock(position_);
   if (!block_info) {
-    shared_ptr<GetblockResponse> get_block_res = namenode_client_->GetBlock(
-        file_info_->fd(), file_info_->token(), position_, 0);
+    GetblockResponse get_block_res =
+        namenode_client_
+            ->GetBlock(file_info_->fd(), file_info_->token(), position_, 0)
+            .get();
 
-    if (!get_block_res) {
+    if (get_block_res.error() < 0) {
       Future<int>::error(-1);
     }
 
-    if (get_block_res->Get() < 0) {
-      Future<int>::error(-1);
-    }
-
-    block_info = get_block_res->block_info();
+    block_info = get_block_res.block_info();
     block_cache_->PutBlock(position_, block_info);
   }
 

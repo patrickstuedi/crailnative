@@ -35,6 +35,7 @@ using namespace std;
 
 class GetblockResponse : public NamenodeResponse {
 public:
+  GetblockResponse() = default;
   GetblockResponse(RpcClient *rpc_client);
   virtual ~GetblockResponse();
 

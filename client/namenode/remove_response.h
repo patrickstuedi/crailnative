@@ -35,6 +35,7 @@
 
 class RemoveResponse : public NamenodeResponse {
 public:
+  RemoveResponse() = default;
   RemoveResponse(RpcClient *rpc_client);
   virtual ~RemoveResponse();
 

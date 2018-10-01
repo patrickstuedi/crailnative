@@ -34,6 +34,7 @@
 
 class LookupResponse : public NamenodeResponse {
 public:
+  LookupResponse() = default;
   LookupResponse(RpcClient *rpc_client);
   virtual ~LookupResponse();
 

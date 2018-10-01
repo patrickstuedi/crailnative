@@ -23,6 +23,8 @@
 
 #include "rpc_response.h"
 
+RpcResponse::RpcResponse() { rpc_checker_ = nullptr; }
+
 RpcResponse::RpcResponse(RpcChecker *rpc_checker) : rpc_checker_(rpc_checker) {}
 
 RpcResponse::~RpcResponse() {}

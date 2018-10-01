@@ -34,6 +34,7 @@
 
 class VoidResponse : public NamenodeResponse {
 public:
+  VoidResponse() = default;
   VoidResponse(RpcClient *rpc_client);
   virtual ~VoidResponse();
 

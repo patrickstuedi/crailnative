@@ -32,6 +32,7 @@
 #include "ioctl_response.h"
 #include "lookup_response.h"
 #include "metadata/filename.h"
+#include "namenode_future.h"
 #include "narpc/rpc_client.h"
 #include "remove_response.h"
 #include "void_response.h"
@@ -43,14 +44,14 @@ public:
 
   static const bool kNodelay = true;
 
-  shared_ptr<CreateResponse> Create(Filename &name, int type, int storage_class,
-                                    int location_class, int enumerable);
-  shared_ptr<LookupResponse> Lookup(Filename &name);
-  shared_ptr<GetblockResponse> GetBlock(long long fd, long long token,
-                                        long long position, long long capacity);
-  shared_ptr<VoidResponse> SetFile(shared_ptr<FileInfo> file_info, bool close);
-  shared_ptr<RemoveResponse> Remove(Filename &name, bool recursive);
-  shared_ptr<IoctlResponse> Ioctl(unsigned char op, Filename &name);
+  Future<CreateResponse> Create(Filename &name, int type, int storage_class,
+                                int location_class, int enumerable);
+  Future<LookupResponse> Lookup(Filename &name);
+  Future<GetblockResponse> GetBlock(long long fd, long long token,
+                                    long long position, long long capacity);
+  Future<VoidResponse> SetFile(shared_ptr<FileInfo> file_info, bool close);
+  Future<RemoveResponse> Remove(Filename &name, bool recursive);
+  Future<IoctlResponse> Ioctl(unsigned char op, Filename &name);
 
 private:
   atomic<unsigned long long> counter_;

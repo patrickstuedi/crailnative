@@ -21,32 +21,27 @@
  * limitations under the License.
  */
 
-#ifndef NAMENODE_RESPONSE_H
-#define NAMENODE_RESPONSE_H
+#ifndef NAMENODE_FUTURE_H
+#define NAMENODE_FUTURE_H
 
-#include "common/byte_buffer.h"
-#include "common/serializable.h"
-#include "narpc/rpc_checker.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
-#include "narpc/rpc_response.h"
+#include "common/future.h"
 
-class NamenodeResponse : public RpcResponse {
+template <typename T> class NamenodeFuture : public Future<T> {
 public:
-  NamenodeResponse() = default;
-  NamenodeResponse(RpcChecker *rpc_checker);
-  virtual ~NamenodeResponse();
+  NamenodeFuture(shared_ptr<RpcResponse> rpc_response, shared_ptr<T> result)
+      : Future<T>(*result), rpc_response_(rpc_response),
+        actual_result_(result) {}
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-  int Size() const { return sizeof(short) * 2; }
+  virtual ~NamenodeFuture<T>() {}
 
-  int type() const { return type_; }
-  int error() const { return error_; }
+  T get() {
+    rpc_response_->Get();
+    return *actual_result_;
+  }
 
 private:
-  short type_;
-  short error_;
+  shared_ptr<RpcResponse> rpc_response_;
+  shared_ptr<T> actual_result_;
 };
 
-#endif /* NAMENODE_RESPONSE_H */
+#endif /* NAMENODE_FUTURE_H */

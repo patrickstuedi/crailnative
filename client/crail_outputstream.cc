@@ -65,18 +65,17 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 
   shared_ptr<BlockInfo> block_info = block_cache_->GetBlock(position_);
   if (!block_info) {
-    shared_ptr<GetblockResponse> get_block_res = namenode_client_->GetBlock(
-        file_info_->fd(), file_info_->token(), position_, position_);
+    GetblockResponse get_block_res =
+        namenode_client_
+            ->GetBlock(file_info_->fd(), file_info_->token(), position_,
+                       position_)
+            .get();
 
-    if (!get_block_res) {
+    if (get_block_res.error() < 0) {
       return Future<int>::error(-1);
     }
 
-    if (get_block_res->Get() < 0) {
-      return Future<int>::error(-1);
-    }
-
-    block_info = get_block_res->block_info();
+    block_info = get_block_res.block_info();
     block_cache_->PutBlock(position_, block_info);
   }
 
@@ -102,16 +101,11 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 
 Future<int> CrailOutputstream::Close() {
   file_info_->set_capacity(position_);
-  shared_ptr<VoidResponse> set_file_res =
-      namenode_client_->SetFile(file_info_, true);
+  VoidResponse set_file_res = namenode_client_->SetFile(file_info_, true).get();
 
-  if (!set_file_res) {
+  if (set_file_res.error() < 0) {
     return Future<int>::error(-1);
   }
 
-  if (set_file_res->Get() < 0) {
-    return Future<int>::error(-1);
-  }
-
-  return Future<int>::error(-1);
+  return Future<int>::error(0);
 }

@@ -35,6 +35,7 @@ using namespace crail;
 
 class IoctlResponse : public NamenodeResponse {
 public:
+  IoctlResponse() = default;
   IoctlResponse(RpcClient *rpc_client);
   virtual ~IoctlResponse();
 

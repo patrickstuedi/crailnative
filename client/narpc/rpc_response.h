@@ -29,6 +29,7 @@
 
 class RpcResponse : public RpcMessage {
 public:
+  RpcResponse();
   RpcResponse(RpcChecker *rpc_checker);
   virtual ~RpcResponse();
 
