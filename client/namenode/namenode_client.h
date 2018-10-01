@@ -44,14 +44,17 @@ public:
 
   static const bool kNodelay = true;
 
-  Future<CreateResponse> Create(Filename &name, int type, int storage_class,
-                                int location_class, int enumerable);
-  Future<LookupResponse> Lookup(Filename &name);
-  Future<GetblockResponse> GetBlock(long long fd, long long token,
-                                    long long position, long long capacity);
-  Future<VoidResponse> SetFile(shared_ptr<FileInfo> file_info, bool close);
-  Future<RemoveResponse> Remove(Filename &name, bool recursive);
-  Future<IoctlResponse> Ioctl(unsigned char op, Filename &name);
+  NamenodeFuture<CreateResponse> Create(Filename &name, int type,
+                                        int storage_class, int location_class,
+                                        int enumerable);
+  NamenodeFuture<LookupResponse> Lookup(Filename &name);
+  NamenodeFuture<GetblockResponse> GetBlock(long long fd, long long token,
+                                            long long position,
+                                            long long capacity);
+  NamenodeFuture<VoidResponse> SetFile(shared_ptr<FileInfo> file_info,
+                                       bool close);
+  NamenodeFuture<RemoveResponse> Remove(Filename &name, bool recursive);
+  NamenodeFuture<IoctlResponse> Ioctl(unsigned char op, Filename &name);
 
 private:
   atomic<unsigned long long> counter_;

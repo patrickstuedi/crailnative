@@ -37,7 +37,7 @@ public:
     return future;
   }
 
-  T get() { return result_; }
+  virtual T get() { return result_; }
 
 private:
   T result_;

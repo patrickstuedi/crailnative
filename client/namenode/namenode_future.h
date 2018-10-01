@@ -29,17 +29,24 @@
 template <typename T> class NamenodeFuture : public Future<T> {
 public:
   NamenodeFuture(shared_ptr<RpcResponse> rpc_response, shared_ptr<T> result)
-      : Future<T>(*result), rpc_response_(rpc_response),
-        actual_result_(result) {}
+      : Future<T>(*result), rpc_response_(rpc_response) {
+    actual_result_ = result;
+    request_failed_ = false;
+  }
 
   virtual ~NamenodeFuture<T>() {}
 
-  T get() {
-    rpc_response_->Get();
+  virtual T get() {
+    if (!request_failed_) {
+      rpc_response_->Get();
+    }
     return *actual_result_;
   }
 
+  void request_failed() { request_failed_ = true; }
+
 private:
+  bool request_failed_;
   shared_ptr<RpcResponse> rpc_response_;
   shared_ptr<T> actual_result_;
 };
