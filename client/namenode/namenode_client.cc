@@ -40,6 +40,7 @@
 #include "getblock_response.h"
 #include "ioctl_request.h"
 #include "lookup_request.h"
+#include "namenode_future.h"
 #include "remove_request.h"
 #include "setfile_request.h"
 
@@ -59,7 +60,8 @@ Future<CreateResponse> NamenodeClient::Create(Filename &name, int type,
   if (RpcClient::IssueRequest(createReq, getblockRes) < 0) {
     return Future<CreateResponse>::error(*getblockRes);
   }
-  return Future<CreateResponse>::error(*getblockRes);
+  NamenodeFuture<CreateResponse> future(getblockRes, getblockRes);
+  return future;
 }
 
 Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
@@ -68,7 +70,8 @@ Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
   if (RpcClient::IssueRequest(lookupReq, lookupRes) < 0) {
     return Future<LookupResponse>::error(*lookupRes);
   }
-  return Future<LookupResponse>::error(*lookupRes);
+  NamenodeFuture<LookupResponse> future(lookupRes, lookupRes);
+  return future;
 }
 
 Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
@@ -80,7 +83,8 @@ Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
   if (RpcClient::IssueRequest(get_block_req, get_block_res) < 0) {
     return Future<GetblockResponse>::error(*get_block_res);
   }
-  return Future<GetblockResponse>::error(*get_block_res);
+  NamenodeFuture<GetblockResponse> future(get_block_res, get_block_res);
+  return future;
 }
 
 Future<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
@@ -90,7 +94,8 @@ Future<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
   if (RpcClient::IssueRequest(set_file_req, set_file_res) < 0) {
     return Future<VoidResponse>::error(*set_file_res);
   }
-  return Future<VoidResponse>::error(*set_file_res);
+  NamenodeFuture<VoidResponse> future(set_file_res, set_file_res);
+  return future;
 }
 
 Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
@@ -99,7 +104,8 @@ Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
   if (RpcClient::IssueRequest(remove_req, remove_res) < 0) {
     return Future<RemoveResponse>::error(*remove_res);
   }
-  return Future<RemoveResponse>::error(*remove_res);
+  NamenodeFuture<RemoveResponse> future(remove_res, remove_res);
+  return future;
 }
 
 Future<IoctlResponse> NamenodeClient::Ioctl(unsigned char op, Filename &name) {
@@ -108,5 +114,6 @@ Future<IoctlResponse> NamenodeClient::Ioctl(unsigned char op, Filename &name) {
   if (RpcClient::IssueRequest(ioctl_request, ioctl_response) < 0) {
     return Future<IoctlResponse>::error(*ioctl_response);
   }
-  return Future<IoctlResponse>::error(*ioctl_response);
+  NamenodeFuture<IoctlResponse> future(ioctl_response, ioctl_response);
+  return future;
 }
