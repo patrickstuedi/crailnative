@@ -44,7 +44,7 @@ public:
                     unsigned long long position);
   virtual ~CrailOutputstream();
 
-  Future<int> Write(shared_ptr<ByteBuffer> buf);
+  StorageFuture<int> Write(shared_ptr<ByteBuffer> buf);
   Future<int> Close();
 
   unsigned long long position() const { return position_; }
