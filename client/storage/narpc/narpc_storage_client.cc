@@ -25,7 +25,6 @@
 
 #include "narpc_read_request.h"
 #include "narpc_read_response.h"
-#include "narpc_storage_future.h"
 #include "narpc_storage_request.h"
 #include "narpc_storage_response.h"
 #include "narpc_write_request.h"
@@ -39,26 +38,26 @@ NarpcStorageClient::NarpcStorageClient()
 
 NarpcStorageClient::~NarpcStorageClient() {}
 
-Future<int> NarpcStorageClient::WriteData(int key, long long address,
-                                          shared_ptr<ByteBuffer> buf) {
+StorageFuture<int> NarpcStorageClient::WriteData(int key, long long address,
+                                                 shared_ptr<ByteBuffer> buf) {
   NarpcWriteRequest write_request(key, address, buf->remaining(), buf);
   shared_ptr<NarpcWriteResponse> write_response =
       make_shared<NarpcWriteResponse>(this);
-  NarpcStorageFuture<int> future(write_response, buf->remaining());
+  StorageFuture<int> future(write_response, buf->remaining());
   if (IssueRequest(write_request, write_response) < 0) {
-    return Future<int>::error(-1);
+    future.request_failed();
   }
   return future;
 }
 
-Future<int> NarpcStorageClient::ReadData(int key, long long address,
-                                         shared_ptr<ByteBuffer> buf) {
+StorageFuture<int> NarpcStorageClient::ReadData(int key, long long address,
+                                                shared_ptr<ByteBuffer> buf) {
   NarpcReadRequest read_request(key, address, buf->remaining());
   shared_ptr<NarpcReadResponse> read_response =
       make_shared<NarpcReadResponse>(this, buf);
-  NarpcStorageFuture<int> future(read_response, buf->remaining());
+  StorageFuture<int> future(read_response, buf->remaining());
   if (IssueRequest(read_request, read_response) < 0) {
-    return Future<int>::error(-1);
+    future.request_failed();
   }
   return future;
 }
