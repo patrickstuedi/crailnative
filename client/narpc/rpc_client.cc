@@ -169,14 +169,6 @@ int RpcClient::PollResponse() {
   // int _total = kNarpcHeader + size;
   // cout << "receiving message, port " << port_ << ", size " << _total << endl;
 
-  /*
-int extra = recv(socket_, buf_.get_bytes(), 1, MSG_DONTWAIT);
-if (extra > 0) {
-cout << "reading extra data! " << endl;
-return -1;
-}
-  */
-
   return 0;
 }
 
