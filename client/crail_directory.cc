@@ -49,7 +49,7 @@ int CrailDirectory::Enumerate() {
   DirectoryRecord record;
   for (int i = 0; i < records; i++) {
     buf->Clear();
-    input_stream->Read(buf);
+    input_stream->Read(buf).get();
     buf->Flip();
     record.Update(*buf);
     if (record.valid()) {

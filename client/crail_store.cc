@@ -178,6 +178,6 @@ int CrailStore::WriteDirectoryRecord(shared_ptr<FileInfo> parent_info,
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(1024);
   record.Write(*buf);
   buf->Flip();
-  directory_stream->Write(buf);
+  directory_stream->Write(buf).get();
   return 0;
 }
