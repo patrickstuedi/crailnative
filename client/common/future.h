@@ -26,7 +26,12 @@
 
 #include "narpc/rpc_response.h"
 
-template <typename T> class Future {
+template <typename T> class AsyncResult {
+public:
+  virtual T get() = 0;
+};
+
+template <typename T> class Future : public AsyncResult<T> {
 public:
   Future(T result) { result_ = result; }
 

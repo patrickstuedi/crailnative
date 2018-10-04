@@ -43,11 +43,10 @@ StorageFuture<int> NarpcStorageClient::WriteData(int key, long long address,
   NarpcWriteRequest write_request(key, address, buf->remaining(), buf);
   shared_ptr<NarpcWriteResponse> write_response =
       make_shared<NarpcWriteResponse>(this);
-  StorageFuture<int> future(write_response, buf->remaining());
   if (IssueRequest(write_request, write_response) < 0) {
-    future.request_failed();
+    return StorageFuture<int>::Failure(-1);
   }
-  return future;
+  return StorageFuture<int>(write_response, buf->remaining());
 }
 
 StorageFuture<int> NarpcStorageClient::ReadData(int key, long long address,
@@ -55,9 +54,8 @@ StorageFuture<int> NarpcStorageClient::ReadData(int key, long long address,
   NarpcReadRequest read_request(key, address, buf->remaining());
   shared_ptr<NarpcReadResponse> read_response =
       make_shared<NarpcReadResponse>(this, buf);
-  StorageFuture<int> future(read_response, buf->remaining());
   if (IssueRequest(read_request, read_response) < 0) {
-    future.request_failed();
+    return StorageFuture<int>::Failure(-1);
   }
-  return future;
+  return StorageFuture<int>(read_response, buf->remaining());
 }

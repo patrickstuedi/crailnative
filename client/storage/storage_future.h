@@ -35,6 +35,8 @@ public:
 
   virtual ~StorageFuture<T>() {}
 
+  static StorageFuture Failure(T val) { return StorageFuture(nullptr, val); }
+
   T get() {
     if (!request_failed_) {
       rpc_response_->Get();
