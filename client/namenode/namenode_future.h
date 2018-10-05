@@ -38,7 +38,7 @@ public:
 
   virtual T get() {
     if (!request_failed_) {
-      rpc_response_->Get();
+      rpc_response_->get();
     }
     return *actual_result_;
   }

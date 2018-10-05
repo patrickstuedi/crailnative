@@ -43,3 +43,8 @@ int NarpcWriteResponse::Update(ByteBuffer &buf) {
 
   return 0;
 }
+
+int NarpcWriteResponse::get() {
+  int res = RpcResponse::get();
+  return res >= 0 ? Size() : res;
+}

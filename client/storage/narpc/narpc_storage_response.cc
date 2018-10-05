@@ -44,5 +44,3 @@ int NarpcStorageResponse::Update(ByteBuffer &buf) {
   type_ = buf.GetInt();
   return 0;
 }
-
-int NarpcStorageResponse::Get() { return RpcResponse::Get(); }

@@ -28,27 +28,22 @@
 
 template <typename T> class StorageFuture : public Future<T> {
 public:
-  StorageFuture(shared_ptr<RpcResponse> rpc_response, T result)
-      : Future<T>(result), rpc_response_(rpc_response) {
-    request_failed_ = false;
-  }
+  StorageFuture(shared_ptr<AsyncResult<T>> rpc_response, T result)
+      : Future<T>(result), rpc_response_(rpc_response) {}
 
   virtual ~StorageFuture<T>() {}
 
   static StorageFuture Failure(T val) { return StorageFuture(nullptr, val); }
 
   T get() {
-    if (!request_failed_) {
-      rpc_response_->Get();
+    if (rpc_response_) {
+      rpc_response_->get();
     }
     return Future<T>::get();
   }
 
-  void request_failed() { request_failed_ = true; }
-
 private:
-  bool request_failed_;
-  shared_ptr<RpcResponse> rpc_response_;
+  shared_ptr<AsyncResult<T>> rpc_response_;
 };
 
 #endif /* STORAGE_FUTURE_H */

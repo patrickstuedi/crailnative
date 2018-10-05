@@ -33,7 +33,7 @@ public:
   RpcResponse(RpcChecker *rpc_checker);
   virtual ~RpcResponse();
 
-  int Get();
+  int get();
 
 private:
   RpcChecker *rpc_checker_;

@@ -50,3 +50,8 @@ int NarpcReadResponse::Update(ByteBuffer &buf) {
 
   return 0;
 }
+
+int NarpcReadResponse::get() {
+  int res = RpcResponse::get();
+  return res >= 0 ? payload_->remaining() : res;
+}

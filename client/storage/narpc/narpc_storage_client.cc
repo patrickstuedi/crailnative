@@ -46,7 +46,7 @@ StorageFuture<int> NarpcStorageClient::WriteData(int key, long long address,
   if (IssueRequest(write_request, write_response) < 0) {
     return StorageFuture<int>::Failure(-1);
   }
-  return StorageFuture<int>(write_response, buf->remaining());
+  return StorageFuture<int>(write_response, -1);
 }
 
 StorageFuture<int> NarpcStorageClient::ReadData(int key, long long address,
@@ -57,5 +57,5 @@ StorageFuture<int> NarpcStorageClient::ReadData(int key, long long address,
   if (IssueRequest(read_request, read_response) < 0) {
     return StorageFuture<int>::Failure(-1);
   }
-  return StorageFuture<int>(read_response, buf->remaining());
+  return StorageFuture<int>(read_response, -1);
 }

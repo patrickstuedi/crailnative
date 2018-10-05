@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include "common/future.h"
 #include "narpc/rpc_checker.h"
 #include "narpc/rpc_message.h"
 #include "narpc/rpc_response.h"
@@ -33,12 +34,15 @@
 
 using namespace std;
 
-class NarpcWriteResponse : public NarpcStorageResponse {
+class NarpcWriteResponse : public NarpcStorageResponse,
+                           public AsyncResult<int> {
 public:
   NarpcWriteResponse(RpcChecker *rpc_checker);
   virtual ~NarpcWriteResponse();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
+
+  int get();
 
   int Size() const { return sizeof(int); }
   int Write(ByteBuffer &buf) const;

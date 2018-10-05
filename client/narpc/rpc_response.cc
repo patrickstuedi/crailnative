@@ -29,4 +29,4 @@ RpcResponse::RpcResponse(RpcChecker *rpc_checker) : rpc_checker_(rpc_checker) {}
 
 RpcResponse::~RpcResponse() {}
 
-int RpcResponse::Get() { return this->rpc_checker_->PollResponse(); }
+int RpcResponse::get() { return this->rpc_checker_->PollResponse(); }
