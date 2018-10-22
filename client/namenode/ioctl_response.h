@@ -24,6 +24,7 @@
 #ifndef IOCTL_RESPONSE_H
 #define IOCTL_RESPONSE_H
 
+#include "common/future.h"
 #include "common/serializable.h"
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
@@ -33,7 +34,8 @@
 
 using namespace crail;
 
-class IoctlResponse : public NamenodeResponse {
+class IoctlResponse : public NamenodeResponse,
+                      public AsyncResult<IoctlResponse> {
 public:
   IoctlResponse() = default;
   IoctlResponse(RpcClient *rpc_client);
@@ -48,6 +50,8 @@ public:
   int Update(ByteBuffer &buf);
 
   long long count() const { return count_; }
+
+  IoctlResponse get() { return *this; }
 
 private:
   unsigned char op_;

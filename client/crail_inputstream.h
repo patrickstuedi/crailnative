@@ -40,7 +40,7 @@ public:
                    shared_ptr<FileInfo> file_info, unsigned long long position);
   virtual ~CrailInputstream();
 
-  StorageFuture<int> Read(shared_ptr<ByteBuffer> buf);
+  Future<int> Read(shared_ptr<ByteBuffer> buf);
   Future<int> Close();
 
   int position() const { return position_; }

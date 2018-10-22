@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include "common/future.h"
 #include "common/serializable.h"
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
@@ -37,7 +38,8 @@ using namespace std;
 
 class NamenodeClient;
 
-class CreateResponse : public NamenodeResponse {
+class CreateResponse : public NamenodeResponse,
+                       public AsyncResult<CreateResponse> {
 public:
   CreateResponse() = default;
   CreateResponse(RpcClient *rpc_client);
@@ -56,6 +58,8 @@ public:
   shared_ptr<FileInfo> parent() const { return parent_info_; }
   shared_ptr<BlockInfo> file_block() const { return file_block_; }
   shared_ptr<BlockInfo> parent_block() const { return parent_block_; }
+
+  CreateResponse get() { return *this; }
 
 private:
   shared_ptr<FileInfo> file_info_;

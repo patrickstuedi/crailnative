@@ -40,7 +40,6 @@
 #include "getblock_response.h"
 #include "ioctl_request.h"
 #include "lookup_request.h"
-#include "namenode_future.h"
 #include "remove_request.h"
 #include "setfile_request.h"
 
@@ -50,73 +49,64 @@ NamenodeClient::NamenodeClient() : RpcClient(NamenodeClient::kNodelay) {
 
 NamenodeClient::~NamenodeClient() {}
 
-NamenodeFuture<CreateResponse> NamenodeClient::Create(Filename &name, int type,
-                                                      int storage_class,
-                                                      int location_class,
-                                                      int enumerable) {
+Future<CreateResponse> NamenodeClient::Create(Filename &name, int type,
+                                              int storage_class,
+                                              int location_class,
+                                              int enumerable) {
   Createrequest createReq(name, type, storage_class, location_class,
                           enumerable);
   shared_ptr<CreateResponse> getblockRes = make_shared<CreateResponse>(this);
-  NamenodeFuture<CreateResponse> future(getblockRes, getblockRes);
   if (RpcClient::IssueRequest(createReq, getblockRes) < 0) {
-    future.request_failed();
+    return Future<CreateResponse>::Failure(nullptr);
   }
-  return future;
+  return Future<CreateResponse>(getblockRes, nullptr);
 }
 
-NamenodeFuture<LookupResponse> NamenodeClient::Lookup(Filename &name) {
+Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
   LookupRequest lookupReq(name);
   shared_ptr<LookupResponse> lookupRes = make_shared<LookupResponse>(this);
-  NamenodeFuture<LookupResponse> future(lookupRes, lookupRes);
   if (RpcClient::IssueRequest(lookupReq, lookupRes) < 0) {
-    future.request_failed();
+    return Future<LookupResponse>::Failure(nullptr);
   }
-  return future;
+  return Future<LookupResponse>(lookupRes, nullptr);
 }
 
-NamenodeFuture<GetblockResponse> NamenodeClient::GetBlock(long long fd,
-                                                          long long token,
-                                                          long long position,
-                                                          long long capacity) {
+Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
+                                                  long long position,
+                                                  long long capacity) {
   GetblockRequest get_block_req(fd, token, position, capacity);
   shared_ptr<GetblockResponse> get_block_res =
       make_shared<GetblockResponse>(this);
-  NamenodeFuture<GetblockResponse> future(get_block_res, get_block_res);
   if (RpcClient::IssueRequest(get_block_req, get_block_res) < 0) {
-    future.request_failed();
+    return Future<GetblockResponse>::Failure(nullptr);
   }
-  return future;
+  return Future<GetblockResponse>(get_block_res, nullptr);
 }
 
-NamenodeFuture<VoidResponse>
-NamenodeClient::SetFile(shared_ptr<FileInfo> file_info, bool close) {
+Future<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
+                                             bool close) {
   SetfileRequest set_file_req(file_info, close);
   shared_ptr<VoidResponse> set_file_res = make_shared<VoidResponse>(this);
-  NamenodeFuture<VoidResponse> future(set_file_res, set_file_res);
   if (RpcClient::IssueRequest(set_file_req, set_file_res) < 0) {
-    future.request_failed();
+    return Future<VoidResponse>::Failure(nullptr);
   }
-  return future;
+  return Future<VoidResponse>(set_file_res, nullptr);
 }
 
-NamenodeFuture<RemoveResponse> NamenodeClient::Remove(Filename &name,
-                                                      bool recursive) {
+Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
   RemoveRequest remove_req(name, recursive);
   shared_ptr<RemoveResponse> remove_res = make_shared<RemoveResponse>(this);
-  NamenodeFuture<RemoveResponse> future(remove_res, remove_res);
   if (RpcClient::IssueRequest(remove_req, remove_res) < 0) {
-    future.request_failed();
+    return Future<RemoveResponse>::Failure(nullptr);
   }
-  return future;
+  return Future<RemoveResponse>(remove_res, nullptr);
 }
 
-NamenodeFuture<IoctlResponse> NamenodeClient::Ioctl(unsigned char op,
-                                                    Filename &name) {
+Future<IoctlResponse> NamenodeClient::Ioctl(unsigned char op, Filename &name) {
   IoctlRequest ioctl_request(op, name);
   shared_ptr<IoctlResponse> ioctl_response = make_shared<IoctlResponse>(this);
-  NamenodeFuture<IoctlResponse> future(ioctl_response, ioctl_response);
   if (RpcClient::IssueRequest(ioctl_request, ioctl_response) < 0) {
-    future.request_failed();
+    return Future<IoctlResponse>::Failure(nullptr);
   }
-  return future;
+  return Future<IoctlResponse>(ioctl_response, nullptr);
 }

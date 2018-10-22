@@ -38,24 +38,24 @@ NarpcStorageClient::NarpcStorageClient()
 
 NarpcStorageClient::~NarpcStorageClient() {}
 
-StorageFuture<int> NarpcStorageClient::WriteData(int key, long long address,
-                                                 shared_ptr<ByteBuffer> buf) {
+Future<int> NarpcStorageClient::WriteData(int key, long long address,
+                                          shared_ptr<ByteBuffer> buf) {
   NarpcWriteRequest write_request(key, address, buf->remaining(), buf);
   shared_ptr<NarpcWriteResponse> write_response =
       make_shared<NarpcWriteResponse>(this);
   if (IssueRequest(write_request, write_response) < 0) {
-    return StorageFuture<int>::Failure(-1);
+    return Future<int>::Failure(-1);
   }
-  return StorageFuture<int>(write_response, -1);
+  return Future<int>(write_response, -1);
 }
 
-StorageFuture<int> NarpcStorageClient::ReadData(int key, long long address,
-                                                shared_ptr<ByteBuffer> buf) {
+Future<int> NarpcStorageClient::ReadData(int key, long long address,
+                                         shared_ptr<ByteBuffer> buf) {
   NarpcReadRequest read_request(key, address, buf->remaining());
   shared_ptr<NarpcReadResponse> read_response =
       make_shared<NarpcReadResponse>(this, buf);
   if (IssueRequest(read_request, read_response) < 0) {
-    return StorageFuture<int>::Failure(-1);
+    return Future<int>::Failure(-1);
   }
-  return StorageFuture<int>(read_response, -1);
+  return Future<int>(read_response, -1);
 }

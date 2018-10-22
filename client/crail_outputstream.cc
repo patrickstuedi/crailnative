@@ -47,12 +47,12 @@ CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
 
 CrailOutputstream::~CrailOutputstream() {}
 
-StorageFuture<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
+Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (buf->remaining() < 0) {
-    return StorageFuture<int>(nullptr, -1);
+    return Future<int>(nullptr, -1);
   }
   if (buf->remaining() == 0) {
-    return StorageFuture<int>(nullptr, -1);
+    return Future<int>(nullptr, -1);
   }
 
   int buf_original_limit = buf->limit();
@@ -72,7 +72,7 @@ StorageFuture<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
             .get();
 
     if (get_block_res.error() < 0) {
-      return StorageFuture<int>(nullptr, -1);
+      return Future<int>(nullptr, -1);
     }
 
     block_info = get_block_res.block_info();
@@ -85,11 +85,11 @@ StorageFuture<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
       block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
-    return StorageFuture<int>(nullptr, -1);
+    return Future<int>(nullptr, -1);
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  StorageFuture<int> storage_response =
+  Future<int> storage_response =
       storage_client->WriteData(block_info->lkey(), block_addr, buf);
 
   this->position_ += buf->remaining();
@@ -104,8 +104,8 @@ Future<int> CrailOutputstream::Close() {
   VoidResponse set_file_res = namenode_client_->SetFile(file_info_, true).get();
 
   if (set_file_res.error() < 0) {
-    return Future<int>::error(-1);
+    return Future<int>::Failure(-1);
   }
 
-  return Future<int>::error(0);
+  return Future<int>::Failure(0);
 }

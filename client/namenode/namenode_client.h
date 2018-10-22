@@ -27,12 +27,12 @@
 #include <atomic>
 #include <string>
 
+#include "common/future.h"
 #include "create_response.h"
 #include "getblock_response.h"
 #include "ioctl_response.h"
 #include "lookup_response.h"
 #include "metadata/filename.h"
-#include "namenode_future.h"
 #include "narpc/rpc_client.h"
 #include "remove_response.h"
 #include "void_response.h"
@@ -44,17 +44,14 @@ public:
 
   static const bool kNodelay = true;
 
-  NamenodeFuture<CreateResponse> Create(Filename &name, int type,
-                                        int storage_class, int location_class,
-                                        int enumerable);
-  NamenodeFuture<LookupResponse> Lookup(Filename &name);
-  NamenodeFuture<GetblockResponse> GetBlock(long long fd, long long token,
-                                            long long position,
-                                            long long capacity);
-  NamenodeFuture<VoidResponse> SetFile(shared_ptr<FileInfo> file_info,
-                                       bool close);
-  NamenodeFuture<RemoveResponse> Remove(Filename &name, bool recursive);
-  NamenodeFuture<IoctlResponse> Ioctl(unsigned char op, Filename &name);
+  Future<CreateResponse> Create(Filename &name, int type, int storage_class,
+                                int location_class, int enumerable);
+  Future<LookupResponse> Lookup(Filename &name);
+  Future<GetblockResponse> GetBlock(long long fd, long long token,
+                                    long long position, long long capacity);
+  Future<VoidResponse> SetFile(shared_ptr<FileInfo> file_info, bool close);
+  Future<RemoveResponse> Remove(Filename &name, bool recursive);
+  Future<IoctlResponse> Ioctl(unsigned char op, Filename &name);
 
 private:
   atomic<unsigned long long> counter_;

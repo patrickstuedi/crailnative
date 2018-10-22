@@ -26,13 +26,15 @@
 
 #include <memory>
 
+#include "common/future.h"
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
 #include "narpc/rpc_client.h"
 #include "narpc/rpc_message.h"
 
-class LookupResponse : public NamenodeResponse {
+class LookupResponse : public NamenodeResponse,
+                       public AsyncResult<LookupResponse> {
 public:
   LookupResponse() = default;
   LookupResponse(RpcClient *rpc_client);
@@ -48,6 +50,8 @@ public:
 
   shared_ptr<FileInfo> file() const { return file_info_; }
   shared_ptr<BlockInfo> file_block() const { return block_info_; }
+
+  LookupResponse get() { return *this; }
 
 private:
   shared_ptr<FileInfo> file_info_;

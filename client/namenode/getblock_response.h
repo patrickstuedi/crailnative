@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include "common/future.h"
 #include "metadata/block_info.h"
 #include "namenode_response.h"
 #include "narpc/rpc_client.h"
@@ -33,7 +34,8 @@
 
 using namespace std;
 
-class GetblockResponse : public NamenodeResponse {
+class GetblockResponse : public NamenodeResponse,
+                         public AsyncResult<GetblockResponse> {
 public:
   GetblockResponse() = default;
   GetblockResponse(RpcClient *rpc_client);
@@ -48,6 +50,8 @@ public:
   int Update(ByteBuffer &buf);
 
   shared_ptr<BlockInfo> block_info() { return block_info_; }
+
+  GetblockResponse get() { return *this; }
 
 private:
   shared_ptr<BlockInfo> block_info_;

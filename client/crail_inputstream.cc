@@ -45,9 +45,9 @@ CrailInputstream::CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
 
 CrailInputstream::~CrailInputstream() {}
 
-StorageFuture<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
+Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   if (position_ >= file_info_->capacity()) {
-    return StorageFuture<int>(nullptr, -1);
+    return Future<int>(nullptr, -1);
   }
 
   int buf_original_limit = buf->limit();
@@ -70,7 +70,7 @@ StorageFuture<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
             .get();
 
     if (get_block_res.error() < 0) {
-      return StorageFuture<int>(nullptr, -1);
+      return Future<int>(nullptr, -1);
     }
 
     block_info = get_block_res.block_info();
@@ -83,11 +83,11 @@ StorageFuture<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
       block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
-    return StorageFuture<int>(nullptr, -1);
+    return Future<int>(nullptr, -1);
   }
 
   long long block_addr = block_info->addr() + block_offset;
-  StorageFuture<int> storage_response =
+  Future<int> storage_response =
       storage_client->ReadData(block_info->lkey(), block_addr, buf);
 
   this->position_ += buf->remaining();
@@ -97,4 +97,4 @@ StorageFuture<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   return storage_response;
 }
 
-Future<int> CrailInputstream::Close() { return Future<int>::error(0); }
+Future<int> CrailInputstream::Close() { return Future<int>::Failure(0); }

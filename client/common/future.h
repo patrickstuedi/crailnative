@@ -33,18 +33,22 @@ public:
 
 template <typename T> class Future : public AsyncResult<T> {
 public:
-  Future(T result) { result_ = result; }
+  Future(shared_ptr<AsyncResult<T>> task, T init_value)
+      : task_(task), result_(init_value) {}
 
   virtual ~Future<T>() {}
 
-  static Future<T> error(T ret) {
-    Future<T> future(ret);
-    return future;
+  static Future Failure(T val) { return Future(nullptr, val); }
+
+  virtual T get() {
+    if (task_) {
+      result_ = task_->get();
+    }
+    return result_;
   }
 
-  virtual T get() { return result_; }
-
 private:
+  shared_ptr<AsyncResult<T>> task_;
   T result_;
 };
 

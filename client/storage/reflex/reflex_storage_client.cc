@@ -31,19 +31,19 @@ ReflexStorageClient::ReflexStorageClient() {}
 
 ReflexStorageClient::~ReflexStorageClient() {}
 
-StorageFuture<int> ReflexStorageClient::WriteData(int key, long long address,
-                                                  shared_ptr<ByteBuffer> buf) {
+Future<int> ReflexStorageClient::WriteData(int key, long long address,
+                                           shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Put(lba, buf);
-  StorageFuture<int> future_tmp(nullptr, -1);
+  Future<int> future_tmp(nullptr, -1);
   return future_tmp;
 }
 
-StorageFuture<int> ReflexStorageClient::ReadData(int key, long long address,
-                                                 shared_ptr<ByteBuffer> buf) {
+Future<int> ReflexStorageClient::ReadData(int key, long long address,
+                                          shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Get(lba, buf);
-  StorageFuture<int> future_tmp(nullptr, -1);
+  Future<int> future_tmp(nullptr, -1);
   return future_tmp;
 }
 

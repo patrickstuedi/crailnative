@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include "common/future.h"
 #include "common/serializable.h"
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
@@ -33,7 +34,8 @@
 #include "narpc/rpc_client.h"
 #include "narpc/rpc_message.h"
 
-class RemoveResponse : public NamenodeResponse {
+class RemoveResponse : public NamenodeResponse,
+                       public AsyncResult<RemoveResponse> {
 public:
   RemoveResponse() = default;
   RemoveResponse(RpcClient *rpc_client);
@@ -47,6 +49,8 @@ public:
 
   shared_ptr<FileInfo> file() const { return file_info_; }
   shared_ptr<FileInfo> parent() const { return parent_info_; }
+
+  RemoveResponse get() { return *this; }
 
 private:
   shared_ptr<FileInfo> file_info_;
