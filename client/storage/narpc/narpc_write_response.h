@@ -34,8 +34,7 @@
 
 using namespace std;
 
-class NarpcWriteResponse : public NarpcStorageResponse,
-                           public AsyncResult<int> {
+class NarpcWriteResponse : public NarpcStorageResponse, public AsyncTask<int> {
 public:
   NarpcWriteResponse(RpcChecker *rpc_checker);
   virtual ~NarpcWriteResponse();

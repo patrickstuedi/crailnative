@@ -26,14 +26,14 @@
 
 #include "narpc/rpc_response.h"
 
-template <typename T> class AsyncResult {
+template <typename T> class AsyncTask {
 public:
   virtual T get() = 0;
 };
 
-template <typename T> class Future : public AsyncResult<T> {
+template <typename T> class Future : public AsyncTask<T> {
 public:
-  Future(shared_ptr<AsyncResult<T>> task, T init_value)
+  Future(shared_ptr<AsyncTask<T>> task, T init_value)
       : task_(task), result_(init_value) {}
 
   virtual ~Future<T>() {}
@@ -48,7 +48,7 @@ public:
   }
 
 private:
-  shared_ptr<AsyncResult<T>> task_;
+  shared_ptr<AsyncTask<T>> task_;
   T result_;
 };
 

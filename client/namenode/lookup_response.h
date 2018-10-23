@@ -34,7 +34,7 @@
 #include "narpc/rpc_message.h"
 
 class LookupResponse : public NamenodeResponse,
-                       public AsyncResult<LookupResponse> {
+                       public AsyncTask<LookupResponse> {
 public:
   LookupResponse() = default;
   LookupResponse(RpcClient *rpc_client);

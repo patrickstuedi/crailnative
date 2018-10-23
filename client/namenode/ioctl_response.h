@@ -34,8 +34,7 @@
 
 using namespace crail;
 
-class IoctlResponse : public NamenodeResponse,
-                      public AsyncResult<IoctlResponse> {
+class IoctlResponse : public NamenodeResponse, public AsyncTask<IoctlResponse> {
 public:
   IoctlResponse() = default;
   IoctlResponse(RpcClient *rpc_client);
