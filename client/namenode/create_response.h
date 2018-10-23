@@ -59,7 +59,10 @@ public:
   shared_ptr<BlockInfo> file_block() const { return file_block_; }
   shared_ptr<BlockInfo> parent_block() const { return parent_block_; }
 
-  CreateResponse get() { return *this; }
+  CreateResponse get() {
+    RpcResponse::get();
+    return *this;
+  }
 
 private:
   shared_ptr<FileInfo> file_info_;
