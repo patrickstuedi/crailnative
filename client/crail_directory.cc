@@ -33,11 +33,7 @@ CrailDirectory::CrailDirectory(shared_ptr<FileInfo> file_info,
                                shared_ptr<NamenodeClient> namenode_client,
                                shared_ptr<StorageCache> storage_cache,
                                shared_ptr<BlockCache> block_cache)
-    : CrailNode(file_info) {
-  this->namenode_client_ = namenode_client;
-  this->storage_cache_ = storage_cache;
-  this->block_cache_ = block_cache;
-}
+    : CrailNode(file_info, namenode_client, storage_cache, block_cache) {}
 
 CrailDirectory::~CrailDirectory() {}
 

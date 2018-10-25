@@ -23,6 +23,14 @@
 
 #include "crail_node.h"
 
-CrailNode::CrailNode(shared_ptr<FileInfo> file_info) { file_info_ = file_info; }
+CrailNode::CrailNode(shared_ptr<FileInfo> file_info,
+                     shared_ptr<NamenodeClient> namenode_client,
+                     shared_ptr<StorageCache> storage_cache,
+                     shared_ptr<BlockCache> block_cache) {
+  this->file_info_ = file_info;
+  this->namenode_client_ = namenode_client;
+  this->storage_cache_ = storage_cache;
+  this->block_cache_ = block_cache;
+}
 
-CrailNode::~CrailNode() {}
+// CrailNode::~CrailNode() {}

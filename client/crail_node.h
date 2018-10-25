@@ -28,14 +28,20 @@
 
 #include "common/block_cache.h"
 #include "metadata/file_info.h"
+#include "namenode/namenode_client.h"
+#include "storage/storage_cache.h"
 
 using namespace std;
 using namespace crail;
 
 class CrailNode {
 public:
-  CrailNode(shared_ptr<FileInfo> file_info);
-  virtual ~CrailNode();
+  CrailNode(shared_ptr<FileInfo> file_info,
+            shared_ptr<NamenodeClient> namenode_client,
+            shared_ptr<StorageCache> storage_cache,
+            shared_ptr<BlockCache> block_cache);
+  CrailNode(CrailNode &&node) = default;
+  virtual ~CrailNode() = default;
 
   int type() const { return file_info_->type(); }
   unsigned long long fd() const { return file_info_->fd(); }
@@ -43,6 +49,9 @@ public:
 
 protected:
   shared_ptr<FileInfo> file_info_;
+  shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<StorageCache> storage_cache_;
+  shared_ptr<BlockCache> block_cache_;
 };
 
 #endif /* CRAIL_NODE_H */

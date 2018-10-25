@@ -35,14 +35,10 @@ public:
                  shared_ptr<NamenodeClient> namenode_client,
                  shared_ptr<StorageCache> storage_cache,
                  shared_ptr<BlockCache> block_cache);
+  CrailDirectory(CrailNode &&node) : CrailNode(std::move(node)) {}
   virtual ~CrailDirectory();
 
   int Enumerate();
-
-private:
-  shared_ptr<NamenodeClient> namenode_client_;
-  shared_ptr<StorageCache> storage_cache_;
-  shared_ptr<BlockCache> block_cache_;
 };
 
 #endif /* CRAIL_DIRECTORY_H */

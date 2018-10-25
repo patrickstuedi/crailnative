@@ -41,15 +41,11 @@ public:
             shared_ptr<NamenodeClient> namenode_client,
             shared_ptr<StorageCache> storage_cache,
             shared_ptr<BlockCache> block_cache);
-  virtual ~CrailFile();
+  CrailFile(CrailNode &&node) : CrailNode(std::move(node)) {}
+  virtual ~CrailFile() = default;
 
   unique_ptr<CrailOutputstream> outputstream();
   unique_ptr<CrailInputstream> inputstream();
-
-private:
-  shared_ptr<NamenodeClient> namenode_client_;
-  shared_ptr<StorageCache> storage_cache_;
-  shared_ptr<BlockCache> block_cache_;
 };
 
 #endif /* CRAIL_FILE_H */
