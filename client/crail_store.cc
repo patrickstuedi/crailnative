@@ -81,6 +81,28 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
   return DispatchType(file_info);
 }
 
+optional<CrailNode> CrailStore::_Create(CreateResponse rpc_response) {
+  if (rpc_response.error() != 0) {
+    return nullopt;
+  }
+
+  auto file_info = rpc_response.file();
+  AddBlock(file_info->fd(), 0, rpc_response.file_block());
+
+  long long dir_offset = file_info->dir_offset();
+  if (dir_offset >= 0) {
+    auto parent_info = rpc_response.parent();
+    AddBlock(parent_info->fd(), dir_offset, rpc_response.parent_block());
+    // string _name = filename.name();
+    string _name = "XXV";
+    WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
+  }
+
+  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+  return CrailFile(file_info, namenode_client_, storage_cache_,
+                   file_block_cache);
+}
+
 unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
   Filename filename(name);
   auto future = namenode_client_->Lookup(filename);

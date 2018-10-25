@@ -54,6 +54,8 @@ public:
   int Ioctl(unsigned char op, string &name);
 
 private:
+  optional<CrailNode> _Create(CreateResponse rpc_response);
+
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
   shared_ptr<BlockCache> GetBlockCache(int fd);
   int AddBlock(int fd, long long offset, shared_ptr<BlockInfo> block);
