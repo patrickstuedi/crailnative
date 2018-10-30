@@ -52,9 +52,10 @@ int CrailStore::Initialize(string address, int port) {
   return this->namenode_client_->Connect((int)inet_addr(address.c_str()), port);
 }
 
-unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
-                                         int storage_class, int location_class,
-                                         bool enumerable) {
+/*
+optional<CrailNode> CrailStore::Create(string &name, FileType type,
+                                       int storage_class, int location_class,
+                                       bool enumerable) {
   Filename filename(name);
   int _enumerable = enumerable ? 1 : 0;
   auto future =
@@ -64,7 +65,7 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
   auto create_res = future.get();
 
   if (create_res.error() != 0) {
-    return nullptr;
+    return nullopt;
   }
 
   auto file_info = create_res.file();
@@ -78,8 +79,12 @@ unique_ptr<CrailNode> CrailStore::Create(string &name, FileType type,
     WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
   }
 
-  return DispatchType(file_info);
+  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+  return CrailFile(file_info, namenode_client_, storage_cache_,
+                   file_block_cache);
+  // return DispatchType(file_info);
 }
+*/
 
 optional<CrailNode> CrailStore::_Create(CreateResponse rpc_response) {
   if (rpc_response.error() != 0) {

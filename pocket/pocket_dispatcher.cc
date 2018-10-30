@@ -41,8 +41,8 @@ int PocketDispatcher::Initialize(string address, int port) {
 }
 
 int PocketDispatcher::MakeDir(string name) {
-  unique_ptr<CrailNode> crail_node =
-      crail_.Create(name, FileType::Directory, 0, 0, true);
+  auto crail_node =
+      crail_.Create<CrailDirectory>(name, FileType::Directory, 0, 0, true);
   if (!crail_node) {
     cout << "makedir failed " << endl;
     return -1;
@@ -84,8 +84,8 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
     return -1;
   }
 
-  unique_ptr<CrailNode> crail_node =
-      crail_.Create(dst_file, FileType::File, 0, 0, enumerable);
+  optional<CrailFile> crail_node =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable);
   if (!crail_node) {
     cout << "create node failed" << endl;
     return -1;
@@ -95,9 +95,9 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailOutputstream> outputstream = file->outputstream();
+  CrailFile file = crail_node.value();
+  // CrailFile file(node);
+  unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
   while (size_t len = fread(buf->get_bytes(), 1, buf->remaining(), fp)) {
@@ -184,8 +184,8 @@ int PocketDispatcher::CountFiles(string directory) {
 
 int PocketDispatcher::PutBuffer(const char data[], int len, string dst_file,
                                 bool enumerable) {
-  unique_ptr<CrailNode> crail_node =
-      crail_.Create(dst_file, FileType::File, 0, 0, enumerable);
+  auto crail_node =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable);
   if (!crail_node) {
     cout << "create node failed" << endl;
     return -1;
@@ -195,9 +195,8 @@ int PocketDispatcher::PutBuffer(const char data[], int len, string dst_file,
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailOutputstream> outputstream = file->outputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
   buf->PutBytes(data, len);

@@ -36,6 +36,7 @@ public:
                  shared_ptr<StorageCache> storage_cache,
                  shared_ptr<BlockCache> block_cache);
   CrailDirectory(CrailNode &&node) : CrailNode(std::move(node)) {}
+  CrailDirectory(const CrailDirectory &directory) = default;
   virtual ~CrailDirectory();
 
   int Enumerate();

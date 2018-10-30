@@ -47,8 +47,41 @@ public:
 
   int Initialize(string address, int port);
 
-  unique_ptr<CrailNode> Create(string &name, FileType type, int storage_class,
-                               int location_class, bool enumerable);
+  /*
+optional<CrailNode> Create(string &name, FileType type, int storage_class,
+                       int location_class, bool enumerable);
+  */
+
+  template <class T>
+  optional<T> Create(string &name, FileType type, int storage_class,
+                     int location_class, bool enumerable) {
+    Filename filename(name);
+    int _enumerable = enumerable ? 1 : 0;
+    auto future =
+        namenode_client_->Create(filename, static_cast<int>(type),
+                                 storage_class, location_class, _enumerable);
+
+    auto create_res = future.get();
+
+    if (create_res.error() != 0) {
+      return nullopt;
+    }
+
+    auto file_info = create_res.file();
+    AddBlock(file_info->fd(), 0, create_res.file_block());
+
+    long long dir_offset = file_info->dir_offset();
+    if (dir_offset >= 0) {
+      auto parent_info = create_res.parent();
+      AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
+      string _name = filename.name();
+      WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
+    }
+
+    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
+  }
+
   unique_ptr<CrailNode> Lookup(string &name);
   int Remove(string &name, bool recursive);
   int Ioctl(unsigned char op, string &name);

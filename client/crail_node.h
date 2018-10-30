@@ -41,6 +41,7 @@ public:
             shared_ptr<StorageCache> storage_cache,
             shared_ptr<BlockCache> block_cache);
   CrailNode(CrailNode &&node) = default;
+  CrailNode(const CrailNode &node) = default;
   virtual ~CrailNode() = default;
 
   int type() const { return file_info_->type(); }

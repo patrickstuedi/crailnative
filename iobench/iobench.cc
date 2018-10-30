@@ -125,8 +125,8 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
     return -1;
   }
 
-  unique_ptr<CrailNode> crail_node =
-      crail_.Create(dst_file, FileType::File, 0, 0, enumerable);
+  auto crail_node =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable);
   if (!crail_node) {
     cout << "create node failed" << endl;
     return -1;
@@ -136,9 +136,8 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailOutputstream> outputstream = file->outputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
   while (size_t len = fread(buf->get_bytes(), 1, buf->remaining(), fp)) {
@@ -214,8 +213,8 @@ int Iobench::Write(string dst_file, int len, int loop) {
   MicroClock clock;
   clock.Start();
 
-  unique_ptr<CrailNode> crail_node =
-      crail_.Create(dst_file, FileType::File, 0, 0, true);
+  auto crail_node =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, true);
   if (!crail_node) {
     cout << "create node failed" << endl;
     return -1;
@@ -225,9 +224,8 @@ int Iobench::Write(string dst_file, int len, int loop) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailOutputstream> outputstream = file->outputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   char data[len];
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
@@ -310,8 +308,8 @@ int Iobench::Read(string src_file, int len, int loop) {
 
 int Iobench::PutKey(const char data[], int len, string dst_file,
                     bool enumerable) {
-  unique_ptr<CrailNode> crail_node =
-      crail_.Create(dst_file, FileType::File, 0, 0, enumerable);
+  auto crail_node =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable);
   if (!crail_node) {
     cout << "create node failed" << endl;
     return -1;
@@ -321,9 +319,8 @@ int Iobench::PutKey(const char data[], int len, string dst_file,
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailOutputstream> outputstream = file->outputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
   buf->PutBytes(data, len);
