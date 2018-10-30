@@ -110,7 +110,7 @@ int Iobench::GetFile(string &filename, const int loop) {
   MicroClock clock;
   clock.Start();
   for (int i = 0; i < loop; i++) {
-    auto node = crail_.Lookup(filename);
+    auto node = crail_.Lookup<CrailNode>(filename);
   }
   clock.Stop();
   auto micros = clock.Duration() / loop;
@@ -171,7 +171,7 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
 }
 
 int Iobench::ReadFile(string src_file, string local_file) {
-  unique_ptr<CrailNode> crail_node = crail_.Lookup(src_file);
+  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
   if (!crail_node) {
     cout << "lookup node failed" << endl;
     return -1;
@@ -187,9 +187,8 @@ int Iobench::ReadFile(string src_file, string local_file) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailInputstream> inputstream = file->inputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
   while (inputstream->Read(buf).get() > 0) {
@@ -263,7 +262,7 @@ int Iobench::Read(string src_file, int len, int loop) {
   MicroClock clock;
   clock.Start();
 
-  unique_ptr<CrailNode> crail_node = crail_.Lookup(src_file);
+  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
   if (!crail_node) {
     cout << "lookup node failed" << endl;
     return -1;
@@ -273,9 +272,8 @@ int Iobench::Read(string src_file, int len, int loop) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailInputstream> inputstream = file->inputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
 
@@ -336,7 +334,7 @@ int Iobench::PutKey(const char data[], int len, string dst_file,
 }
 
 int Iobench::GetKey(char data[], int len, string src_file) {
-  unique_ptr<CrailNode> crail_node = crail_.Lookup(src_file);
+  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
   if (!crail_node) {
     cout << "lookup node failed" << endl;
     return -1;
@@ -346,9 +344,8 @@ int Iobench::GetKey(char data[], int len, string src_file) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailInputstream> inputstream = file->inputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
   while (buf->remaining()) {

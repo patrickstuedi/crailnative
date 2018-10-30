@@ -86,6 +86,7 @@ optional<CrailNode> CrailStore::Create(string &name, FileType type,
 }
 */
 
+/*
 optional<CrailNode> CrailStore::_Create(CreateResponse rpc_response) {
   if (rpc_response.error() != 0) {
     return nullopt;
@@ -107,7 +108,9 @@ optional<CrailNode> CrailStore::_Create(CreateResponse rpc_response) {
   return CrailFile(file_info, namenode_client_, storage_cache_,
                    file_block_cache);
 }
+*/
 
+/*
 unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
   Filename filename(name);
   auto future = namenode_client_->Lookup(filename);
@@ -122,6 +125,7 @@ unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
   AddBlock(file_info->fd(), 0, lookup_res.file_block());
   return DispatchType(file_info);
 }
+*/
 
 int CrailStore::Remove(string &name, bool recursive) {
   Filename filename(name);

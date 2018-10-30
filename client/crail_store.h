@@ -47,11 +47,6 @@ public:
 
   int Initialize(string address, int port);
 
-  /*
-optional<CrailNode> Create(string &name, FileType type, int storage_class,
-                       int location_class, bool enumerable);
-  */
-
   template <class T>
   optional<T> Create(string &name, FileType type, int storage_class,
                      int location_class, bool enumerable) {
@@ -82,12 +77,27 @@ optional<CrailNode> Create(string &name, FileType type, int storage_class,
     return T(file_info, namenode_client_, storage_cache_, file_block_cache);
   }
 
-  unique_ptr<CrailNode> Lookup(string &name);
+  template <class T> optional<T> Lookup(string &name) {
+    Filename filename(name);
+    auto future = namenode_client_->Lookup(filename);
+
+    LookupResponse lookup_res = future.get();
+
+    if (lookup_res.error() != 0) {
+      return nullopt;
+    }
+
+    auto file_info = lookup_res.file();
+    AddBlock(file_info->fd(), 0, lookup_res.file_block());
+    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
+  }
+
   int Remove(string &name, bool recursive);
   int Ioctl(unsigned char op, string &name);
 
 private:
-  optional<CrailNode> _Create(CreateResponse rpc_response);
+  // optional<CrailNode> _Create(CreateResponse rpc_response);
 
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
   shared_ptr<BlockCache> GetBlockCache(int fd);

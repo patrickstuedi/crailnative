@@ -51,7 +51,7 @@ int PocketDispatcher::MakeDir(string name) {
 }
 
 int PocketDispatcher::Lookup(string name) {
-  unique_ptr<CrailNode> crail_node = crail_.Lookup(name);
+  optional<CrailNode> crail_node = crail_.Lookup<CrailNode>(name);
   if (!crail_node) {
     cout << "lookup node failed" << endl;
     return -1;
@@ -60,7 +60,7 @@ int PocketDispatcher::Lookup(string name) {
 }
 
 int PocketDispatcher::Enumerate(string name) {
-  unique_ptr<CrailNode> crail_node = crail_.Lookup(name);
+  optional<CrailDirectory> crail_node = crail_.Lookup<CrailDirectory>(name);
   if (!crail_node) {
     cout << "lookup node failed" << endl;
     return -1;
@@ -70,9 +70,8 @@ int PocketDispatcher::Enumerate(string name) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailDirectory *directory = static_cast<CrailDirectory *>(node);
-  directory->Enumerate();
+  CrailDirectory directory = crail_node.value();
+  directory.Enumerate();
   return 0;
 }
 
@@ -131,7 +130,7 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
 }
 
 int PocketDispatcher::GetFile(string src_file, string local_file) {
-  unique_ptr<CrailNode> crail_node = crail_.Lookup(src_file);
+  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
   if (!crail_node) {
     cout << "lookup node failed" << endl;
     return -1;
@@ -147,9 +146,8 @@ int PocketDispatcher::GetFile(string src_file, string local_file) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailInputstream> inputstream = file->inputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
   while (inputstream->Read(buf).get() > 0) {
@@ -212,7 +210,7 @@ int PocketDispatcher::PutBuffer(const char data[], int len, string dst_file,
 }
 
 int PocketDispatcher::GetBuffer(char data[], int len, string src_file) {
-  unique_ptr<CrailNode> crail_node = crail_.Lookup(src_file);
+  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
   if (!crail_node) {
     cout << "lookup node failed" << endl;
     return -1;
@@ -222,9 +220,8 @@ int PocketDispatcher::GetBuffer(char data[], int len, string src_file) {
     return -1;
   }
 
-  CrailNode *node = crail_node.get();
-  CrailFile *file = static_cast<CrailFile *>(node);
-  unique_ptr<CrailInputstream> inputstream = file->inputstream();
+  CrailFile file = crail_node.value();
+  unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
   while (buf->remaining()) {
