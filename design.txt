@@ -3,7 +3,8 @@ crail_store.h
 option 1: return unique_ptr<CrailNode> for create/lookup
 - requires application to cast unique_ptr<CrailNode> to unique_ptr<CrailFile/CrailDirectory>
 - casting requires releasing the unique_ptr, casting the raw pointer, and wrapping a new unique_ptr around
-- that type of casting cannot be offered as a method (e.g., asFile()) on top of the dynamic type of node (no access to unique_ptr)
+- Crail/Java does offer asFile methods on CrailNode and overrrides them on CrailFile to return the right dynamic type
+- that type of casting cannot be offered as a method (e.g., asFile()) with unique_ptr (no access to unique_ptr in CrailFile::asFile())
 - in addition, we don't need unique_ptr as we are not overrriding methods of CrailNode in CrailFile/CrailDirectory
 
 
