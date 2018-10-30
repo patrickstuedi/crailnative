@@ -52,81 +52,6 @@ int CrailStore::Initialize(string address, int port) {
   return this->namenode_client_->Connect((int)inet_addr(address.c_str()), port);
 }
 
-/*
-optional<CrailNode> CrailStore::Create(string &name, FileType type,
-                                       int storage_class, int location_class,
-                                       bool enumerable) {
-  Filename filename(name);
-  int _enumerable = enumerable ? 1 : 0;
-  auto future =
-      namenode_client_->Create(filename, static_cast<int>(type), storage_class,
-                               location_class, _enumerable);
-
-  auto create_res = future.get();
-
-  if (create_res.error() != 0) {
-    return nullopt;
-  }
-
-  auto file_info = create_res.file();
-  AddBlock(file_info->fd(), 0, create_res.file_block());
-
-  long long dir_offset = file_info->dir_offset();
-  if (dir_offset >= 0) {
-    auto parent_info = create_res.parent();
-    AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
-    string _name = filename.name();
-    WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
-  }
-
-  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-  return CrailFile(file_info, namenode_client_, storage_cache_,
-                   file_block_cache);
-  // return DispatchType(file_info);
-}
-*/
-
-/*
-optional<CrailNode> CrailStore::_Create(CreateResponse rpc_response) {
-  if (rpc_response.error() != 0) {
-    return nullopt;
-  }
-
-  auto file_info = rpc_response.file();
-  AddBlock(file_info->fd(), 0, rpc_response.file_block());
-
-  long long dir_offset = file_info->dir_offset();
-  if (dir_offset >= 0) {
-    auto parent_info = rpc_response.parent();
-    AddBlock(parent_info->fd(), dir_offset, rpc_response.parent_block());
-    // string _name = filename.name();
-    string _name = "XXV";
-    WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
-  }
-
-  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-  return CrailFile(file_info, namenode_client_, storage_cache_,
-                   file_block_cache);
-}
-*/
-
-/*
-unique_ptr<CrailNode> CrailStore::Lookup(string &name) {
-  Filename filename(name);
-  auto future = namenode_client_->Lookup(filename);
-
-  LookupResponse lookup_res = future.get();
-
-  if (lookup_res.error() != 0) {
-    return nullptr;
-  }
-
-  auto file_info = lookup_res.file();
-  AddBlock(file_info->fd(), 0, lookup_res.file_block());
-  return DispatchType(file_info);
-}
-*/
-
 int CrailStore::Remove(string &name, bool recursive) {
   Filename filename(name);
   auto future = namenode_client_->Remove(filename, recursive);
@@ -155,19 +80,6 @@ int CrailStore::Ioctl(unsigned char op, string &name) {
     return -1;
   }
   return ioctl_res.count();
-}
-
-unique_ptr<CrailNode> CrailStore::DispatchType(shared_ptr<FileInfo> file_info) {
-  shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-  if (file_info->type() == static_cast<int>(FileType::File)) {
-    return make_unique<CrailFile>(file_info, namenode_client_, storage_cache_,
-                                  file_block_cache);
-  } else if (file_info->type() == static_cast<int>(FileType::Directory)) {
-    return make_unique<CrailDirectory>(file_info, namenode_client_,
-                                       storage_cache_, file_block_cache);
-  } else {
-    return nullptr;
-  }
 }
 
 shared_ptr<BlockCache> CrailStore::GetBlockCache(int fd) {
