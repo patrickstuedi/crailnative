@@ -5,15 +5,19 @@ option 1: return unique_ptr<CrailNode> for create/lookup
 - casting requires releasing the unique_ptr, casting the raw pointer, and wrapping a new unique_ptr around
 - Crail/Java does offer asFile methods on CrailNode and overrrides them on CrailFile to return the right dynamic type
 - that type of casting cannot be offered as a method (e.g., asFile()) with unique_ptr (no access to unique_ptr in CrailFile::asFile())
-- in addition, we don't need unique_ptr as we are not overrriding methods of CrailNode in CrailFile/CrailDirectory
 
 
-option 2: return by value, e.g., "CrailNode create()" and provide efficient method to move node to a file (move constructor in CrailFile)
+option 2:
+- define the supserset of methods from CrailFile and CrailDirectory in CrailNode
+- override the methods of CrailNode in CrailFile and CrailDirectory
+- no casting necessary, but means CrailFile has enumerateDir() defined just to throw an exception 
+
+option 3: return by value, e.g., "CrailNode create()" and provide efficient method to move node to a file (move constructor in CrailFile)
 - requires applications to explicitly call the move constructor, 
 - instead, what we want is a method asFile() on CrailNode that moves the object and returns a CrailFile (or CrailDirectory)
 - that cannot be done as requires CrailNode to know CrailFile (circular dependency)
 
-option 3: template function, e.g., template <class T> T create()
+option 4: template function, e.g., template <class T> T create()
 - requires applications to pass type as template parameter
 - downside: blows up crail_store.h
 
