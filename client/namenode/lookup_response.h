@@ -51,7 +51,10 @@ public:
   shared_ptr<FileInfo> file() const { return file_info_; }
   shared_ptr<BlockInfo> file_block() const { return block_info_; }
 
-  LookupResponse get() { return *this; }
+  LookupResponse get() {
+    RpcResponse::get();
+    return *this;
+  }
 
 private:
   shared_ptr<FileInfo> file_info_;

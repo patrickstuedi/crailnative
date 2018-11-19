@@ -44,6 +44,7 @@ public:
   CrailNode(const CrailNode &node) = default;
   virtual ~CrailNode() = default;
 
+  bool valid() const { return file_info_->fd() >= 0; }
   int type() const { return file_info_->type(); }
   unsigned long long fd() const { return file_info_->fd(); }
   unsigned long long capacity() const { return file_info_->capacity(); }
