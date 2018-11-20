@@ -21,42 +21,15 @@
  * limitations under the License.
  */
 
-#ifndef FUTURE_H
-#define FUTURE_H
+#ifndef POST_LOOKUP_H
+#define POST_LOOKUP_H
 
-#include <memory>
-
-#include "narpc/rpc_response.h"
-
-template <typename T> class AsyncTask {
+class PostLookup {
 public:
-  virtual T get() = 0;
-};
-
-template <typename T> class Error : public AsyncTask<T> {
-public:
-  Error(T value) : value_(value) {}
-
-  virtual T get() { return value_; }
+  PostLookup();
+  virtual ~PostLookup();
 
 private:
-  T value_;
 };
 
-template <typename T> class Future : public AsyncTask<T> {
-public:
-  Future(shared_ptr<AsyncTask<T>> task) : task_(task) {}
-
-  virtual ~Future<T>() {}
-
-  static Future Failure(T val) {
-    return Future(std::make_shared<Error<T>>(val));
-  }
-
-  virtual T get() { return task_->get(); }
-
-private:
-  shared_ptr<AsyncTask<T>> task_;
-};
-
-#endif /* FUTURE_H */
+#endif /* POST_LOOKUP_H */

@@ -37,6 +37,7 @@ using namespace std;
 
 class CrailFile : public CrailNode {
 public:
+  CrailFile() = default;
   CrailFile(shared_ptr<FileInfo> file_info,
             shared_ptr<NamenodeClient> namenode_client,
             shared_ptr<StorageCache> storage_cache,
@@ -44,6 +45,8 @@ public:
   CrailFile(CrailNode &&node) : CrailNode(std::move(node)){};
   CrailFile(const CrailNode &node) : CrailNode(node){};
   virtual ~CrailFile() = default;
+
+  CrailFile &operator=(CrailFile other) { return *this; };
 
   unique_ptr<CrailOutputstream> outputstream();
   unique_ptr<CrailInputstream> inputstream();

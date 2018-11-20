@@ -35,7 +35,7 @@ Future<int> ReflexStorageClient::WriteData(int key, long long address,
                                            shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Put(lba, buf);
-  Future<int> future_tmp(nullptr, -1);
+  Future<int> future_tmp(nullptr);
   return future_tmp;
 }
 
@@ -43,7 +43,7 @@ Future<int> ReflexStorageClient::ReadData(int key, long long address,
                                           shared_ptr<ByteBuffer> buf) {
   long long lba = linearBlockAddress(address, kReflexBlockSize);
   shared_ptr<ReflexFuture> future = Get(lba, buf);
-  Future<int> future_tmp(nullptr, -1);
+  Future<int> future_tmp(nullptr);
   return future_tmp;
 }
 

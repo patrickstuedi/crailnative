@@ -59,7 +59,7 @@ Future<CreateResponse> NamenodeClient::Create(Filename &name, int type,
   if (RpcClient::IssueRequest(createReq, getblockRes) < 0) {
     return Future<CreateResponse>::Failure(nullptr);
   }
-  return Future<CreateResponse>(getblockRes, nullptr);
+  return Future<CreateResponse>(getblockRes);
 }
 
 Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
@@ -68,7 +68,7 @@ Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
   if (RpcClient::IssueRequest(lookupReq, lookupRes) < 0) {
     return Future<LookupResponse>::Failure(nullptr);
   }
-  return Future<LookupResponse>(lookupRes, nullptr);
+  return Future<LookupResponse>(lookupRes);
 }
 
 Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
@@ -80,7 +80,7 @@ Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
   if (RpcClient::IssueRequest(get_block_req, get_block_res) < 0) {
     return Future<GetblockResponse>::Failure(nullptr);
   }
-  return Future<GetblockResponse>(get_block_res, nullptr);
+  return Future<GetblockResponse>(get_block_res);
 }
 
 Future<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
@@ -90,7 +90,7 @@ Future<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
   if (RpcClient::IssueRequest(set_file_req, set_file_res) < 0) {
     return Future<VoidResponse>::Failure(nullptr);
   }
-  return Future<VoidResponse>(set_file_res, nullptr);
+  return Future<VoidResponse>(set_file_res);
 }
 
 Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
@@ -99,7 +99,7 @@ Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
   if (RpcClient::IssueRequest(remove_req, remove_res) < 0) {
     return Future<RemoveResponse>::Failure(nullptr);
   }
-  return Future<RemoveResponse>(remove_res, nullptr);
+  return Future<RemoveResponse>(remove_res);
 }
 
 Future<IoctlResponse> NamenodeClient::Ioctl(unsigned char op, Filename &name) {
@@ -108,5 +108,5 @@ Future<IoctlResponse> NamenodeClient::Ioctl(unsigned char op, Filename &name) {
   if (RpcClient::IssueRequest(ioctl_request, ioctl_response) < 0) {
     return Future<IoctlResponse>::Failure(nullptr);
   }
-  return Future<IoctlResponse>(ioctl_response, nullptr);
+  return Future<IoctlResponse>(ioctl_response);
 }

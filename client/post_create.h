@@ -21,42 +21,21 @@
  * limitations under the License.
  */
 
-#ifndef FUTURE_H
-#define FUTURE_H
+#ifndef POST_CREATE_H
+#define POST_CREATE_H
 
-#include <memory>
+#include "common/future.h"
+#include "namenode/create_response.h"
 
-#include "narpc/rpc_response.h"
-
-template <typename T> class AsyncTask {
+template <typename T> class PostCreate {
 public:
-  virtual T get() = 0;
-};
+  PostCreate(Future<CreateResponse> future) : future_(future) {}
+  virtual ~PostCreate<T>() {}
 
-template <typename T> class Error : public AsyncTask<T> {
-public:
-  Error(T value) : value_(value) {}
-
-  virtual T get() { return value_; }
+  virtual T get() { return T(); }
 
 private:
-  T value_;
+  Future<CreateResponse> future_;
 };
 
-template <typename T> class Future : public AsyncTask<T> {
-public:
-  Future(shared_ptr<AsyncTask<T>> task) : task_(task) {}
-
-  virtual ~Future<T>() {}
-
-  static Future Failure(T val) {
-    return Future(std::make_shared<Error<T>>(val));
-  }
-
-  virtual T get() { return task_->get(); }
-
-private:
-  shared_ptr<AsyncTask<T>> task_;
-};
-
-#endif /* FUTURE_H */
+#endif /* POST_CREATE_H */

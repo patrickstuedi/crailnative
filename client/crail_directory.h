@@ -31,13 +31,17 @@
 
 class CrailDirectory : public CrailNode {
 public:
+  CrailDirectory() = default;
   CrailDirectory(shared_ptr<FileInfo> file_info,
                  shared_ptr<NamenodeClient> namenode_client,
                  shared_ptr<StorageCache> storage_cache,
                  shared_ptr<BlockCache> block_cache);
   CrailDirectory(CrailNode &&node) : CrailNode(std::move(node)) {}
   CrailDirectory(const CrailDirectory &directory) = default;
+  CrailDirectory(const CrailNode &node) : CrailNode(node){};
   virtual ~CrailDirectory();
+
+  CrailDirectory &operator=(CrailDirectory other) { return *this; };
 
   int Enumerate();
 };

@@ -36,6 +36,7 @@ using namespace crail;
 
 class CrailNode {
 public:
+  CrailNode() = default;
   CrailNode(shared_ptr<FileInfo> file_info,
             shared_ptr<NamenodeClient> namenode_client,
             shared_ptr<StorageCache> storage_cache,

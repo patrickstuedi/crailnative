@@ -49,10 +49,10 @@ CrailOutputstream::~CrailOutputstream() {}
 
 Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (buf->remaining() < 0) {
-    return Future<int>(nullptr, -1);
+    return Future<int>::Failure(-1);
   }
   if (buf->remaining() == 0) {
-    return Future<int>(nullptr, -1);
+    return Future<int>::Failure(-1);
   }
 
   int buf_original_limit = buf->limit();
@@ -72,7 +72,7 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
             .get();
 
     if (get_block_res.error() < 0) {
-      return Future<int>(nullptr, -1);
+      return Future<int>::Failure(-1);
     }
 
     block_info = get_block_res.block_info();
@@ -85,7 +85,7 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
       block_info->datanode()->Key(), block_info->datanode()->storage_class());
   if (storage_client->Connect(address, port) < 0) {
-    return Future<int>(nullptr, -1);
+    return Future<int>::Failure(-1);
   }
 
   long long block_addr = block_info->addr() + block_offset;

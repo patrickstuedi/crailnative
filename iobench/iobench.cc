@@ -125,18 +125,14 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
     return -1;
   }
 
-  auto crail_node =
-      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable);
-  if (!crail_node) {
+  auto file =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable)
+          .get();
+  if (!file.valid()) {
     cout << "create node failed" << endl;
     return -1;
   }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
-    return -1;
-  }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
@@ -212,18 +208,13 @@ int Iobench::Write(string dst_file, int len, int loop) {
   MicroClock clock;
   clock.Start();
 
-  auto crail_node =
-      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, true);
-  if (!crail_node) {
+  auto file =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, true).get();
+  if (!file.valid()) {
     cout << "create node failed" << endl;
     return -1;
   }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
-    return -1;
-  }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   char data[len];
@@ -306,18 +297,14 @@ int Iobench::Read(string src_file, int len, int loop) {
 
 int Iobench::PutKey(const char data[], int len, string dst_file,
                     bool enumerable) {
-  auto crail_node =
-      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable);
-  if (!crail_node) {
+  auto file =
+      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable)
+          .get();
+  if (!file.valid()) {
     cout << "create node failed" << endl;
     return -1;
   }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
-    return -1;
-  }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailOutputstream> outputstream = file.outputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
