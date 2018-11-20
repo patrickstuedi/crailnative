@@ -27,7 +27,7 @@
 #include "common/future.h"
 #include "namenode/create_response.h"
 
-template <typename T> class PostCreate {
+template <typename T> class PostCreate : public AsyncTask<T> {
 public:
   PostCreate(Future<CreateResponse> future) : future_(future) {}
   virtual ~PostCreate<T>() {}

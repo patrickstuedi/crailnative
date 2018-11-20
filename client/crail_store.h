@@ -58,8 +58,9 @@ public:
         namenode_client_->Create(filename, static_cast<int>(type),
                                  storage_class, location_class, _enumerable);
 
-    PostCreate<T> post_create(future);
-    return Future<T>(nullptr);
+    shared_ptr<PostCreate<T>> post_create =
+        std::make_shared<PostCreate<T>>(future);
+    return Future<T>(post_create);
 
     /*
 auto create_res = future.get();
