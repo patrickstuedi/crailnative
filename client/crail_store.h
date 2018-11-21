@@ -49,6 +49,47 @@ public:
 
   int Initialize(string address, int port);
 
+  template <typename T> T CreateNode(shared_ptr<FileInfo> file_info) {
+    T node(file_info, namenode_client_, storage_cache_, block_cache_);
+    return node;
+  }
+
+  template <typename T> class PostCreate2 : public AsyncTask<T> {
+  public:
+    PostCreate2(Future<CreateResponse> future, CrailStore *store,
+                Filename filename)
+        : future_(future), store_(store), filename_(filename) {}
+
+    T get() {
+      auto create_res = future_.get();
+
+      if (create_res.error() != 0) {
+        return T();
+      }
+
+      auto file_info = create_res.file();
+      store_->AddBlock(file_info->fd(), 0, create_res.file_block());
+
+      long long dir_offset = file_info->dir_offset();
+      if (dir_offset >= 0) {
+        auto parent_info = create_res.parent();
+        store_->AddBlock(parent_info->fd(), dir_offset,
+                         create_res.parent_block());
+        string _name = filename_.name();
+        store_->WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
+      }
+
+      shared_ptr<BlockCache> file_block_cache =
+          store_->GetBlockCache(file_info->fd());
+      return store_->CreateNode<T>(file_info);
+    }
+
+  private:
+    Future<CreateResponse> future_;
+    CrailStore *store_;
+    Filename filename_;
+  };
+
   template <class T>
   Future<T> Create(string &name, FileType type, int storage_class,
                    int location_class, bool enumerable) {
@@ -58,8 +99,8 @@ public:
         namenode_client_->Create(filename, static_cast<int>(type),
                                  storage_class, location_class, _enumerable);
 
-    shared_ptr<PostCreate<T>> post_create =
-        std::make_shared<PostCreate<T>>(future);
+    shared_ptr<PostCreate2<T>> post_create =
+        std::make_shared<PostCreate2<T>>(future, this, filename);
     return Future<T>(post_create);
 
     /*
