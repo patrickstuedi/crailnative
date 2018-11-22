@@ -50,7 +50,8 @@ public:
   int Initialize(string address, int port);
 
   template <typename T> T CreateNode(shared_ptr<FileInfo> file_info) {
-    T node(file_info, namenode_client_, storage_cache_, block_cache_);
+    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+    T node(file_info, namenode_client_, storage_cache_, file_block_cache);
     return node;
   }
 
