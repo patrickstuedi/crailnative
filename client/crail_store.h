@@ -48,12 +48,12 @@ public:
   int Initialize(string address, int port);
 
   template <class T>
-  Future<T> Create(string &name, FileType type, int storage_class,
-                   int location_class, bool enumerable) {
+  Future<T> Create(string &name, int storage_class, int location_class,
+                   bool enumerable) {
     Filename filename(name);
     int _enumerable = enumerable ? 1 : 0;
     auto future =
-        namenode_client_->Create(filename, static_cast<int>(type),
+        namenode_client_->Create(filename, static_cast<int>(T::type),
                                  storage_class, location_class, _enumerable);
 
     shared_ptr<PostCreate<T>> post_create =

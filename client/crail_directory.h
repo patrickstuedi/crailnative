@@ -24,6 +24,7 @@
 #ifndef CRAIL_DIRECTORY_H
 #define CRAIL_DIRECTORY_H
 
+#include "common/file_type.h"
 #include "crail_node.h"
 #include "metadata/file_info.h"
 #include "namenode/namenode_client.h"
@@ -31,6 +32,8 @@
 
 class CrailDirectory : public CrailNode {
 public:
+  static const FileType type = FileType::Directory;
+
   CrailDirectory() = default;
   CrailDirectory(shared_ptr<FileInfo> file_info,
                  shared_ptr<NamenodeClient> namenode_client,

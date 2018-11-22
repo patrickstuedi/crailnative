@@ -27,6 +27,7 @@
 #include <memory>
 
 #include "common/block_cache.h"
+#include "common/file_type.h"
 #include "crail_inputstream.h"
 #include "crail_node.h"
 #include "crail_outputstream.h"
@@ -37,6 +38,8 @@ using namespace std;
 
 class CrailFile : public CrailNode {
 public:
+  static const FileType type = FileType::File;
+
   CrailFile() = default;
   CrailFile(shared_ptr<FileInfo> file_info,
             shared_ptr<NamenodeClient> namenode_client,

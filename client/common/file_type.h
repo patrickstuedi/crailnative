@@ -21,4 +21,9 @@
  * limitations under the License.
  */
 
+#ifndef FILE_TYPE_H
+#define FILE_TYPE_H
+
 enum class FileType { File = 0, Directory = 1 };
+
+#endif /* FILE_TYPE_H */

@@ -41,9 +41,7 @@ int PocketDispatcher::Initialize(string address, int port) {
 }
 
 int PocketDispatcher::MakeDir(string name) {
-  auto directory =
-      crail_.Create<CrailDirectory>(name, FileType::Directory, 0, 0, true)
-          .get();
+  auto directory = crail_.Create<CrailDirectory>(name, 0, 0, true).get();
   if (!directory.valid()) {
     cout << "makedir failed " << endl;
     return -1;
@@ -78,9 +76,7 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
     return -1;
   }
 
-  CrailFile file =
-      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable)
-          .get();
+  CrailFile file = crail_.Create<CrailFile>(dst_file, 0, 0, enumerable).get();
   if (!file.valid()) {
     cout << "create node failed" << endl;
     return -1;
@@ -167,9 +163,7 @@ int PocketDispatcher::CountFiles(string directory) {
 
 int PocketDispatcher::PutBuffer(const char data[], int len, string dst_file,
                                 bool enumerable) {
-  auto file =
-      crail_.Create<CrailFile>(dst_file, FileType::File, 0, 0, enumerable)
-          .get();
+  auto file = crail_.Create<CrailFile>(dst_file, 0, 0, enumerable).get();
   if (!file.valid()) {
     cout << "create node failed" << endl;
     return -1;

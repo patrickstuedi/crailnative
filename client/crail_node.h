@@ -27,6 +27,7 @@
 #include <memory>
 
 #include "common/block_cache.h"
+#include "common/file_type.h"
 #include "metadata/file_info.h"
 #include "namenode/namenode_client.h"
 #include "storage/storage_cache.h"
