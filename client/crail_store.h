@@ -32,7 +32,6 @@
 #include "crail_node.h"
 #include "crail_outputstream.h"
 #include "namenode/namenode_client.h"
-#include "post_create.h"
 #include "storage/storage_cache.h"
 
 using namespace std;
@@ -55,42 +54,6 @@ public:
     return node;
   }
 
-  template <typename T> class PostCreate2 : public AsyncTask<T> {
-  public:
-    PostCreate2(Future<CreateResponse> future, CrailStore *store,
-                Filename filename)
-        : future_(future), store_(store), filename_(filename) {}
-
-    T get() {
-      auto create_res = future_.get();
-
-      if (create_res.error() != 0) {
-        return T();
-      }
-
-      auto file_info = create_res.file();
-      store_->AddBlock(file_info->fd(), 0, create_res.file_block());
-
-      long long dir_offset = file_info->dir_offset();
-      if (dir_offset >= 0) {
-        auto parent_info = create_res.parent();
-        store_->AddBlock(parent_info->fd(), dir_offset,
-                         create_res.parent_block());
-        string _name = filename_.name();
-        store_->WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
-      }
-
-      shared_ptr<BlockCache> file_block_cache =
-          store_->GetBlockCache(file_info->fd());
-      return store_->CreateNode<T>(file_info);
-    }
-
-  private:
-    Future<CreateResponse> future_;
-    CrailStore *store_;
-    Filename filename_;
-  };
-
   template <class T>
   Future<T> Create(string &name, FileType type, int storage_class,
                    int location_class, bool enumerable) {
@@ -100,57 +63,10 @@ public:
         namenode_client_->Create(filename, static_cast<int>(type),
                                  storage_class, location_class, _enumerable);
 
-    shared_ptr<PostCreate2<T>> post_create =
-        std::make_shared<PostCreate2<T>>(future, this, filename);
+    shared_ptr<PostCreate<T>> post_create =
+        std::make_shared<PostCreate<T>>(this, future, name);
     return Future<T>(post_create);
-
-    /*
-auto create_res = future.get();
-
-if (create_res.error() != 0) {
-return nullopt;
-}
-
-auto file_info = create_res.file();
-AddBlock(file_info->fd(), 0, create_res.file_block());
-
-long long dir_offset = file_info->dir_offset();
-if (dir_offset >= 0) {
-auto parent_info = create_res.parent();
-AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
-string _name = filename.name();
-WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
-}
-
-shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-return T(file_info, namenode_client_, storage_cache_, file_block_cache);
-    */
   }
-
-  /*
-    template <class T> T PostCreate(Future<CreateResponse> future, string &name)
-    { auto create_res = future.get();
-
-      if (create_res.error() != 0) {
-        return T();
-      }
-
-      auto file_info = create_res.file();
-      AddBlock(file_info->fd(), 0, create_res.file_block());
-
-      long long dir_offset = file_info->dir_offset();
-      if (dir_offset >= 0) {
-        auto parent_info = create_res.parent();
-        AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
-        Filename filename(name);
-        string _name = filename.name();
-        WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
-      }
-
-      shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-      return T(file_info, namenode_client_, storage_cache_, file_block_cache);
-    }
-  */
 
   template <class T> optional<T> Lookup(string &name) {
     Filename filename(name);
@@ -172,6 +88,42 @@ return T(file_info, namenode_client_, storage_cache_, file_block_cache);
   int Ioctl(unsigned char op, string &name);
 
 private:
+  template <typename T> class PostCreate : public AsyncTask<T> {
+  public:
+    PostCreate(CrailStore *store, Future<CreateResponse> future, string name)
+        : store_(store), future_(future), name_(name) {}
+
+    T get() { return store_->_Create<T>(future_, name_); }
+
+  private:
+    CrailStore *store_;
+    Future<CreateResponse> future_;
+    string name_;
+  };
+
+  template <class T> T _Create(Future<CreateResponse> future, string &name) {
+    auto create_res = future.get();
+
+    if (create_res.error() != 0) {
+      return T();
+    }
+
+    auto file_info = create_res.file();
+    AddBlock(file_info->fd(), 0, create_res.file_block());
+
+    long long dir_offset = file_info->dir_offset();
+    if (dir_offset >= 0) {
+      auto parent_info = create_res.parent();
+      AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
+      Filename filename(name);
+      string _name = filename.name();
+      WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
+    }
+
+    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
+  }
+
   unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
   shared_ptr<BlockCache> GetBlockCache(int fd);
   int AddBlock(int fd, long long offset, shared_ptr<BlockInfo> block);
