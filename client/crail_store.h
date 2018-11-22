@@ -48,12 +48,6 @@ public:
 
   int Initialize(string address, int port);
 
-  template <typename T> T CreateNode(shared_ptr<FileInfo> file_info) {
-    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    T node(file_info, namenode_client_, storage_cache_, file_block_cache);
-    return node;
-  }
-
   template <class T>
   Future<T> Create(string &name, FileType type, int storage_class,
                    int location_class, bool enumerable) {
@@ -68,20 +62,15 @@ public:
     return Future<T>(post_create);
   }
 
-  template <class T> optional<T> Lookup(string &name) {
+  template <class T> Future<T> Lookup(string &name) {
     Filename filename(name);
     auto future = namenode_client_->Lookup(filename);
 
     LookupResponse lookup_res = future.get();
 
-    if (lookup_res.error() != 0) {
-      return nullopt;
-    }
-
-    auto file_info = lookup_res.file();
-    AddBlock(file_info->fd(), 0, lookup_res.file_block());
-    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
+    shared_ptr<PostLookup<T>> post_lookup =
+        std::make_shared<PostLookup<T>>(this, future);
+    return Future<T>(post_lookup);
   }
 
   int Remove(string &name, bool recursive);
@@ -99,6 +88,18 @@ private:
     CrailStore *store_;
     Future<CreateResponse> future_;
     string name_;
+  };
+
+  template <typename T> class PostLookup : public AsyncTask<T> {
+  public:
+    PostLookup(CrailStore *store, Future<LookupResponse> future)
+        : store_(store), future_(future) {}
+
+    T get() { return store_->_Lookup<T>(future_); }
+
+  private:
+    CrailStore *store_;
+    Future<LookupResponse> future_;
   };
 
   template <class T> T _Create(Future<CreateResponse> future, string &name) {
@@ -120,6 +121,19 @@ private:
       WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
     }
 
+    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
+    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
+  }
+
+  template <class T> T _Lookup(Future<LookupResponse> future) {
+    auto lookup_res = future.get();
+
+    if (lookup_res.error() != 0) {
+      return T();
+    }
+
+    auto file_info = lookup_res.file();
+    AddBlock(file_info->fd(), 0, lookup_res.file_block());
     shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
     return T(file_info, namenode_client_, storage_cache_, file_block_cache);
   }

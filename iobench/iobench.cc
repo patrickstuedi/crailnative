@@ -167,13 +167,9 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
 }
 
 int Iobench::ReadFile(string src_file, string local_file) {
-  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
-  if (!crail_node) {
+  CrailFile file = crail_.Lookup<CrailFile>(src_file).get();
+  if (!file.valid()) {
     cout << "lookup node failed" << endl;
-    return -1;
-  }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
     return -1;
   }
 
@@ -183,7 +179,6 @@ int Iobench::ReadFile(string src_file, string local_file) {
     return -1;
   }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
@@ -253,17 +248,12 @@ int Iobench::Read(string src_file, int len, int loop) {
   MicroClock clock;
   clock.Start();
 
-  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
-  if (!crail_node) {
+  CrailFile file = crail_.Lookup<CrailFile>(src_file).get();
+  if (!file.valid()) {
     cout << "lookup node failed" << endl;
     return -1;
   }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
-    return -1;
-  }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
@@ -321,17 +311,12 @@ int Iobench::PutKey(const char data[], int len, string dst_file,
 }
 
 int Iobench::GetKey(char data[], int len, string src_file) {
-  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
-  if (!crail_node) {
+  CrailFile file = crail_.Lookup<CrailFile>(src_file).get();
+  if (!file.valid()) {
     cout << "lookup node failed" << endl;
     return -1;
   }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
-    return -1;
-  }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);

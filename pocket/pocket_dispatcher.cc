@@ -52,8 +52,8 @@ int PocketDispatcher::MakeDir(string name) {
 }
 
 int PocketDispatcher::Lookup(string name) {
-  optional<CrailNode> crail_node = crail_.Lookup<CrailNode>(name);
-  if (!crail_node) {
+  CrailNode crail_node = crail_.Lookup<CrailNode>(name).get();
+  if (!crail_node.valid()) {
     cout << "lookup node failed" << endl;
     return -1;
   }
@@ -61,17 +61,11 @@ int PocketDispatcher::Lookup(string name) {
 }
 
 int PocketDispatcher::Enumerate(string name) {
-  optional<CrailDirectory> crail_node = crail_.Lookup<CrailDirectory>(name);
-  if (!crail_node) {
+  CrailDirectory directory = crail_.Lookup<CrailDirectory>(name).get();
+  if (!directory.valid()) {
     cout << "lookup node failed" << endl;
     return -1;
   }
-  if (crail_node->type() != static_cast<int>(FileType::Directory)) {
-    cout << "node is not a directory" << endl;
-    return -1;
-  }
-
-  CrailDirectory directory = crail_node.value();
   directory.Enumerate();
   return 0;
 }
@@ -126,13 +120,9 @@ int PocketDispatcher::PutFile(string local_file, string dst_file,
 }
 
 int PocketDispatcher::GetFile(string src_file, string local_file) {
-  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
-  if (!crail_node) {
+  CrailFile file = crail_.Lookup<CrailFile>(src_file).get();
+  if (!file.valid()) {
     cout << "lookup node failed" << endl;
-    return -1;
-  }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
     return -1;
   }
 
@@ -142,7 +132,6 @@ int PocketDispatcher::GetFile(string src_file, string local_file) {
     return -1;
   }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
@@ -202,17 +191,12 @@ int PocketDispatcher::PutBuffer(const char data[], int len, string dst_file,
 }
 
 int PocketDispatcher::GetBuffer(char data[], int len, string src_file) {
-  optional<CrailFile> crail_node = crail_.Lookup<CrailFile>(src_file);
-  if (!crail_node) {
+  CrailFile file = crail_.Lookup<CrailFile>(src_file).get();
+  if (!file.valid()) {
     cout << "lookup node failed" << endl;
     return -1;
   }
-  if (crail_node->type() != static_cast<int>(FileType::File)) {
-    cout << "node is not a file" << endl;
-    return -1;
-  }
 
-  CrailFile file = crail_node.value();
   unique_ptr<CrailInputstream> inputstream = file.inputstream();
 
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
