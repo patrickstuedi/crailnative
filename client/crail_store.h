@@ -27,6 +27,7 @@
 #include <memory>
 #include <string>
 
+#include "common/file_type.h"
 #include "common/future.h"
 #include "crail_inputstream.h"
 #include "crail_node.h"
@@ -38,8 +39,6 @@ using namespace std;
 using namespace crail;
 
 namespace crail {
-
-enum class FileType { File = 0, Directory = 1 };
 
 class CrailStore {
 public:
