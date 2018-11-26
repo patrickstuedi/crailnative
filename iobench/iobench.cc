@@ -38,8 +38,8 @@ using namespace std;
 enum class Operation {
   Undefined = 0,
   GetFile = 1,
-  WriteFile = 2,
-  ReadFile = 3,
+  CopyFromLocal = 2,
+  CopyToLocal = 3,
   Write = 4,
   Read = 5,
   PutKey = 6,
@@ -62,10 +62,10 @@ struct Settings {
 Operation getOperation(string name) {
   if (name == "GetFile") {
     return Operation::GetFile;
-  } else if (name == "WriteFile") {
-    return Operation::WriteFile;
-  } else if (name == "ReadFile") {
-    return Operation::ReadFile;
+  } else if (name == "CopyFromLocal") {
+    return Operation::CopyFromLocal;
+  } else if (name == "CopyToLocal") {
+    return Operation::CopyToLocal;
   } else if (name == "Write") {
     return Operation::Write;
   } else if (name == "Read") {
@@ -118,7 +118,8 @@ int Iobench::GetFile(string &filename, const int loop) {
   return 0;
 }
 
-int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
+int Iobench::CopyFromLocal(string local_file, string dst_file,
+                           bool enumerable) {
   FILE *fp = fopen(local_file.c_str(), "r");
   if (!fp) {
     cout << "could not open local file " << local_file.c_str() << endl;
@@ -164,7 +165,7 @@ int Iobench::WriteFile(string local_file, string dst_file, bool enumerable) {
   return 0;
 }
 
-int Iobench::ReadFile(string src_file, string local_file) {
+int Iobench::CopyToLocal(string src_file, string local_file) {
   CrailFile file = crail_.Lookup<CrailFile>(src_file).get();
   if (!file.valid()) {
     cout << "lookup node failed" << endl;
@@ -212,11 +213,9 @@ int Iobench::Write(string dst_file, int len, int loop) {
   char data[len];
   shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(len);
   buf->PutBytes(data, len);
-  // buf->Flip();
 
   for (int i = 0; i < loop; i++) {
     buf->Clear();
-    // cout << "buf->remaining " << buf->remaining() << endl;
     while (buf->remaining() > 0) {
       if (outputstream->Write(buf).get() < 0) {
         cout << "error while writing " << endl;
@@ -262,8 +261,6 @@ int Iobench::Read(string src_file, int len, int loop) {
         return -1;
       }
     }
-    // buf->Clear();
-    // memcpy(data, buf->get_bytes(), len);
   }
   inputstream->Close().get();
 
@@ -373,10 +370,10 @@ int main(int argc, char *argv[]) {
   int res = -1;
   if (settings.operation == Operation::GetFile) {
     res = iobench.GetFile(settings.filename, settings.loop);
-  } else if (settings.operation == Operation::WriteFile) {
-    res = iobench.WriteFile(settings.filename, settings.dstfile, true);
-  } else if (settings.operation == Operation::ReadFile) {
-    res = iobench.ReadFile(settings.filename, settings.dstfile);
+  } else if (settings.operation == Operation::CopyFromLocal) {
+    res = iobench.CopyFromLocal(settings.filename, settings.dstfile, true);
+  } else if (settings.operation == Operation::CopyToLocal) {
+    res = iobench.CopyToLocal(settings.filename, settings.dstfile);
   } else if (settings.operation == Operation::Write) {
     res = iobench.Write(settings.filename, settings.size, settings.loop);
   } else if (settings.operation == Operation::Read) {

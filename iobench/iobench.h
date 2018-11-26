@@ -36,8 +36,8 @@ public:
   virtual ~Iobench();
 
   int GetFile(string &filename, const int loop);
-  int WriteFile(string local_file, string dst_file, bool enumerable);
-  int ReadFile(string src_file, string local_file);
+  int CopyFromLocal(string local_file, string dst_file, bool enumerable);
+  int CopyToLocal(string src_file, string local_file);
   int Write(string dst_file, int len, int loop);
   int Read(string src_file, int len, int loop);
   int PutKey(const char data[], int len, string dst_file, bool enumerable);
