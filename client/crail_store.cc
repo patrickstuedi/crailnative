@@ -31,8 +31,6 @@
 #include <unistd.h>
 
 #include "common/crail_constants.h"
-#include "crail_directory.h"
-#include "crail_file.h"
 #include "directory_record.h"
 #include "metadata/filename.h"
 #include "storage/storage_client.h"

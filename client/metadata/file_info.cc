@@ -25,11 +25,17 @@
 
 #include <iostream>
 
+#include "common/file_type.h"
+
 using namespace std;
 
-FileInfo::FileInfo() {}
-
-FileInfo::~FileInfo() {}
+FileInfo::FileInfo() {
+  this->fd_ = -1;
+  this->capacity_ = 0;
+  this->node_type_ = static_cast<int>(FileType::Undefined);
+  this->dir_offset_ = -1;
+  this->modification_time_ = -1;
+}
 
 int FileInfo::Write(ByteBuffer &buf) const {
   buf.PutLong(fd_);

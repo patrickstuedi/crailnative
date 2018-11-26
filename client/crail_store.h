@@ -30,7 +30,6 @@
 #include "common/file_type.h"
 #include "common/future.h"
 #include "crail_inputstream.h"
-#include "crail_node.h"
 #include "crail_outputstream.h"
 #include "namenode/namenode_client.h"
 #include "storage/storage_cache.h"
@@ -137,7 +136,6 @@ private:
     return T(file_info, namenode_client_, storage_cache_, file_block_cache);
   }
 
-  unique_ptr<CrailNode> DispatchType(shared_ptr<FileInfo> file_info);
   shared_ptr<BlockCache> GetBlockCache(int fd);
   int AddBlock(int fd, long long offset, shared_ptr<BlockInfo> block);
   unique_ptr<CrailOutputstream> DirectoryOuput(shared_ptr<FileInfo> file_info,
