@@ -120,7 +120,8 @@ private:
     }
 
     shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
+    return T(file_info, this, namenode_client_, storage_cache_,
+             file_block_cache);
   }
 
   template <class T> T _Lookup(Future<LookupResponse> future) {
@@ -133,7 +134,8 @@ private:
     auto file_info = lookup_res.file();
     AddBlock(file_info->fd(), 0, lookup_res.file_block());
     shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
+    return T(file_info, this, namenode_client_, storage_cache_,
+             file_block_cache);
   }
 
   shared_ptr<BlockCache> GetBlockCache(int fd);

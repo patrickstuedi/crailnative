@@ -23,7 +23,7 @@
 
 #include "crail_node.h"
 
-CrailNode::CrailNode(shared_ptr<FileInfo> file_info,
+CrailNode::CrailNode(shared_ptr<FileInfo> file_info, CrailStore *store,
                      shared_ptr<NamenodeClient> namenode_client,
                      shared_ptr<StorageCache> storage_cache,
                      shared_ptr<BlockCache> block_cache) {
