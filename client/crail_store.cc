@@ -63,7 +63,7 @@ int CrailStore::Remove(string &name, bool recursive) {
   auto parent_info = remove_res.parent();
   long long dir_offset = remove_res.file()->dir_offset();
   string _name = filename.name();
-  WriteDirectoryRecord(parent_info, _name, dir_offset, 0);
+  WriteDirectoryRecord(*parent_info, _name, dir_offset, 0);
 
   return 0;
 }
@@ -98,18 +98,17 @@ int CrailStore::AddBlock(int fd, long long offset,
   return 0;
 }
 
-unique_ptr<CrailOutputstream>
-CrailStore::DirectoryOuput(shared_ptr<FileInfo> file_info, long long position) {
-  shared_ptr<BlockCache> dir_block_cache = GetBlockCache(file_info->fd());
+unique_ptr<CrailOutputstream> CrailStore::DirectoryOuput(FileInfo file_info,
+                                                         long long position) {
+  shared_ptr<BlockCache> dir_block_cache = GetBlockCache(file_info.fd());
   auto directory_stream =
       make_unique<CrailOutputstream>(this->namenode_client_, storage_cache_,
                                      dir_block_cache, file_info, position);
   return directory_stream;
 }
 
-int CrailStore::WriteDirectoryRecord(shared_ptr<FileInfo> parent_info,
-                                     string &fname, long long offset,
-                                     int valid) {
+int CrailStore::WriteDirectoryRecord(FileInfo parent_info, string &fname,
+                                     long long offset, int valid) {
   if (offset < 0) {
     return 0;
   }

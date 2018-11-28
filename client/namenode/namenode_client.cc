@@ -83,8 +83,7 @@ Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
   return Future<GetblockResponse>(get_block_res);
 }
 
-Future<VoidResponse> NamenodeClient::SetFile(shared_ptr<FileInfo> file_info,
-                                             bool close) {
+Future<VoidResponse> NamenodeClient::SetFile(FileInfo &file_info, bool close) {
   SetfileRequest set_file_req(file_info, close);
   shared_ptr<VoidResponse> set_file_res = make_shared<VoidResponse>(this);
   if (RpcClient::IssueRequest(set_file_req, set_file_res) < 0) {

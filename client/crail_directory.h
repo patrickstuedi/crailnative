@@ -35,8 +35,7 @@ public:
   static const FileType type = FileType::Directory;
 
   CrailDirectory() = default;
-  CrailDirectory(shared_ptr<FileInfo> file_info, CrailStore *store,
-                 shared_ptr<NamenodeClient> namenode_client,
+  CrailDirectory(FileInfo file_info, shared_ptr<NamenodeClient> namenode_client,
                  shared_ptr<StorageCache> storage_cache,
                  shared_ptr<BlockCache> block_cache);
   CrailDirectory(CrailNode &&node) : CrailNode(std::move(node)) {}

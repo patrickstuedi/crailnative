@@ -34,9 +34,9 @@
 CrailInputstream::CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
                                    shared_ptr<StorageCache> storage_cache,
                                    shared_ptr<BlockCache> block_cache,
-                                   shared_ptr<FileInfo> file_info,
-                                   unsigned long long position) {
-  this->file_info_ = file_info;
+                                   FileInfo file_info,
+                                   unsigned long long position)
+    : file_info_(file_info) {
   this->namenode_client_ = namenode_client;
   this->storage_cache_ = storage_cache;
   this->block_cache_ = block_cache;
@@ -46,14 +46,14 @@ CrailInputstream::CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
 CrailInputstream::~CrailInputstream() {}
 
 Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
-  if (position_ >= file_info_->capacity()) {
+  if (position_ >= file_info_.capacity()) {
     return Future<int>::Failure(-1);
   }
 
   int buf_original_limit = buf->limit();
   int block_offset = position_ % kBlockSize;
   int block_remaining = kBlockSize - block_offset;
-  unsigned long long file_remaining = file_info_->capacity() - position_;
+  unsigned long long file_remaining = file_info_.capacity() - position_;
 
   if (block_remaining < buf->remaining()) {
     buf->set_limit(buf->position() + block_remaining);
@@ -66,7 +66,7 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   if (!block_info) {
     GetblockResponse get_block_res =
         namenode_client_
-            ->GetBlock(file_info_->fd(), file_info_->token(), position_, 0)
+            ->GetBlock(file_info_.fd(), file_info_.token(), position_, 0)
             .get();
 
     if (get_block_res.error() < 0) {

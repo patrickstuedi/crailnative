@@ -36,21 +36,21 @@
 
 class SetfileRequest : public NamenodeRequest, public RpcMessage {
 public:
-  SetfileRequest(shared_ptr<FileInfo> file_info, bool close);
+  SetfileRequest(FileInfo file_info, bool close);
   virtual ~SetfileRequest();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
-    return NamenodeRequest::Size() + file_info_->Size() + sizeof(int);
+    return NamenodeRequest::Size() + file_info_.Size() + sizeof(int);
   }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  const shared_ptr<FileInfo> file_info() const { return file_info_; }
+  const FileInfo file_info() const { return file_info_; }
 
 private:
-  shared_ptr<FileInfo> file_info_;
+  FileInfo file_info_;
   bool close_;
 };
 

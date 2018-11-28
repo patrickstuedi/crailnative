@@ -36,9 +36,9 @@ using namespace std;
 CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
                                      shared_ptr<StorageCache> storage_cache,
                                      shared_ptr<BlockCache> block_cache,
-                                     shared_ptr<FileInfo> file_info,
-                                     unsigned long long position) {
-  this->file_info_ = file_info;
+                                     FileInfo file_info,
+                                     unsigned long long position)
+    : file_info_(file_info) {
   this->namenode_client_ = namenode_client;
   this->storage_cache_ = storage_cache;
   this->block_cache_ = block_cache;
@@ -67,7 +67,7 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   if (!block_info) {
     GetblockResponse get_block_res =
         namenode_client_
-            ->GetBlock(file_info_->fd(), file_info_->token(), position_,
+            ->GetBlock(file_info_.fd(), file_info_.token(), position_,
                        position_)
             .get();
 
@@ -100,7 +100,7 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 }
 
 Future<int> CrailOutputstream::Close() {
-  file_info_->set_capacity(position_);
+  file_info_.set_capacity(position_);
   VoidResponse set_file_res = namenode_client_->SetFile(file_info_, true).get();
 
   if (set_file_res.error() < 0) {

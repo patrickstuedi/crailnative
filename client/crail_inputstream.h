@@ -36,18 +36,18 @@ class CrailInputstream {
 public:
   CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
                    shared_ptr<StorageCache> storage_cache,
-                   shared_ptr<BlockCache> block_cache,
-                   shared_ptr<FileInfo> file_info, unsigned long long position);
+                   shared_ptr<BlockCache> block_cache, FileInfo file_info,
+                   unsigned long long position);
   virtual ~CrailInputstream();
 
   Future<int> Read(shared_ptr<ByteBuffer> buf);
   Future<int> Close();
 
   int position() const { return position_; }
-  int capacity() const { return file_info_->capacity(); }
+  int capacity() const { return file_info_.capacity(); }
 
 private:
-  shared_ptr<FileInfo> file_info_;
+  FileInfo file_info_;
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
   shared_ptr<BlockCache> block_cache_;

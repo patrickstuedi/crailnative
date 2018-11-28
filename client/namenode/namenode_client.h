@@ -49,7 +49,7 @@ public:
   Future<LookupResponse> Lookup(Filename &name);
   Future<GetblockResponse> GetBlock(long long fd, long long token,
                                     long long position, long long capacity);
-  Future<VoidResponse> SetFile(shared_ptr<FileInfo> file_info, bool close);
+  Future<VoidResponse> SetFile(FileInfo &file_info, bool close);
   Future<RemoveResponse> Remove(Filename &name, bool recursive);
   Future<IoctlResponse> Ioctl(unsigned char op, Filename &name);
 

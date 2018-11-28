@@ -116,12 +116,11 @@ private:
       AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
       Filename filename(name);
       string _name = filename.name();
-      WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
+      WriteDirectoryRecord(*parent_info, _name, dir_offset, 1);
     }
 
     shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    return T(file_info, this, namenode_client_, storage_cache_,
-             file_block_cache);
+    return T(*file_info, namenode_client_, storage_cache_, file_block_cache);
   }
 
   template <class T> T _Lookup(Future<LookupResponse> future) {
@@ -134,16 +133,15 @@ private:
     auto file_info = lookup_res.file();
     AddBlock(file_info->fd(), 0, lookup_res.file_block());
     shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    return T(file_info, this, namenode_client_, storage_cache_,
-             file_block_cache);
+    return T(*file_info, namenode_client_, storage_cache_, file_block_cache);
   }
 
   shared_ptr<BlockCache> GetBlockCache(int fd);
   int AddBlock(int fd, long long offset, shared_ptr<BlockInfo> block);
-  unique_ptr<CrailOutputstream> DirectoryOuput(shared_ptr<FileInfo> file_info,
+  unique_ptr<CrailOutputstream> DirectoryOuput(FileInfo file_info,
                                                long long position);
-  int WriteDirectoryRecord(shared_ptr<FileInfo> directory, string &fname,
-                           long long offset, int valid);
+  int WriteDirectoryRecord(FileInfo directory, string &fname, long long offset,
+                           int valid);
 
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;

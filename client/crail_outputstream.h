@@ -39,8 +39,7 @@ class CrailOutputstream {
 public:
   CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
                     shared_ptr<StorageCache> storage_cache,
-                    shared_ptr<BlockCache> block_cache,
-                    shared_ptr<FileInfo> file_info,
+                    shared_ptr<BlockCache> block_cache, FileInfo file_info,
                     unsigned long long position);
   virtual ~CrailOutputstream();
 
@@ -48,10 +47,10 @@ public:
   Future<int> Close();
 
   unsigned long long position() const { return position_; }
-  int capacity() const { return file_info_->capacity(); }
+  int capacity() const { return file_info_.capacity(); }
 
 private:
-  shared_ptr<FileInfo> file_info_;
+  FileInfo file_info_;
   shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
   shared_ptr<BlockCache> block_cache_;
