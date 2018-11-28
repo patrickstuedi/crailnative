@@ -49,6 +49,7 @@ public:
   int location_class() const { return location_class_; }
   int port() const { return port_; }
   int addr() { return ip_address_; }
+  bool valid() { return ip_address_ && port_; }
 
 private:
   int storage_type_;

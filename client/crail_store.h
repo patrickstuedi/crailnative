@@ -108,19 +108,19 @@ private:
     }
 
     auto file_info = create_res.file();
-    AddBlock(file_info->fd(), 0, create_res.file_block());
+    AddBlock(file_info.fd(), 0, create_res.file_block());
 
-    long long dir_offset = file_info->dir_offset();
+    long long dir_offset = file_info.dir_offset();
     if (dir_offset >= 0) {
       auto parent_info = create_res.parent();
-      AddBlock(parent_info->fd(), dir_offset, create_res.parent_block());
+      AddBlock(parent_info.fd(), dir_offset, create_res.parent_block());
       Filename filename(name);
       string _name = filename.name();
-      WriteDirectoryRecord(*parent_info, _name, dir_offset, 1);
+      WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
     }
 
-    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    return T(*file_info, namenode_client_, storage_cache_, file_block_cache);
+    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info.fd());
+    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
   }
 
   template <class T> T _Lookup(Future<LookupResponse> future) {
@@ -131,9 +131,9 @@ private:
     }
 
     auto file_info = lookup_res.file();
-    AddBlock(file_info->fd(), 0, lookup_res.file_block());
-    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info->fd());
-    return T(*file_info, namenode_client_, storage_cache_, file_block_cache);
+    AddBlock(file_info.fd(), 0, lookup_res.file_block());
+    shared_ptr<BlockCache> file_block_cache = GetBlockCache(file_info.fd());
+    return T(file_info, namenode_client_, storage_cache_, file_block_cache);
   }
 
   shared_ptr<BlockCache> GetBlockCache(int fd);

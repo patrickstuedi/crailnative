@@ -24,14 +24,14 @@
 #include "getblock_response.h"
 
 GetblockResponse::GetblockResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client), block_info_(new BlockInfo()) {}
+    : NamenodeResponse(rpc_client) {}
 
 GetblockResponse::~GetblockResponse() {}
 
 int GetblockResponse::Write(ByteBuffer &buf) const {
   NamenodeResponse::Write(buf);
 
-  block_info_->Write(buf);
+  block_info_.Write(buf);
   buf.PutShort(error_);
 
   return 0;
@@ -40,7 +40,7 @@ int GetblockResponse::Write(ByteBuffer &buf) const {
 int GetblockResponse::Update(ByteBuffer &buf) {
   NamenodeResponse::Update(buf);
 
-  block_info_->Update(buf);
+  block_info_.Update(buf);
   this->error_ = buf.GetShort();
 
   return 0;

@@ -37,20 +37,21 @@ public:
   int Update(ByteBuffer &buf);
 
   int Size() const {
-    return datanode_info_->Size() + sizeof(unsigned long long) * 2 +
+    return datanode_info_.Size() + sizeof(unsigned long long) * 2 +
            sizeof(int) * 2;
   }
 
   int Dump() const;
 
-  DatanodeInfo *datanode() const { return datanode_info_; }
+  DatanodeInfo datanode() const { return datanode_info_; }
   unsigned long long lba() const { return lba_; }
   unsigned long long addr() const { return addr_; }
   int length() const { return length_; }
   int lkey() const { return lkey_; }
+  bool valid() { return datanode_info_.valid(); }
 
 private:
-  DatanodeInfo *datanode_info_;
+  DatanodeInfo datanode_info_;
   unsigned long long lba_;
   unsigned long long addr_;
   int length_;

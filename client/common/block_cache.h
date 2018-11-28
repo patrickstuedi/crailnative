@@ -35,12 +35,13 @@ public:
   BlockCache(int fd);
   virtual ~BlockCache();
 
-  int PutBlock(long long offset, shared_ptr<BlockInfo> block);
-  shared_ptr<BlockInfo> GetBlock(long long offset);
+  int PutBlock(long long offset, BlockInfo block);
+  BlockInfo &GetBlock(long long offset);
 
 private:
   int fd_;
-  unordered_map<long long, shared_ptr<BlockInfo>> cache_;
+  unordered_map<long long, BlockInfo> cache_;
+  BlockInfo cache_miss_;
 };
 
 #endif /* BLOCK_CACHE_H */

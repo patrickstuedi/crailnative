@@ -44,17 +44,17 @@ public:
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
-    return NamenodeResponse::Size() + block_info_->Size() + sizeof(short);
+    return NamenodeResponse::Size() + block_info_.Size() + sizeof(short);
   }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<BlockInfo> block_info() { return block_info_; }
+  BlockInfo &block_info() { return block_info_; }
 
   GetblockResponse get() { return *this; }
 
 private:
-  shared_ptr<BlockInfo> block_info_;
+  BlockInfo block_info_;
   short error_;
 };
 

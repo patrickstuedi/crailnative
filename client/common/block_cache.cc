@@ -31,16 +31,15 @@ BlockCache::BlockCache(int fd) : fd_(fd) {}
 
 BlockCache::~BlockCache() {}
 
-int BlockCache::PutBlock(long long offset, shared_ptr<BlockInfo> block) {
+int BlockCache::PutBlock(long long offset, BlockInfo block) {
   cache_.insert({offset, block});
   return 0;
 }
 
-shared_ptr<BlockInfo> BlockCache::GetBlock(long long offset) {
-  shared_ptr<BlockInfo> block = nullptr;
+BlockInfo &BlockCache::GetBlock(long long offset) {
   auto iter = cache_.find(offset);
   if (iter != cache_.end()) {
-    block = iter->second;
+    return cache_[offset];
   }
-  return block;
+  return cache_miss_;
 }

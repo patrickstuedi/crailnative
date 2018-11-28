@@ -44,7 +44,10 @@ string make_address(int address, int port) {
   return ss.str();
 }
 
-DatanodeInfo::DatanodeInfo() {}
+DatanodeInfo::DatanodeInfo() {
+  this->ip_address_ = 0;
+  this->port_ = 0;
+}
 
 DatanodeInfo::~DatanodeInfo() {}
 

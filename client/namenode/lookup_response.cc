@@ -28,15 +28,14 @@
 using namespace std;
 
 LookupResponse::LookupResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client), file_info_(new FileInfo()),
-      block_info_(new BlockInfo()) {}
+    : NamenodeResponse(rpc_client), block_info_(new BlockInfo()) {}
 
 LookupResponse::~LookupResponse() {}
 
 int LookupResponse::Write(ByteBuffer &buf) const {
   NamenodeResponse::Write(buf);
 
-  file_info_->Write(buf);
+  file_info_.Write(buf);
   block_info_->Write(buf);
 
   return 0;
@@ -45,7 +44,7 @@ int LookupResponse::Write(ByteBuffer &buf) const {
 int LookupResponse::Update(ByteBuffer &buf) {
   NamenodeResponse::Update(buf);
 
-  file_info_->Update(buf);
+  file_info_.Update(buf);
   block_info_->Update(buf);
 
   return 0;

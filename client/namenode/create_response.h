@@ -48,14 +48,14 @@ public:
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() * 2 +
+    return NamenodeResponse::Size() + file_info_.Size() * 2 +
            file_block_->Size() * 2;
   }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<FileInfo> parent() const { return parent_info_; }
+  FileInfo file() const { return file_info_; }
+  FileInfo parent() const { return parent_info_; }
   shared_ptr<BlockInfo> file_block() const { return file_block_; }
   shared_ptr<BlockInfo> parent_block() const { return parent_block_; }
 
@@ -65,8 +65,8 @@ public:
   }
 
 private:
-  shared_ptr<FileInfo> file_info_;
-  shared_ptr<FileInfo> parent_info_;
+  FileInfo file_info_;
+  FileInfo parent_info_;
   shared_ptr<BlockInfo> file_block_;
   shared_ptr<BlockInfo> parent_block_;
 };

@@ -43,12 +43,12 @@ public:
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
-    return NamenodeResponse::Size() + file_info_->Size() + block_info_->Size();
+    return NamenodeResponse::Size() + file_info_.Size() + block_info_->Size();
   }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
 
-  shared_ptr<FileInfo> file() const { return file_info_; }
+  FileInfo file() const { return file_info_; }
   shared_ptr<BlockInfo> file_block() const { return block_info_; }
 
   LookupResponse get() {
@@ -57,7 +57,7 @@ public:
   }
 
 private:
-  shared_ptr<FileInfo> file_info_;
+  FileInfo file_info_;
   shared_ptr<BlockInfo> block_info_;
 };
 

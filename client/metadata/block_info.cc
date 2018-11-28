@@ -25,12 +25,12 @@
 
 #include <iostream>
 
-BlockInfo::BlockInfo() { this->datanode_info_ = new DatanodeInfo(); }
+BlockInfo::BlockInfo() {}
 
-BlockInfo::~BlockInfo() { delete datanode_info_; }
+BlockInfo::~BlockInfo() {}
 
 int BlockInfo::Write(ByteBuffer &buf) const {
-  datanode_info_->Write(buf);
+  datanode_info_.Write(buf);
   buf.PutLong(lba_);
   buf.PutLong(addr_);
   buf.PutInt(length_);
@@ -40,7 +40,7 @@ int BlockInfo::Write(ByteBuffer &buf) const {
 }
 
 int BlockInfo::Update(ByteBuffer &buf) {
-  datanode_info_->Update(buf);
+  datanode_info_.Update(buf);
   lba_ = buf.GetLong();
   addr_ = buf.GetLong();
   length_ = buf.GetInt();
@@ -50,7 +50,7 @@ int BlockInfo::Update(ByteBuffer &buf) {
 }
 
 int BlockInfo::Dump() const {
-  datanode_info_->Dump();
+  datanode_info_.Dump();
   cout << "lba " << lba_ << ", addr " << addr_ << ", length_ " << length_
        << ", lkey " << lkey_ << endl;
   return 0;

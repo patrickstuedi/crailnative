@@ -63,8 +63,8 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
     buf->set_limit(buf->position() + block_remaining);
   }
 
-  shared_ptr<BlockInfo> block_info = block_cache_->GetBlock(position_);
-  if (!block_info) {
+  BlockInfo &block_info = block_cache_->GetBlock(position_);
+  if (!block_info.valid()) {
     GetblockResponse get_block_res =
         namenode_client_
             ->GetBlock(file_info_.fd(), file_info_.token(), position_,
@@ -79,18 +79,18 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
     block_cache_->PutBlock(position_, block_info);
   }
 
-  int address = block_info->datanode()->addr();
-  int port = block_info->datanode()->port();
+  int address = block_info.datanode().addr();
+  int port = block_info.datanode().port();
 
   shared_ptr<StorageClient> storage_client = storage_cache_->Get(
-      block_info->datanode()->Key(), block_info->datanode()->storage_class());
+      block_info.datanode().Key(), block_info.datanode().storage_class());
   if (storage_client->Connect(address, port) < 0) {
     return Future<int>::Failure(-1);
   }
 
-  long long block_addr = block_info->addr() + block_offset;
+  long long block_addr = block_info.addr() + block_offset;
   Future<int> storage_response =
-      storage_client->WriteData(block_info->lkey(), block_addr, buf);
+      storage_client->WriteData(block_info.lkey(), block_addr, buf);
 
   this->position_ += buf->remaining();
   buf->set_position(buf->position() + buf->remaining());
