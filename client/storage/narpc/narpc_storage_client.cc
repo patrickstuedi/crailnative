@@ -46,7 +46,7 @@ Future<int> NarpcStorageClient::WriteData(int key, long long address,
 
   shared_ptr<NarpcWriteResponse> write_response =
       make_shared<NarpcWriteResponse>(this);
-  RpcMessage response(write_response, nullptr);
+  RpcMessage response(write_response);
 
   if (IssueRequest(request, response) < 0) {
     return Future<int>::Failure(-1);
@@ -58,7 +58,7 @@ Future<int> NarpcStorageClient::ReadData(int key, long long address,
                                          shared_ptr<ByteBuffer> buf) {
   shared_ptr<NarpcReadRequest> read_request =
       make_shared<NarpcReadRequest>(key, address, buf->remaining());
-  RpcMessage request(read_request, nullptr);
+  RpcMessage request(read_request);
 
   shared_ptr<NarpcReadResponse> read_response =
       make_shared<NarpcReadResponse>(this);
