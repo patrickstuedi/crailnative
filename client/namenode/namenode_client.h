@@ -38,20 +38,20 @@
 
 class NamenodeClient {
 public:
+  // Control ops
+  virtual int Connect(int address, int port) = 0;
+  virtual int Close() = 0;
+
+  // RPC calls
   virtual Future<CreateResponse> Create(Filename &name, int type,
                                         int storage_class, int location_class,
                                         int enumerable) = 0;
-
   virtual Future<LookupResponse> Lookup(Filename &name) = 0;
-
   virtual Future<GetblockResponse> GetBlock(long long fd, long long token,
                                             long long position,
                                             long long capacity) = 0;
-
   virtual Future<VoidResponse> SetFile(FileInfo &file_info, bool close) = 0;
-
   virtual Future<RemoveResponse> Remove(Filename &name, bool recursive) = 0;
-
   virtual Future<IoctlResponse> Ioctl(unsigned char op, Filename &name) = 0;
 };
 

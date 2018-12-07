@@ -33,10 +33,11 @@
 
 using namespace std;
 
-CrailOutputstream::CrailOutputstream(
-    shared_ptr<NarpcNamenodeClient> namenode_client,
-    shared_ptr<StorageCache> storage_cache, shared_ptr<BlockCache> block_cache,
-    FileInfo file_info, unsigned long long position)
+CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
+                                     shared_ptr<StorageCache> storage_cache,
+                                     shared_ptr<BlockCache> block_cache,
+                                     FileInfo file_info,
+                                     unsigned long long position)
     : file_info_(file_info) {
   this->namenode_client_ = namenode_client;
   this->storage_cache_ = storage_cache;

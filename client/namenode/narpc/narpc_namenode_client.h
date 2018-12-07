@@ -40,10 +40,15 @@
 
 class NarpcNamenodeClient : public RpcClient, public NamenodeClient {
 public:
-  NarpcNamenodeClient();
-  virtual ~NarpcNamenodeClient();
-
   static const bool kNodelay = true;
+
+  NarpcNamenodeClient();
+  ~NarpcNamenodeClient();
+
+  int Connect(int address, int port) {
+    return RpcClient::Connect(address, port);
+  }
+  int Close() { return RpcClient::Close(); }
 
   Future<CreateResponse> Create(Filename &name, int type, int storage_class,
                                 int location_class, int enumerable);

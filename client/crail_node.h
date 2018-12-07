@@ -30,7 +30,7 @@
 #include "common/file_type.h"
 #include "crail_store.h"
 #include "metadata/file_info.h"
-#include "namenode/narpc/narpc_namenode_client.h"
+#include "namenode/namenode_client.h"
 #include "storage/storage_cache.h"
 
 using namespace std;
@@ -39,7 +39,7 @@ using namespace crail;
 class CrailNode {
 public:
   CrailNode() = default;
-  CrailNode(FileInfo file_info, shared_ptr<NarpcNamenodeClient> namenode_client,
+  CrailNode(FileInfo file_info, shared_ptr<NamenodeClient> namenode_client,
             shared_ptr<StorageCache> storage_cache,
             shared_ptr<BlockCache> block_cache);
   virtual ~CrailNode() = default;
@@ -51,7 +51,7 @@ public:
 
 protected:
   FileInfo file_info_;
-  shared_ptr<NarpcNamenodeClient> namenode_client_;
+  shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
   shared_ptr<BlockCache> block_cache_;
 };

@@ -143,7 +143,7 @@ private:
   int WriteDirectoryRecord(FileInfo directory, string &fname, long long offset,
                            int valid);
 
-  shared_ptr<NarpcNamenodeClient> namenode_client_;
+  shared_ptr<NamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
   unordered_map<int, shared_ptr<BlockCache>> block_cache_;
 };
