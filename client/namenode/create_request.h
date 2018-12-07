@@ -37,11 +37,11 @@ using namespace std;
 
 namespace crail {
 
-class Createrequest : public NamenodeRequest, public RpcMessage {
+class CreateRequest : public NamenodeRequest, public RpcMessage {
 public:
-  Createrequest(Filename &name, int type, int storage_class, int location_class,
+  CreateRequest(Filename &name, int type, int storage_class, int location_class,
                 int enumerable);
-  virtual ~Createrequest();
+  virtual ~CreateRequest();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
 

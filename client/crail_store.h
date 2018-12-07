@@ -50,13 +50,12 @@ public:
   Future<T> Create(string &name, int storage_class, int location_class,
                    bool enumerable) {
     Filename filename(name);
-    int _enumerable = enumerable ? 1 : 0;
     auto future =
         namenode_client_->Create(filename, static_cast<int>(T::type),
-                                 storage_class, location_class, _enumerable);
+                                 storage_class, location_class, enumerable);
 
     shared_ptr<PostCreate<T>> post_create =
-        std::make_shared<PostCreate<T>>(this, future, name);
+        std::make_shared<PostCreate<T>>(this, future, filename);
     return Future<T>(post_create);
   }
 
@@ -77,15 +76,16 @@ public:
 private:
   template <typename T> class PostCreate : public AsyncTask<T> {
   public:
-    PostCreate(CrailStore *store, Future<CreateResponse> future, string name)
-        : store_(store), future_(future), name_(name) {}
+    PostCreate(CrailStore *store, Future<CreateResponse> future,
+               Filename filename)
+        : store_(store), future_(future), filename_(filename) {}
 
-    T get() { return store_->_Create<T>(future_, name_); }
+    T get() { return store_->_Create<T>(future_, filename_); }
 
   private:
     CrailStore *store_;
     Future<CreateResponse> future_;
-    string name_;
+    Filename filename_;
   };
 
   template <typename T> class PostLookup : public AsyncTask<T> {
@@ -100,7 +100,8 @@ private:
     Future<LookupResponse> future_;
   };
 
-  template <class T> T _Create(Future<CreateResponse> future, string &name) {
+  template <class T>
+  T _Create(Future<CreateResponse> future, Filename &filename) {
     auto create_res = future.get();
 
     if (create_res.error() != 0) {
@@ -114,7 +115,6 @@ private:
     if (dir_offset >= 0) {
       auto parent_info = create_res.parent();
       AddBlock(parent_info.fd(), dir_offset, create_res.parent_block());
-      Filename filename(name);
       string _name = filename.name();
       WriteDirectoryRecord(parent_info, _name, dir_offset, 1);
     }

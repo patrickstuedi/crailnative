@@ -53,7 +53,7 @@ Future<CreateResponse> NamenodeClient::Create(Filename &name, int type,
                                               int storage_class,
                                               int location_class,
                                               int enumerable) {
-  Createrequest createReq(name, type, storage_class, location_class,
+  CreateRequest createReq(name, type, storage_class, location_class,
                           enumerable);
   shared_ptr<CreateResponse> getblockRes = make_shared<CreateResponse>(this);
   if (RpcClient::IssueRequest(createReq, getblockRes) < 0) {

@@ -33,7 +33,6 @@ using namespace std;
 
 class RpcMessage : public Serializable {
 public:
-  // virtual shared_ptr<ByteBuffer> Payload() = 0;
   virtual shared_ptr<ByteBuffer> Payload() { return nullptr; };
 };
 

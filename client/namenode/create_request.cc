@@ -23,7 +23,7 @@
 
 #include "create_request.h"
 
-Createrequest::Createrequest(Filename &name, int type, int storage_class,
+CreateRequest::CreateRequest(Filename &name, int type, int storage_class,
                              int location_class, int enumerable)
     : NamenodeRequest(static_cast<short>(RpcCommand::Create),
                       static_cast<short>(RequestType::Create)),
@@ -32,9 +32,9 @@ Createrequest::Createrequest(Filename &name, int type, int storage_class,
   this->filename_ = std::move(name);
 }
 
-Createrequest::~Createrequest() {}
+CreateRequest::~CreateRequest() {}
 
-int Createrequest::Write(ByteBuffer &buf) const {
+int CreateRequest::Write(ByteBuffer &buf) const {
   NamenodeRequest::Write(buf);
 
   filename_.Write(buf);
@@ -46,7 +46,7 @@ int Createrequest::Write(ByteBuffer &buf) const {
   return Size();
 }
 
-int Createrequest::Update(ByteBuffer &buf) {
+int CreateRequest::Update(ByteBuffer &buf) {
   NamenodeRequest::Update(buf);
 
   filename_.Update(buf);
