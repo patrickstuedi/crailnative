@@ -26,15 +26,10 @@
 
 #include "common/byte_buffer.h"
 #include "common/serializable.h"
-#include "narpc/rpc_checker.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
-#include "narpc/rpc_response.h"
 
-class NamenodeResponse : public RpcResponse {
+class NamenodeResponse : public Serializable {
 public:
-  NamenodeResponse() = default;
-  NamenodeResponse(RpcChecker *rpc_checker);
+  NamenodeResponse();
   virtual ~NamenodeResponse();
 
   int Write(ByteBuffer &buf) const;

@@ -23,8 +23,8 @@
 
 #include "create_response.h"
 
-CreateResponse::CreateResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client), file_block_(new BlockInfo()),
+CreateResponse::CreateResponse()
+    : NamenodeResponse(), file_block_(new BlockInfo()),
       parent_block_(new BlockInfo()) {}
 
 CreateResponse::~CreateResponse() {}

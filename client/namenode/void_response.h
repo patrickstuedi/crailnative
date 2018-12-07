@@ -30,18 +30,11 @@
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
 
-class VoidResponse : public NamenodeResponse,
-                     public AsyncTask<VoidResponse>,
-                     public Serializable {
+class VoidResponse : public NamenodeResponse, public AsyncTask<VoidResponse> {
 public:
-  VoidResponse() = default;
-  VoidResponse(RpcClient *rpc_client);
+  VoidResponse();
   virtual ~VoidResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const { return NamenodeResponse::Size() + sizeof(error_); }
   int Write(ByteBuffer &buf) const;

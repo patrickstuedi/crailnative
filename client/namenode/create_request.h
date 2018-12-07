@@ -31,19 +31,16 @@
 #include "common/serializable.h"
 #include "metadata/filename.h"
 #include "namenode_request.h"
-#include "narpc/rpc_message.h"
 
 using namespace std;
 
 namespace crail {
 
-class CreateRequest : public NamenodeRequest, public RpcMessage {
+class CreateRequest : public NamenodeRequest {
 public:
   CreateRequest(Filename &name, int type, int storage_class, int location_class,
                 int enumerable);
   virtual ~CreateRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + 4 * sizeof(int);

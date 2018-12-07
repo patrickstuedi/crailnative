@@ -28,16 +28,13 @@
 
 #include "metadata/filename.h"
 #include "namenode_request.h"
-#include "narpc/rpc_message.h"
 
 using namespace std;
 
-class LookupRequest : public NamenodeRequest, public RpcMessage {
+class LookupRequest : public NamenodeRequest {
 public:
   LookupRequest(Filename &name);
   virtual ~LookupRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + sizeof(int);

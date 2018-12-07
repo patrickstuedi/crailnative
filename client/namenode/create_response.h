@@ -31,22 +31,16 @@
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
 
 using namespace std;
 
 class NamenodeClient;
 
 class CreateResponse : public NamenodeResponse,
-                       public AsyncTask<CreateResponse>,
-                       public Serializable {
+                       public AsyncTask<CreateResponse> {
 public:
-  CreateResponse() = default;
-  CreateResponse(RpcClient *rpc_client);
+  CreateResponse();
   virtual ~CreateResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() * 2 +
@@ -60,10 +54,7 @@ public:
   shared_ptr<BlockInfo> file_block() const { return file_block_; }
   shared_ptr<BlockInfo> parent_block() const { return parent_block_; }
 
-  CreateResponse get() {
-    RpcResponse::get();
-    return *this;
-  }
+  CreateResponse get() { return *this; }
 
 private:
   FileInfo file_info_;

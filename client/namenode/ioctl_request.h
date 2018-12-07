@@ -28,16 +28,13 @@
 #include "common/serializable.h"
 #include "metadata/filename.h"
 #include "namenode_request.h"
-#include "narpc/rpc_message.h"
 
 using namespace crail;
 
-class IoctlRequest : public NamenodeRequest, public RpcMessage {
+class IoctlRequest : public NamenodeRequest {
 public:
   IoctlRequest(unsigned char op, Filename &name);
   virtual ~IoctlRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + sizeof(op_) + filename_.Size();

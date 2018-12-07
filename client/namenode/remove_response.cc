@@ -23,8 +23,8 @@
 
 #include "remove_response.h"
 
-RemoveResponse::RemoveResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client), file_info_(new FileInfo()),
+RemoveResponse::RemoveResponse()
+    : NamenodeResponse(), file_info_(new FileInfo()),
       parent_info_(new FileInfo()) {}
 
 RemoveResponse::~RemoveResponse() {}

@@ -29,20 +29,14 @@
 #include "common/future.h"
 #include "metadata/block_info.h"
 #include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
 
 using namespace std;
 
 class GetblockResponse : public NamenodeResponse,
-                         public AsyncTask<GetblockResponse>,
-                         public Serializable {
+                         public AsyncTask<GetblockResponse> {
 public:
-  GetblockResponse() = default;
-  GetblockResponse(RpcClient *rpc_client);
+  GetblockResponse();
   virtual ~GetblockResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + block_info_.Size() + sizeof(short);

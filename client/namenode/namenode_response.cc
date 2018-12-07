@@ -23,8 +23,7 @@
 
 #include "namenode_response.h"
 
-NamenodeResponse::NamenodeResponse(RpcChecker *rpc_checker)
-    : RpcResponse(rpc_checker), type_(-1), error_(-1) {}
+NamenodeResponse::NamenodeResponse() : type_(-1), error_(-1) {}
 
 NamenodeResponse::~NamenodeResponse() {}
 

@@ -30,18 +30,12 @@
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
 
 class LookupResponse : public NamenodeResponse,
-                       public AsyncTask<LookupResponse>,
-                       public Serializable {
+                       public AsyncTask<LookupResponse> {
 public:
-  LookupResponse() = default;
-  LookupResponse(RpcClient *rpc_client);
+  LookupResponse();
   virtual ~LookupResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() + block_info_->Size();
@@ -52,10 +46,7 @@ public:
   FileInfo file() const { return file_info_; }
   shared_ptr<BlockInfo> file_block() const { return block_info_; }
 
-  LookupResponse get() {
-    RpcResponse::get();
-    return *this;
-  }
+  LookupResponse get() { return *this; }
 
 private:
   FileInfo file_info_;

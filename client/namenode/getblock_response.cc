@@ -23,8 +23,7 @@
 
 #include "getblock_response.h"
 
-GetblockResponse::GetblockResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client) {}
+GetblockResponse::GetblockResponse() : NamenodeResponse() {}
 
 GetblockResponse::~GetblockResponse() {}
 

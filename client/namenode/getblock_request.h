@@ -28,15 +28,12 @@
 
 #include "common/byte_buffer.h"
 #include "namenode_request.h"
-#include "narpc/rpc_client.h"
 
-class GetblockRequest : public NamenodeRequest, public RpcMessage {
+class GetblockRequest : public NamenodeRequest {
 public:
   GetblockRequest(long long fd, long long token, long long position,
                   long long capacity);
   virtual ~GetblockRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const { return NamenodeRequest::Size() + sizeof(long long) * 4; };
   int Write(ByteBuffer &buf) const;

@@ -23,8 +23,7 @@
 
 #include "ioctl_response.h"
 
-IoctlResponse::IoctlResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client) {}
+IoctlResponse::IoctlResponse() : NamenodeResponse() {}
 
 IoctlResponse::~IoctlResponse() {}
 

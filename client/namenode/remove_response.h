@@ -31,18 +31,12 @@
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
 
 class RemoveResponse : public NamenodeResponse,
-                       public AsyncTask<RemoveResponse>,
-                       public Serializable {
+                       public AsyncTask<RemoveResponse> {
 public:
-  RemoveResponse() = default;
-  RemoveResponse(RpcClient *rpc_client);
+  RemoveResponse();
   virtual ~RemoveResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const { return NamenodeResponse::Size() + file_info_->Size() * 2; }
   int Write(ByteBuffer &buf) const;

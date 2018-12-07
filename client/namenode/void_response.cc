@@ -23,8 +23,7 @@
 
 #include "void_response.h"
 
-VoidResponse::VoidResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client), error_(-1) {}
+VoidResponse::VoidResponse() : NamenodeResponse(), error_(-1) {}
 
 VoidResponse::~VoidResponse() {}
 

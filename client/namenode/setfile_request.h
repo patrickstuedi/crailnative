@@ -32,14 +32,11 @@
 #include "metadata/file_info.h"
 #include "metadata/filename.h"
 #include "namenode_request.h"
-#include "narpc/rpc_message.h"
 
-class SetfileRequest : public NamenodeRequest, public RpcMessage {
+class SetfileRequest : public NamenodeRequest {
 public:
   SetfileRequest(FileInfo file_info, bool close);
   virtual ~SetfileRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + file_info_.Size() + sizeof(int);

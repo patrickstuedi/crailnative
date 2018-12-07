@@ -27,8 +27,8 @@
 
 using namespace std;
 
-LookupResponse::LookupResponse(RpcClient *rpc_client)
-    : NamenodeResponse(rpc_client), block_info_(new BlockInfo()) {}
+LookupResponse::LookupResponse()
+    : NamenodeResponse(), block_info_(new BlockInfo()) {}
 
 LookupResponse::~LookupResponse() {}
 

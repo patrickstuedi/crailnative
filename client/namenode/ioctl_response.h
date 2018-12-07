@@ -29,20 +29,13 @@
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"
 #include "namenode_response.h"
-#include "narpc/rpc_client.h"
-#include "narpc/rpc_message.h"
 
 using namespace crail;
 
-class IoctlResponse : public NamenodeResponse,
-                      public AsyncTask<IoctlResponse>,
-                      public Serializable {
+class IoctlResponse : public NamenodeResponse, public AsyncTask<IoctlResponse> {
 public:
-  IoctlResponse() = default;
-  IoctlResponse(RpcClient *rpc_client);
+  IoctlResponse();
   virtual ~IoctlResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + sizeof(op_) + sizeof(long long);

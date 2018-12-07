@@ -28,14 +28,11 @@
 
 #include "metadata/filename.h"
 #include "namenode_request.h"
-#include "narpc/rpc_message.h"
 
-class RemoveRequest : public NamenodeRequest, public RpcMessage {
+class RemoveRequest : public NamenodeRequest {
 public:
   RemoveRequest(Filename &name, bool recursive);
   virtual ~RemoveRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + sizeof(int);
