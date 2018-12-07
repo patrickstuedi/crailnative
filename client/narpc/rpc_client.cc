@@ -91,8 +91,7 @@ int RpcClient::Close() {
   return 0;
 }
 
-int RpcClient::IssueRequest(RpcMessage &request,
-                            shared_ptr<RpcResponse> response) {
+int RpcClient::IssueRequest(RpcMessage &request, RpcMessage &response) {
   unsigned long long ticket = counter_++ % RpcClient::kMaxTicket;
   if (ticket == 0) {
     ticket++;
@@ -101,9 +100,10 @@ int RpcClient::IssueRequest(RpcMessage &request,
   buf_.Clear();
 
   // narpc header (size, ticket)
-  AddNaRPCHeader(buf_, request.Size(), ticket);
+  shared_ptr<Serializable> header = request.Header();
+  AddNaRPCHeader(buf_, header->Size(), ticket);
   // create file request
-  request.Write(buf_);
+  header->Write(buf_);
 
   // issue request
   buf_.Flip();
@@ -140,10 +140,10 @@ int RpcClient::PollResponse() {
   int size = buf_.GetInt();
   long long ticket = buf_.GetLong();
 
-  shared_ptr<RpcMessage> response = responseMap_[ticket];
-  responseMap_[ticket] = nullptr;
+  RpcMessage &response = responseMap_[ticket];
+  // responseMap_[ticket] = nullptr;
 
-  shared_ptr<ByteBuffer> payload = response->Payload();
+  shared_ptr<ByteBuffer> payload = response.Payload();
   int payload_size = 0;
   if (payload) {
     payload_size = payload->remaining();
@@ -157,7 +157,8 @@ int RpcClient::PollResponse() {
     return -1;
   }
 
-  response->Update(buf_);
+  shared_ptr<Serializable> header = response.Header();
+  header->Update(buf_);
 
   if (payload) {
     if (RecvBytes(payload->get_bytes(), payload->remaining()) < 0) {

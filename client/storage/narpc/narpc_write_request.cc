@@ -26,12 +26,9 @@
 
 using namespace std;
 
-NarpcWriteRequest::NarpcWriteRequest(int key, long long address, int length,
-                                     shared_ptr<ByteBuffer> buf)
+NarpcWriteRequest::NarpcWriteRequest(int key, long long address, int length)
     : NarpcStorageRequest(static_cast<int>(NarpcStorageRequestType::Write)),
-      key_(key), address_(address), length_(length) {
-  this->buf_ = buf;
-}
+      key_(key), address_(address), length_(length) {}
 
 NarpcWriteRequest::~NarpcWriteRequest() {}
 

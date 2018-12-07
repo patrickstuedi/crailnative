@@ -39,7 +39,8 @@ using namespace std;
 class NamenodeClient;
 
 class CreateResponse : public NamenodeResponse,
-                       public AsyncTask<CreateResponse> {
+                       public AsyncTask<CreateResponse>,
+                       public Serializable {
 public:
   CreateResponse() = default;
   CreateResponse(RpcClient *rpc_client);

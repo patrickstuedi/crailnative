@@ -35,7 +35,8 @@
 #include "narpc/rpc_message.h"
 
 class RemoveResponse : public NamenodeResponse,
-                       public AsyncTask<RemoveResponse> {
+                       public AsyncTask<RemoveResponse>,
+                       public Serializable {
 public:
   RemoveResponse() = default;
   RemoveResponse(RpcClient *rpc_client);

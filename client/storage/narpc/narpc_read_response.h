@@ -34,12 +34,12 @@
 
 using namespace std;
 
-class NarpcReadResponse : public NarpcStorageResponse, public AsyncTask<int> {
+class NarpcReadResponse : public NarpcStorageResponse,
+                          public AsyncTask<int>,
+                          public Serializable {
 public:
-  NarpcReadResponse(RpcChecker *rpc_checker, shared_ptr<ByteBuffer> payload);
+  NarpcReadResponse(RpcChecker *rpc_checker);
   virtual ~NarpcReadResponse();
-
-  shared_ptr<ByteBuffer> Payload() { return payload_; }
 
   int Size() const { return length_; }
   int Write(ByteBuffer &buf) const;
@@ -49,7 +49,6 @@ public:
 
 private:
   int length_;
-  shared_ptr<ByteBuffer> payload_;
 };
 
 #endif /* NARPC_READ_RESPONSE_H */

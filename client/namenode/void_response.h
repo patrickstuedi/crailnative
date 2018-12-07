@@ -33,7 +33,9 @@
 #include "narpc/rpc_client.h"
 #include "narpc/rpc_message.h"
 
-class VoidResponse : public NamenodeResponse, public AsyncTask<VoidResponse> {
+class VoidResponse : public NamenodeResponse,
+                     public AsyncTask<VoidResponse>,
+                     public Serializable {
 public:
   VoidResponse() = default;
   VoidResponse(RpcClient *rpc_client);

@@ -34,13 +34,10 @@
 
 using namespace std;
 
-class NarpcWriteRequest : public NarpcStorageRequest {
+class NarpcWriteRequest : public NarpcStorageRequest, public Serializable {
 public:
-  NarpcWriteRequest(int key, long long address, int length,
-                    shared_ptr<ByteBuffer> buf);
+  NarpcWriteRequest(int key, long long address, int length);
   virtual ~NarpcWriteRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return buf_; }
 
   int Size() const {
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +
@@ -53,7 +50,6 @@ private:
   int key_;
   long long address_;
   int length_;
-  shared_ptr<ByteBuffer> buf_;
 };
 
 #endif /* NARPC_WRITE_REQUEST_H */

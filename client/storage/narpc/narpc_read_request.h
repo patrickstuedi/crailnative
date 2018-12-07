@@ -32,12 +32,10 @@
 #include "narpc/rpc_client.h"
 #include "narpc_storage_request.h"
 
-class NarpcReadRequest : public NarpcStorageRequest {
+class NarpcReadRequest : public NarpcStorageRequest, public Serializable {
 public:
   NarpcReadRequest(int key, long long address, int length);
   virtual ~NarpcReadRequest();
-
-  shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const {
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +

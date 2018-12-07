@@ -27,7 +27,7 @@
 #include "common/file_type.h"
 #include "crail_node.h"
 #include "metadata/file_info.h"
-#include "namenode/namenode_client.h"
+#include "namenode/narpc/namenode_client.h"
 #include "storage/storage_cache.h"
 
 class CrailDirectory : public CrailNode {

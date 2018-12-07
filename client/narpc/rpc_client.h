@@ -58,7 +58,7 @@ public:
   static const int kMaxTicket = 8;
 
   int Connect(int address, int port);
-  int IssueRequest(RpcMessage &request, shared_ptr<RpcResponse> response);
+  int IssueRequest(RpcMessage &request, RpcMessage &response);
   int Close();
 
 private:
@@ -71,7 +71,7 @@ private:
 
   int socket_;
   atomic<unsigned long long> counter_;
-  shared_ptr<RpcMessage> responseMap_[kMaxTicket];
+  RpcMessage responseMap_[kMaxTicket];
   bool isConnected;
   ByteBuffer buf_;
   bool nodelay_;

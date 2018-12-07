@@ -31,7 +31,7 @@
 #include "common/future.h"
 #include "crail_inputstream.h"
 #include "crail_outputstream.h"
-#include "namenode/namenode_client.h"
+#include "namenode/narpc/namenode_client.h"
 #include "storage/storage_cache.h"
 
 using namespace std;

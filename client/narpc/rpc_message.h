@@ -31,9 +31,18 @@
 
 using namespace std;
 
-class RpcMessage : public Serializable {
+class RpcMessage {
 public:
-  virtual shared_ptr<ByteBuffer> Payload() { return nullptr; };
+  RpcMessage() = default;
+  RpcMessage(shared_ptr<Serializable> header, shared_ptr<ByteBuffer> payload)
+      : header_(header), payload_(payload) {}
+
+  shared_ptr<Serializable> Header() { return header_; };
+  shared_ptr<ByteBuffer> Payload() { return payload_; };
+
+private:
+  shared_ptr<Serializable> header_;
+  shared_ptr<ByteBuffer> payload_;
 };
 
 #endif /* RPC_MESSAGE_H */

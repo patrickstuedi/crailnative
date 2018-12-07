@@ -27,11 +27,8 @@
 
 using namespace std;
 
-NarpcReadResponse::NarpcReadResponse(RpcChecker *rpc_checker,
-                                     shared_ptr<ByteBuffer> payload)
-    : NarpcStorageResponse(rpc_checker, -1, -1), length_(-1) {
-  this->payload_ = payload;
-}
+NarpcReadResponse::NarpcReadResponse(RpcChecker *rpc_checker)
+    : NarpcStorageResponse(rpc_checker, -1, -1), length_(-1) {}
 
 NarpcReadResponse::~NarpcReadResponse() {}
 
@@ -53,5 +50,5 @@ int NarpcReadResponse::Update(ByteBuffer &buf) {
 
 int NarpcReadResponse::get() {
   int res = RpcResponse::get();
-  return res >= 0 ? payload_->remaining() : res;
+  return res;
 }

@@ -35,7 +35,8 @@
 using namespace std;
 
 class GetblockResponse : public NamenodeResponse,
-                         public AsyncTask<GetblockResponse> {
+                         public AsyncTask<GetblockResponse>,
+                         public Serializable {
 public:
   GetblockResponse() = default;
   GetblockResponse(RpcClient *rpc_client);
