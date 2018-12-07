@@ -21,8 +21,8 @@
  * limitations under the License.
  */
 
-#ifndef NAMENODE_CLIENT_H
-#define NAMENODE_CLIENT_H
+#ifndef NARPC_NAMENODE_CLIENT_H
+#define NARPC_NAMENODE_CLIENT_H
 
 #include <atomic>
 #include <string>
@@ -33,14 +33,15 @@
 #include "namenode/getblock_response.h"
 #include "namenode/ioctl_response.h"
 #include "namenode/lookup_response.h"
+#include "namenode/namenode_client.h"
 #include "namenode/remove_response.h"
 #include "namenode/void_response.h"
 #include "narpc/rpc_client.h"
 
-class NamenodeClient : public RpcClient {
+class NarpcNamenodeClient : public RpcClient, public NamenodeClient {
 public:
-  NamenodeClient();
-  virtual ~NamenodeClient();
+  NarpcNamenodeClient();
+  virtual ~NarpcNamenodeClient();
 
   static const bool kNodelay = true;
 
@@ -52,9 +53,6 @@ public:
   Future<VoidResponse> SetFile(FileInfo &file_info, bool close);
   Future<RemoveResponse> Remove(Filename &name, bool recursive);
   Future<IoctlResponse> Ioctl(unsigned char op, Filename &name);
-
-private:
-  atomic<unsigned long long> counter_;
 };
 
-#endif /* NAMENODE_CLIENT_H */
+#endif /* NARPC_NAMENODE_CLIENT_H */

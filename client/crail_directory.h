@@ -27,7 +27,7 @@
 #include "common/file_type.h"
 #include "crail_node.h"
 #include "metadata/file_info.h"
-#include "namenode/narpc/namenode_client.h"
+#include "namenode/narpc/narpc_namenode_client.h"
 #include "storage/storage_cache.h"
 
 class CrailDirectory : public CrailNode {
@@ -35,7 +35,8 @@ public:
   static const FileType type = FileType::Directory;
 
   CrailDirectory() = default;
-  CrailDirectory(FileInfo file_info, shared_ptr<NamenodeClient> namenode_client,
+  CrailDirectory(FileInfo file_info,
+                 shared_ptr<NarpcNamenodeClient> namenode_client,
                  shared_ptr<StorageCache> storage_cache,
                  shared_ptr<BlockCache> block_cache);
   CrailDirectory(CrailNode &&node) : CrailNode(std::move(node)) {}

@@ -38,7 +38,7 @@
 using namespace crail;
 
 CrailStore::CrailStore()
-    : namenode_client_(new NamenodeClient()),
+    : namenode_client_(new NarpcNamenodeClient()),
       storage_cache_(new StorageCache()) {}
 
 CrailStore::~CrailStore() {

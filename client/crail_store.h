@@ -31,7 +31,7 @@
 #include "common/future.h"
 #include "crail_inputstream.h"
 #include "crail_outputstream.h"
-#include "namenode/narpc/namenode_client.h"
+#include "namenode/narpc/narpc_namenode_client.h"
 #include "storage/storage_cache.h"
 
 using namespace std;
@@ -143,7 +143,7 @@ private:
   int WriteDirectoryRecord(FileInfo directory, string &fname, long long offset,
                            int valid);
 
-  shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<NarpcNamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
   unordered_map<int, shared_ptr<BlockCache>> block_cache_;
 };

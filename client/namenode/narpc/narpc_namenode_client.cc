@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "namenode_client.h"
+#include "narpc_namenode_client.h"
 
 #include <arpa/inet.h>
 #include <errno.h>
@@ -41,22 +41,21 @@
 #include "namenode/remove_request.h"
 #include "namenode/setfile_request.h"
 
-NamenodeClient::NamenodeClient() : RpcClient(NamenodeClient::kNodelay) {
-  this->counter_ = 1;
-}
+NarpcNamenodeClient::NarpcNamenodeClient()
+    : RpcClient(NarpcNamenodeClient::kNodelay) {}
 
-NamenodeClient::~NamenodeClient() {}
+NarpcNamenodeClient::~NarpcNamenodeClient() {}
 
-Future<CreateResponse> NamenodeClient::Create(Filename &name, int type,
-                                              int storage_class,
-                                              int location_class,
-                                              int enumerable) {
+Future<CreateResponse> NarpcNamenodeClient::Create(Filename &name, int type,
+                                                   int storage_class,
+                                                   int location_class,
+                                                   int enumerable) {
   shared_ptr<CreateRequest> createReq = make_shared<CreateRequest>(
       name, type, storage_class, location_class, enumerable);
-  RpcMessage request(createReq, nullptr);
+  RpcMessage request(createReq);
 
   shared_ptr<CreateResponse> getblockRes = make_shared<CreateResponse>();
-  RpcMessage response(getblockRes, nullptr);
+  RpcMessage response(getblockRes);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
     return Future<CreateResponse>(nullptr);
@@ -64,12 +63,12 @@ Future<CreateResponse> NamenodeClient::Create(Filename &name, int type,
   return Future<CreateResponse>(getblockRes);
 }
 
-Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
+Future<LookupResponse> NarpcNamenodeClient::Lookup(Filename &name) {
   shared_ptr<LookupRequest> lookupReq = make_shared<LookupRequest>(name);
-  RpcMessage request(lookupReq, nullptr);
+  RpcMessage request(lookupReq);
 
   shared_ptr<LookupResponse> lookupRes = make_shared<LookupResponse>();
-  RpcMessage response(lookupRes, nullptr);
+  RpcMessage response(lookupRes);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
     return Future<LookupResponse>(nullptr);
@@ -77,15 +76,16 @@ Future<LookupResponse> NamenodeClient::Lookup(Filename &name) {
   return Future<LookupResponse>(lookupRes);
 }
 
-Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
-                                                  long long position,
-                                                  long long capacity) {
+Future<GetblockResponse> NarpcNamenodeClient::GetBlock(long long fd,
+                                                       long long token,
+                                                       long long position,
+                                                       long long capacity) {
   shared_ptr<GetblockRequest> get_block_req =
       make_shared<GetblockRequest>(fd, token, position, capacity);
-  RpcMessage request(get_block_req, nullptr);
+  RpcMessage request(get_block_req);
 
   shared_ptr<GetblockResponse> get_block_res = make_shared<GetblockResponse>();
-  RpcMessage response(get_block_res, nullptr);
+  RpcMessage response(get_block_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
     return Future<GetblockResponse>(nullptr);
@@ -93,13 +93,14 @@ Future<GetblockResponse> NamenodeClient::GetBlock(long long fd, long long token,
   return Future<GetblockResponse>(get_block_res);
 }
 
-Future<VoidResponse> NamenodeClient::SetFile(FileInfo &file_info, bool close) {
+Future<VoidResponse> NarpcNamenodeClient::SetFile(FileInfo &file_info,
+                                                  bool close) {
   shared_ptr<SetfileRequest> set_file_req =
       make_shared<SetfileRequest>(file_info, close);
-  RpcMessage request(set_file_req, nullptr);
+  RpcMessage request(set_file_req);
 
   shared_ptr<VoidResponse> set_file_res = make_shared<VoidResponse>();
-  RpcMessage response(set_file_res, nullptr);
+  RpcMessage response(set_file_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
     return Future<VoidResponse>(nullptr);
@@ -107,13 +108,14 @@ Future<VoidResponse> NamenodeClient::SetFile(FileInfo &file_info, bool close) {
   return Future<VoidResponse>(set_file_res);
 }
 
-Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
+Future<RemoveResponse> NarpcNamenodeClient::Remove(Filename &name,
+                                                   bool recursive) {
   shared_ptr<RemoveRequest> remove_req =
       make_shared<RemoveRequest>(name, recursive);
-  RpcMessage request(remove_req, nullptr);
+  RpcMessage request(remove_req);
 
   shared_ptr<RemoveResponse> remove_res = make_shared<RemoveResponse>();
-  RpcMessage response(remove_res, nullptr);
+  RpcMessage response(remove_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
     return Future<RemoveResponse>(nullptr);
@@ -121,12 +123,13 @@ Future<RemoveResponse> NamenodeClient::Remove(Filename &name, bool recursive) {
   return Future<RemoveResponse>(remove_res);
 }
 
-Future<IoctlResponse> NamenodeClient::Ioctl(unsigned char op, Filename &name) {
+Future<IoctlResponse> NarpcNamenodeClient::Ioctl(unsigned char op,
+                                                 Filename &name) {
   shared_ptr<IoctlRequest> ioctl_request = make_shared<IoctlRequest>(op, name);
-  RpcMessage request(ioctl_request, nullptr);
+  RpcMessage request(ioctl_request);
 
   shared_ptr<IoctlResponse> ioctl_response = make_shared<IoctlResponse>();
-  RpcMessage response(ioctl_response, nullptr);
+  RpcMessage response(ioctl_response);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
     return Future<IoctlResponse>(nullptr);

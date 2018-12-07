@@ -29,12 +29,12 @@
 #include "common/block_cache.h"
 #include "common/byte_buffer.h"
 #include "common/future.h"
-#include "namenode/narpc/namenode_client.h"
+#include "namenode/narpc/narpc_namenode_client.h"
 #include "storage/storage_cache.h"
 
 class CrailInputstream {
 public:
-  CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
+  CrailInputstream(shared_ptr<NarpcNamenodeClient> namenode_client,
                    shared_ptr<StorageCache> storage_cache,
                    shared_ptr<BlockCache> block_cache, FileInfo file_info,
                    unsigned long long position);
@@ -48,7 +48,7 @@ public:
 
 private:
   FileInfo file_info_;
-  shared_ptr<NamenodeClient> namenode_client_;
+  shared_ptr<NarpcNamenodeClient> namenode_client_;
   shared_ptr<StorageCache> storage_cache_;
   shared_ptr<BlockCache> block_cache_;
   unsigned long long position_;

@@ -24,7 +24,7 @@
 #include "crail_node.h"
 
 CrailNode::CrailNode(FileInfo file_info,
-                     shared_ptr<NamenodeClient> namenode_client,
+                     shared_ptr<NarpcNamenodeClient> namenode_client,
                      shared_ptr<StorageCache> storage_cache,
                      shared_ptr<BlockCache> block_cache)
     : file_info_(file_info) {

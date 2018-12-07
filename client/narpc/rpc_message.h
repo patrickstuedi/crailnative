@@ -34,7 +34,8 @@ using namespace std;
 class RpcMessage {
 public:
   RpcMessage() = default;
-  RpcMessage(shared_ptr<Serializable> header, shared_ptr<ByteBuffer> payload)
+  RpcMessage(shared_ptr<Serializable> header,
+             shared_ptr<ByteBuffer> payload = nullptr)
       : header_(header), payload_(payload) {}
 
   shared_ptr<Serializable> Header() { return header_; };
