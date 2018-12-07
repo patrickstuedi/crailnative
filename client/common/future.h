@@ -26,7 +26,7 @@
 
 #include <memory>
 
-#include "narpc/rpc_response.h"
+using namespace std;
 
 template <typename T> class AsyncTask {
 public:

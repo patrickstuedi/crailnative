@@ -25,12 +25,12 @@
 #define NARPC_STORAGE_RESPONSE_H
 
 #include "common/byte_buffer.h"
+#include "common/serializable.h"
 #include "narpc/rpc_checker.h"
-#include "narpc/rpc_response.h"
 
 using namespace crail;
 
-class NarpcStorageResponse : public RpcResponse {
+class NarpcStorageResponse : public Serializable {
 public:
   NarpcStorageResponse(RpcChecker *rpc_checker, int error, int type);
   virtual ~NarpcStorageResponse();

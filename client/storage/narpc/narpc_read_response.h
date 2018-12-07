@@ -29,7 +29,6 @@
 #include "common/future.h"
 #include "narpc/rpc_checker.h"
 #include "narpc/rpc_message.h"
-#include "narpc/rpc_response.h"
 #include "narpc_storage_response.h"
 
 using namespace std;

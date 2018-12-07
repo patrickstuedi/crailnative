@@ -14,7 +14,6 @@ add_library (cppcrail SHARED
 	reflex/reflex_header.cc
 	reflex/reflex_future.cc
 	narpc/rpc_client.cc
-	narpc/rpc_response.cc
 	namenode/namenode_request.cc
 	namenode/namenode_response.cc
 	namenode/create_request.cc
