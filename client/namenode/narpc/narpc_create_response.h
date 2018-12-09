@@ -21,43 +21,24 @@
  * limitations under the License.
  */
 
-#ifndef CREATE_RESPONSE_H
-#define CREATE_RESPONSE_H
-
-#include <memory>
+#ifndef NARPC_CREATE_RESPONSE_H
+#define NARPC_CREATE_RESPONSE_H
 
 #include "common/future.h"
-#include "common/serializable.h"
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
+#include "namenode/create_response.h"
+#include "narpc_namenode_client.h"
 
-using namespace std;
-
-class NamenodeClient;
-
-class CreateResponse : public NamenodeResponse {
+class NarpcCreateResponse : public CreateResponse,
+                            public AsyncTask<CreateResponse> {
 public:
-  CreateResponse();
-  virtual ~CreateResponse();
+  NarpcCreateResponse(NarpcNamenodeClient *client)
+      : CreateResponse(), client_(client) {}
+  virtual ~NarpcCreateResponse() {}
 
-  int Size() const {
-    return NamenodeResponse::Size() + file_info_.Size() * 2 +
-           file_block_->Size() * 2;
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  FileInfo file() const { return file_info_; }
-  FileInfo parent() const { return parent_info_; }
-  shared_ptr<BlockInfo> file_block() const { return file_block_; }
-  shared_ptr<BlockInfo> parent_block() const { return parent_block_; }
+  CreateResponse get() { return *this; }
 
 private:
-  FileInfo file_info_;
-  FileInfo parent_info_;
-  shared_ptr<BlockInfo> file_block_;
-  shared_ptr<BlockInfo> parent_block_;
+  NarpcNamenodeClient *client_;
 };
 
-#endif /* CREATE_RESPONSE_H */
+#endif /* NARPC_CREATE_RESPONSE_H */

@@ -38,6 +38,7 @@
 #include "namenode/getblock_request.h"
 #include "namenode/ioctl_request.h"
 #include "namenode/lookup_request.h"
+#include "namenode/narpc/narpc_create_response.h"
 #include "namenode/remove_request.h"
 #include "namenode/setfile_request.h"
 
@@ -54,7 +55,8 @@ Future<CreateResponse> NarpcNamenodeClient::Create(Filename &name, int type,
       name, type, storage_class, location_class, enumerable);
   RpcMessage request(createReq);
 
-  shared_ptr<CreateResponse> getblockRes = make_shared<CreateResponse>();
+  shared_ptr<NarpcCreateResponse> getblockRes =
+      make_shared<NarpcCreateResponse>(this);
   RpcMessage response(getblockRes);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
