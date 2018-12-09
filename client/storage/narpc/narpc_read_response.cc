@@ -27,8 +27,8 @@
 
 using namespace std;
 
-NarpcReadResponse::NarpcReadResponse(RpcChecker *rpc_checker)
-    : NarpcStorageResponse(rpc_checker, -1, -1), length_(-1) {}
+NarpcReadResponse::NarpcReadResponse()
+    : NarpcStorageResponse(-1, -1), length_(-1) {}
 
 NarpcReadResponse::~NarpcReadResponse() {}
 
@@ -48,7 +48,4 @@ int NarpcReadResponse::Update(ByteBuffer &buf) {
   return 0;
 }
 
-int NarpcReadResponse::get() {
-  int res = RpcResponse::get();
-  return res;
-}
+int NarpcReadResponse::get() { return 0; }

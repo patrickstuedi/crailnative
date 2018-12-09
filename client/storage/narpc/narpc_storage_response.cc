@@ -27,9 +27,8 @@
 
 using namespace std;
 
-NarpcStorageResponse::NarpcStorageResponse(RpcChecker *rpc_checker, int error,
-                                           int type)
-    : RpcResponse(rpc_checker), error_(error), type_(type) {}
+NarpcStorageResponse::NarpcStorageResponse(int error, int type)
+    : error_(error), type_(type) {}
 
 NarpcStorageResponse::~NarpcStorageResponse() {}
 

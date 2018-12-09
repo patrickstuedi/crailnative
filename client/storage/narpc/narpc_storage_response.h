@@ -32,7 +32,7 @@ using namespace crail;
 
 class NarpcStorageResponse : public Serializable {
 public:
-  NarpcStorageResponse(RpcChecker *rpc_checker, int error, int type);
+  NarpcStorageResponse(int error, int type);
   virtual ~NarpcStorageResponse();
 
   int Write(ByteBuffer &buf) const;

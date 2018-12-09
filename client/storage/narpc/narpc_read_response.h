@@ -33,11 +33,9 @@
 
 using namespace std;
 
-class NarpcReadResponse : public NarpcStorageResponse,
-                          public AsyncTask<int>,
-                          public Serializable {
+class NarpcReadResponse : public NarpcStorageResponse, public AsyncTask<int> {
 public:
-  NarpcReadResponse(RpcChecker *rpc_checker);
+  NarpcReadResponse();
   virtual ~NarpcReadResponse();
 
   int Size() const { return length_; }

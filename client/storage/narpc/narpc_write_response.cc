@@ -23,8 +23,8 @@
 
 #include "narpc_write_response.h"
 
-NarpcWriteResponse::NarpcWriteResponse(RpcChecker *rpc_checker)
-    : NarpcStorageResponse(rpc_checker, -1, -1), ret_(-1) {}
+NarpcWriteResponse::NarpcWriteResponse()
+    : NarpcStorageResponse(-1, -1), ret_(-1) {}
 
 NarpcWriteResponse::~NarpcWriteResponse() {}
 
@@ -44,7 +44,4 @@ int NarpcWriteResponse::Update(ByteBuffer &buf) {
   return 0;
 }
 
-int NarpcWriteResponse::get() {
-  int res = RpcResponse::get();
-  return res >= 0 ? Size() : res;
-}
+int NarpcWriteResponse::get() { return 0; }

@@ -27,18 +27,16 @@
 #include <memory>
 
 #include "common/future.h"
+#include "common/serializable.h"
 #include "narpc/rpc_checker.h"
 #include "narpc/rpc_message.h"
-#include "narpc/rpc_response.h"
 #include "narpc_storage_response.h"
 
 using namespace std;
 
-class NarpcWriteResponse : public NarpcStorageResponse,
-                           public AsyncTask<int>,
-                           public Serializable {
+class NarpcWriteResponse : public NarpcStorageResponse, public AsyncTask<int> {
 public:
-  NarpcWriteResponse(RpcChecker *rpc_checker);
+  NarpcWriteResponse();
   virtual ~NarpcWriteResponse();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
