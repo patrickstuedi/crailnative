@@ -21,32 +21,24 @@
  * limitations under the License.
  */
 
-#ifndef IOCTL_RESPONSE_H
-#define IOCTL_RESPONSE_H
+#ifndef NARPC_IOCTL_RESPONSE_H
+#define NARPC_IOCTL_RESPONSE_H
 
-#include "common/serializable.h"
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
+#include "common/future.h"
+#include "namenode/create_response.h"
+#include "narpc_namenode_client.h"
 
-using namespace crail;
-
-class IoctlResponse : public NamenodeResponse {
+class NarpcIoctlResponse : public IoctlResponse,
+                           public AsyncTask<IoctlResponse> {
 public:
-  IoctlResponse();
-  virtual ~IoctlResponse();
+  NarpcIoctlResponse(NarpcNamenodeClient *client)
+      : IoctlResponse(), client_(client) {}
+  virtual ~NarpcIoctlResponse() {}
 
-  int Size() const {
-    return NamenodeResponse::Size() + sizeof(op_) + sizeof(long long);
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  long long count() const { return count_; }
+  IoctlResponse get() { return *this; }
 
 private:
-  unsigned char op_;
-  long long count_;
+  NarpcNamenodeClient *client_;
 };
 
-#endif /* IOCTL_RESPONSE_H */
+#endif /* NARPC_IOCTL_RESPONSE_H */

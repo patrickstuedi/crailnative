@@ -40,6 +40,7 @@
 #include "namenode/lookup_request.h"
 #include "namenode/narpc/narpc_create_response.h"
 #include "namenode/narpc/narpc_getblock_response.h"
+#include "namenode/narpc/narpc_ioctl_response.h"
 #include "namenode/narpc/narpc_lookup_response.h"
 #include "namenode/narpc/narpc_remove_response.h"
 #include "namenode/narpc/narpc_void_response.h"
@@ -138,7 +139,8 @@ Future<IoctlResponse> NarpcNamenodeClient::Ioctl(unsigned char op,
   shared_ptr<IoctlRequest> ioctl_request = make_shared<IoctlRequest>(op, name);
   RpcMessage request(ioctl_request);
 
-  shared_ptr<IoctlResponse> ioctl_response = make_shared<IoctlResponse>();
+  shared_ptr<NarpcIoctlResponse> ioctl_response =
+      make_shared<NarpcIoctlResponse>(this);
   RpcMessage response(ioctl_response);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
