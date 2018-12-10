@@ -25,20 +25,19 @@
 #define NARPC_IOCTL_RESPONSE_H
 
 #include "common/future.h"
-#include "namenode/create_response.h"
-#include "narpc_namenode_client.h"
+#include "namenode/ioctl_response.h"
+#include "narpc/rpc_client.h"
 
 class NarpcIoctlResponse : public IoctlResponse,
                            public AsyncTask<IoctlResponse> {
 public:
-  NarpcIoctlResponse(NarpcNamenodeClient *client)
-      : IoctlResponse(), client_(client) {}
+  NarpcIoctlResponse(RpcClient *client) : IoctlResponse(), client_(client) {}
   virtual ~NarpcIoctlResponse() {}
 
   IoctlResponse get() { return *this; }
 
 private:
-  NarpcNamenodeClient *client_;
+  RpcClient *client_;
 };
 
 #endif /* NARPC_IOCTL_RESPONSE_H */

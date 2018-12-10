@@ -25,19 +25,18 @@
 #define NARPC_VOID_RESPONSE_H
 
 #include "common/future.h"
-#include "namenode/create_response.h"
-#include "narpc_namenode_client.h"
+#include "namenode/void_response.h"
+#include "narpc/rpc_client.h"
 
 class NarpcVoidResponse : public VoidResponse, public AsyncTask<VoidResponse> {
 public:
-  NarpcVoidResponse(NarpcNamenodeClient *client)
-      : VoidResponse(), client_(client) {}
+  NarpcVoidResponse(RpcClient *client) : VoidResponse(), client_(client) {}
   virtual ~NarpcVoidResponse() {}
 
   VoidResponse get() { return *this; }
 
 private:
-  NarpcNamenodeClient *client_;
+  RpcClient *client_;
 };
 
 #endif /* NARPC_VOID_RESPONSE_H */

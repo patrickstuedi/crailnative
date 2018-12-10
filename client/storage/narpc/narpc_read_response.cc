@@ -27,8 +27,8 @@
 
 using namespace std;
 
-NarpcReadResponse::NarpcReadResponse()
-    : NarpcStorageResponse(-1, -1), length_(-1) {}
+NarpcReadResponse::NarpcReadResponse(RpcClient *client)
+    : NarpcStorageResponse(-1, -1), client_(client), length_(-1) {}
 
 NarpcReadResponse::~NarpcReadResponse() {}
 
@@ -48,4 +48,7 @@ int NarpcReadResponse::Update(ByteBuffer &buf) {
   return 0;
 }
 
-int NarpcReadResponse::get() { return 0; }
+int NarpcReadResponse::get() {
+  client_->PollResponse();
+  return length_;
+}

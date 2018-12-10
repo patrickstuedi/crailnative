@@ -23,8 +23,8 @@
 
 #include "narpc_write_response.h"
 
-NarpcWriteResponse::NarpcWriteResponse()
-    : NarpcStorageResponse(-1, -1), ret_(-1) {}
+NarpcWriteResponse::NarpcWriteResponse(RpcClient *client)
+    : NarpcStorageResponse(-1, -1), client_(client), ret_(-1) {}
 
 NarpcWriteResponse::~NarpcWriteResponse() {}
 
@@ -44,4 +44,7 @@ int NarpcWriteResponse::Update(ByteBuffer &buf) {
   return 0;
 }
 
-int NarpcWriteResponse::get() { return 0; }
+int NarpcWriteResponse::get() {
+  client_->PollResponse();
+  return ret_;
+}

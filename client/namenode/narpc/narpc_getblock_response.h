@@ -26,19 +26,19 @@
 
 #include "common/future.h"
 #include "namenode/getblock_response.h"
-#include "narpc_namenode_client.h"
+#include "narpc/rpc_client.h"
 
 class NarpcGetBlockResponse : public GetblockResponse,
                               public AsyncTask<GetblockResponse> {
 public:
-  NarpcGetBlockResponse(NarpcNamenodeClient *client)
+  NarpcGetBlockResponse(RpcClient *client)
       : GetblockResponse(), client_(client) {}
   virtual ~NarpcGetBlockResponse() {}
 
   GetblockResponse get() { return *this; }
 
 private:
-  NarpcNamenodeClient *client_;
+  RpcClient *client_;
 };
 
 #endif /* NARPC_GETBLOCK_RESPONSE_H */

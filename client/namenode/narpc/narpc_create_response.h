@@ -26,19 +26,18 @@
 
 #include "common/future.h"
 #include "namenode/create_response.h"
-#include "narpc_namenode_client.h"
+#include "narpc/rpc_client.h"
 
 class NarpcCreateResponse : public CreateResponse,
                             public AsyncTask<CreateResponse> {
 public:
-  NarpcCreateResponse(NarpcNamenodeClient *client)
-      : CreateResponse(), client_(client) {}
+  NarpcCreateResponse(RpcClient *client) : CreateResponse(), client_(client) {}
   virtual ~NarpcCreateResponse() {}
 
   CreateResponse get() { return *this; }
 
 private:
-  NarpcNamenodeClient *client_;
+  RpcClient *client_;
 };
 
 #endif /* NARPC_CREATE_RESPONSE_H */

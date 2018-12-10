@@ -26,19 +26,18 @@
 
 #include "common/future.h"
 #include "namenode/lookup_response.h"
-#include "namenode/narpc/narpc_namenode_client.h"
+#include "narpc/rpc_client.h"
 
 class NarpcLookupResponse : public LookupResponse,
                             public AsyncTask<LookupResponse> {
 public:
-  NarpcLookupResponse(NarpcNamenodeClient *client)
-      : LookupResponse(), client_(client) {}
+  NarpcLookupResponse(RpcClient *client) : LookupResponse(), client_(client) {}
   virtual ~NarpcLookupResponse() {}
 
   LookupResponse get() { return *this; }
 
 private:
-  NarpcNamenodeClient *client_;
+  RpcClient *client_;
 };
 
 #endif /* NARPC_LOOKUP_RESPONSE_H */

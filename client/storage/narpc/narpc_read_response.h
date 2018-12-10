@@ -27,7 +27,7 @@
 #include <memory>
 
 #include "common/future.h"
-#include "narpc/rpc_checker.h"
+#include "narpc/rpc_client.h"
 #include "narpc/rpc_message.h"
 #include "narpc_storage_response.h"
 
@@ -35,7 +35,7 @@ using namespace std;
 
 class NarpcReadResponse : public NarpcStorageResponse, public AsyncTask<int> {
 public:
-  NarpcReadResponse();
+  NarpcReadResponse(RpcClient *client);
   virtual ~NarpcReadResponse();
 
   int Size() const { return length_; }
@@ -45,6 +45,7 @@ public:
   int get();
 
 private:
+  RpcClient *client_;
   int length_;
 };
 

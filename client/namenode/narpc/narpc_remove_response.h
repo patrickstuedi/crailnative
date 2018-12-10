@@ -25,20 +25,19 @@
 #define NARPC_REMOVE_RESPONSE_H
 
 #include "common/future.h"
-#include "namenode/create_response.h"
-#include "narpc_namenode_client.h"
+#include "namenode/remove_response.h"
+#include "narpc/rpc_client.h"
 
 class NarpcRemoveResponse : public RemoveResponse,
                             public AsyncTask<RemoveResponse> {
 public:
-  NarpcRemoveResponse(NarpcNamenodeClient *client)
-      : RemoveResponse(), client_(client) {}
+  NarpcRemoveResponse(RpcClient *client) : RemoveResponse(), client_(client) {}
   virtual ~NarpcRemoveResponse() {}
 
   RemoveResponse get() { return *this; }
 
 private:
-  NarpcNamenodeClient *client_;
+  RpcClient *client_;
 };
 
 #endif /* NARPC_REMOVE_RESPONSE_H */

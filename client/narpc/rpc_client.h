@@ -39,7 +39,6 @@
 
 #include "common/byte_buffer.h"
 #include "common/serializable.h"
-#include "rpc_checker.h"
 #include "rpc_message.h"
 
 using namespace std;
@@ -47,7 +46,7 @@ using namespace crail;
 
 namespace crail {
 
-class RpcClient : public RpcChecker {
+class RpcClient {
 public:
   RpcClient(bool nodelay);
   virtual ~RpcClient();
@@ -58,11 +57,10 @@ public:
 
   int Connect(int address, int port);
   int IssueRequest(RpcMessage &request, RpcMessage &response);
+  int PollResponse();
   int Close();
 
 private:
-  int PollResponse();
-
   int SendBytes(unsigned char *buf, int size);
   int RecvBytes(unsigned char *buf, int size);
   void AddNaRPCHeader(ByteBuffer &buf, int size, unsigned long long ticket);

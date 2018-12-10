@@ -28,7 +28,7 @@
 
 #include "common/future.h"
 #include "common/serializable.h"
-#include "narpc/rpc_checker.h"
+#include "narpc/rpc_client.h"
 #include "narpc/rpc_message.h"
 #include "narpc_storage_response.h"
 
@@ -36,7 +36,7 @@ using namespace std;
 
 class NarpcWriteResponse : public NarpcStorageResponse, public AsyncTask<int> {
 public:
-  NarpcWriteResponse();
+  NarpcWriteResponse(RpcClient *client);
   virtual ~NarpcWriteResponse();
 
   shared_ptr<ByteBuffer> Payload() { return nullptr; }
@@ -48,6 +48,7 @@ public:
   int Update(ByteBuffer &buf);
 
 private:
+  RpcClient *client_;
   int ret_;
 };
 

@@ -26,7 +26,6 @@
 
 #include "common/byte_buffer.h"
 #include "common/serializable.h"
-#include "narpc/rpc_checker.h"
 
 using namespace crail;
 
