@@ -21,31 +21,23 @@
  * limitations under the License.
  */
 
-#ifndef REMOVE_RESPONSE_H
-#define REMOVE_RESPONSE_H
+#ifndef NARPC_VOID_RESPONSE_H
+#define NARPC_VOID_RESPONSE_H
 
-#include <memory>
+#include "common/future.h"
+#include "namenode/create_response.h"
+#include "narpc_namenode_client.h"
 
-#include "common/serializable.h"
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
-
-class RemoveResponse : public NamenodeResponse {
+class NarpcVoidResponse : public VoidResponse, public AsyncTask<VoidResponse> {
 public:
-  RemoveResponse();
-  virtual ~RemoveResponse();
+  NarpcVoidResponse(NarpcNamenodeClient *client)
+      : VoidResponse(), client_(client) {}
+  virtual ~NarpcVoidResponse() {}
 
-  int Size() const { return NamenodeResponse::Size() + file_info_->Size() * 2; }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  shared_ptr<FileInfo> file() const { return file_info_; }
-  shared_ptr<FileInfo> parent() const { return parent_info_; }
+  VoidResponse get() { return *this; }
 
 private:
-  shared_ptr<FileInfo> file_info_;
-  shared_ptr<FileInfo> parent_info_;
+  NarpcNamenodeClient *client_;
 };
 
-#endif /* REMOVE_RESPONSE_H */
+#endif /* NARPC_VOID_RESPONSE_H */

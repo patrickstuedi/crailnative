@@ -41,6 +41,8 @@
 #include "namenode/narpc/narpc_create_response.h"
 #include "namenode/narpc/narpc_getblock_response.h"
 #include "namenode/narpc/narpc_lookup_response.h"
+#include "namenode/narpc/narpc_remove_response.h"
+#include "namenode/narpc/narpc_void_response.h"
 #include "namenode/remove_request.h"
 #include "namenode/setfile_request.h"
 
@@ -105,7 +107,8 @@ Future<VoidResponse> NarpcNamenodeClient::SetFile(FileInfo &file_info,
       make_shared<SetfileRequest>(file_info, close);
   RpcMessage request(set_file_req);
 
-  shared_ptr<VoidResponse> set_file_res = make_shared<VoidResponse>();
+  shared_ptr<NarpcVoidResponse> set_file_res =
+      make_shared<NarpcVoidResponse>(this);
   RpcMessage response(set_file_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
@@ -120,7 +123,8 @@ Future<RemoveResponse> NarpcNamenodeClient::Remove(Filename &name,
       make_shared<RemoveRequest>(name, recursive);
   RpcMessage request(remove_req);
 
-  shared_ptr<RemoveResponse> remove_res = make_shared<RemoveResponse>();
+  shared_ptr<NarpcRemoveResponse> remove_res =
+      make_shared<NarpcRemoveResponse>(this);
   RpcMessage response(remove_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {

@@ -31,7 +31,7 @@
 #include "metadata/file_info.h"
 #include "namenode_response.h"
 
-class VoidResponse : public NamenodeResponse, public AsyncTask<VoidResponse> {
+class VoidResponse : public NamenodeResponse {
 public:
   VoidResponse();
   virtual ~VoidResponse();
@@ -39,8 +39,6 @@ public:
   int Size() const { return NamenodeResponse::Size() + sizeof(error_); }
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
-
-  VoidResponse get() { return *this; }
 
 private:
   short error_;
