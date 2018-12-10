@@ -21,32 +21,24 @@
  * limitations under the License.
  */
 
-#ifndef LOOKUP_RESPONSE_H
-#define LOOKUP_RESPONSE_H
+#ifndef NARPC_LOOKUP_RESPONSE_H
+#define NARPC_LOOKUP_RESPONSE_H
 
-#include <memory>
+#include "common/future.h"
+#include "namenode/lookup_response.h"
+#include "namenode/narpc/narpc_namenode_client.h"
 
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
-#include "namenode_response.h"
-
-class LookupResponse : public NamenodeResponse {
+class NarpcLookupResponse : public LookupResponse,
+                            public AsyncTask<LookupResponse> {
 public:
-  LookupResponse();
-  virtual ~LookupResponse();
+  NarpcLookupResponse(NarpcNamenodeClient *client)
+      : LookupResponse(), client_(client) {}
+  virtual ~NarpcLookupResponse() {}
 
-  int Size() const {
-    return NamenodeResponse::Size() + file_info_.Size() + block_info_->Size();
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  FileInfo file() const { return file_info_; }
-  shared_ptr<BlockInfo> file_block() const { return block_info_; }
+  LookupResponse get() { return *this; }
 
 private:
-  FileInfo file_info_;
-  shared_ptr<BlockInfo> block_info_;
+  NarpcNamenodeClient *client_;
 };
 
-#endif /* LOOKUP_RESPONSE_H */
+#endif /* NARPC_LOOKUP_RESPONSE_H */

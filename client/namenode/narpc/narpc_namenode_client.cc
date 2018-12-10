@@ -39,6 +39,7 @@
 #include "namenode/ioctl_request.h"
 #include "namenode/lookup_request.h"
 #include "namenode/narpc/narpc_create_response.h"
+#include "namenode/narpc/narpc_lookup_response.h"
 #include "namenode/remove_request.h"
 #include "namenode/setfile_request.h"
 
@@ -69,7 +70,8 @@ Future<LookupResponse> NarpcNamenodeClient::Lookup(Filename &name) {
   shared_ptr<LookupRequest> lookupReq = make_shared<LookupRequest>(name);
   RpcMessage request(lookupReq);
 
-  shared_ptr<LookupResponse> lookupRes = make_shared<LookupResponse>();
+  shared_ptr<NarpcLookupResponse> lookupRes =
+      make_shared<NarpcLookupResponse>(this);
   RpcMessage response(lookupRes);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
