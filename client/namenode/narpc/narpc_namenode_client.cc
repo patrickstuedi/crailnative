@@ -39,6 +39,7 @@
 #include "namenode/ioctl_request.h"
 #include "namenode/lookup_request.h"
 #include "namenode/narpc/narpc_create_response.h"
+#include "namenode/narpc/narpc_getblock_response.h"
 #include "namenode/narpc/narpc_lookup_response.h"
 #include "namenode/remove_request.h"
 #include "namenode/setfile_request.h"
@@ -88,7 +89,8 @@ Future<GetblockResponse> NarpcNamenodeClient::GetBlock(long long fd,
       make_shared<GetblockRequest>(fd, token, position, capacity);
   RpcMessage request(get_block_req);
 
-  shared_ptr<GetblockResponse> get_block_res = make_shared<GetblockResponse>();
+  shared_ptr<NarpcGetBlockResponse> get_block_res =
+      make_shared<NarpcGetBlockResponse>(this);
   RpcMessage response(get_block_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {

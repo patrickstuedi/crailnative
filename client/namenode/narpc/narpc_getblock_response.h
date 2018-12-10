@@ -21,32 +21,24 @@
  * limitations under the License.
  */
 
-#ifndef GETBLOCK_RESPONSE_H
-#define GETBLOCK_RESPONSE_H
+#ifndef NARPC_GETBLOCK_RESPONSE_H
+#define NARPC_GETBLOCK_RESPONSE_H
 
-#include <memory>
+#include "common/future.h"
+#include "namenode/getblock_response.h"
+#include "narpc_namenode_client.h"
 
-#include "metadata/block_info.h"
-#include "namenode_response.h"
-
-using namespace std;
-
-class GetblockResponse : public NamenodeResponse {
+class NarpcGetBlockResponse : public GetblockResponse,
+                              public AsyncTask<GetblockResponse> {
 public:
-  GetblockResponse();
-  virtual ~GetblockResponse();
+  NarpcGetBlockResponse(NarpcNamenodeClient *client)
+      : GetblockResponse(), client_(client) {}
+  virtual ~NarpcGetBlockResponse() {}
 
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_.Size() + sizeof(short);
-  }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
-
-  BlockInfo &block_info() { return block_info_; }
+  GetblockResponse get() { return *this; }
 
 private:
-  BlockInfo block_info_;
-  short error_;
+  NarpcNamenodeClient *client_;
 };
 
-#endif /* GETBLOCK_RESPONSE_H */
+#endif /* NARPC_GETBLOCK_RESPONSE_H */
