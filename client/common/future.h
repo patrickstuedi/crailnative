@@ -25,6 +25,7 @@
 #define FUTURE_H
 
 #include <memory>
+#include <optional>
 
 using namespace std;
 
@@ -39,7 +40,7 @@ public:
 
   virtual ~Future<T>() {}
 
-  static Future Failure(T val = T()) { return Future(val); }
+  static Future Failure(std::optional<T> val = nullopt) { return Future(val); }
 
   virtual T get() {
     if (!is_done_ && task_ != nullptr) {
@@ -50,7 +51,11 @@ public:
   }
 
 private:
-  Future(T result) : task_(nullptr), is_done_(true), result_(result) {}
+  Future(std::optional<T> result) : task_(nullptr), is_done_(true) {
+    if (result) {
+      result_ = *result;
+    }
+  }
 
   shared_ptr<AsyncTask<T>> task_;
   T result_;
