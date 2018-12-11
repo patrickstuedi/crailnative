@@ -34,7 +34,10 @@ public:
   NarpcIoctlResponse(RpcClient *client) : IoctlResponse(), client_(client) {}
   virtual ~NarpcIoctlResponse() {}
 
-  IoctlResponse get() { return *this; }
+  IoctlResponse get() {
+    client_->PollResponse();
+    return *this;
+  }
 
 private:
   RpcClient *client_;

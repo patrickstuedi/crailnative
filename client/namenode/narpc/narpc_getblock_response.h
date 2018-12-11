@@ -35,7 +35,10 @@ public:
       : GetblockResponse(), client_(client) {}
   virtual ~NarpcGetBlockResponse() {}
 
-  GetblockResponse get() { return *this; }
+  GetblockResponse get() {
+    client_->PollResponse();
+    return *this;
+  }
 
 private:
   RpcClient *client_;

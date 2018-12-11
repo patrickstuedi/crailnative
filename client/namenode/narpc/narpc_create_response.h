@@ -34,7 +34,10 @@ public:
   NarpcCreateResponse(RpcClient *client) : CreateResponse(), client_(client) {}
   virtual ~NarpcCreateResponse() {}
 
-  CreateResponse get() { return *this; }
+  CreateResponse get() {
+    client_->PollResponse();
+    return *this;
+  }
 
 private:
   RpcClient *client_;

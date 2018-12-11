@@ -34,7 +34,10 @@ public:
   NarpcLookupResponse(RpcClient *client) : LookupResponse(), client_(client) {}
   virtual ~NarpcLookupResponse() {}
 
-  LookupResponse get() { return *this; }
+  LookupResponse get() {
+    client_->PollResponse();
+    return *this;
+  }
 
 private:
   RpcClient *client_;

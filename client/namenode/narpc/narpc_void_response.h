@@ -33,7 +33,10 @@ public:
   NarpcVoidResponse(RpcClient *client) : VoidResponse(), client_(client) {}
   virtual ~NarpcVoidResponse() {}
 
-  VoidResponse get() { return *this; }
+  VoidResponse get() {
+    client_->PollResponse();
+    return *this;
+  }
 
 private:
   RpcClient *client_;

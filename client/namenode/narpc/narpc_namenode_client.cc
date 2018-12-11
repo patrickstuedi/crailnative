@@ -65,7 +65,7 @@ Future<CreateResponse> NarpcNamenodeClient::Create(Filename &name, int type,
   RpcMessage response(getblockRes);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
-    return Future<CreateResponse>(nullptr);
+    return Future<CreateResponse>::Failure();
   }
   return Future<CreateResponse>(getblockRes);
 }
@@ -79,7 +79,7 @@ Future<LookupResponse> NarpcNamenodeClient::Lookup(Filename &name) {
   RpcMessage response(lookupRes);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
-    return Future<LookupResponse>(nullptr);
+    return Future<LookupResponse>::Failure();
   }
   return Future<LookupResponse>(lookupRes);
 }
@@ -97,7 +97,7 @@ Future<GetblockResponse> NarpcNamenodeClient::GetBlock(long long fd,
   RpcMessage response(get_block_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
-    return Future<GetblockResponse>(nullptr);
+    return Future<GetblockResponse>::Failure();
   }
   return Future<GetblockResponse>(get_block_res);
 }
@@ -113,7 +113,7 @@ Future<VoidResponse> NarpcNamenodeClient::SetFile(FileInfo &file_info,
   RpcMessage response(set_file_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
-    return Future<VoidResponse>(nullptr);
+    return Future<VoidResponse>::Failure();
   }
   return Future<VoidResponse>(set_file_res);
 }
@@ -129,7 +129,7 @@ Future<RemoveResponse> NarpcNamenodeClient::Remove(Filename &name,
   RpcMessage response(remove_res);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
-    return Future<RemoveResponse>(nullptr);
+    return Future<RemoveResponse>::Failure();
   }
   return Future<RemoveResponse>(remove_res);
 }
@@ -144,7 +144,7 @@ Future<IoctlResponse> NarpcNamenodeClient::Ioctl(unsigned char op,
   RpcMessage response(ioctl_response);
 
   if (RpcClient::IssueRequest(request, response) < 0) {
-    return Future<IoctlResponse>(nullptr);
+    return Future<IoctlResponse>::Failure();
   }
   return Future<IoctlResponse>(ioctl_response);
 }

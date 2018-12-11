@@ -33,30 +33,28 @@ public:
   virtual T get() = 0;
 };
 
-template <typename T> class Error : public AsyncTask<T> {
-public:
-  Error(T value) : value_(value) {}
-
-  virtual T get() { return value_; }
-
-private:
-  T value_;
-};
-
 template <typename T> class Future : public AsyncTask<T> {
 public:
-  Future(shared_ptr<AsyncTask<T>> task) : task_(task) {}
+  Future(shared_ptr<AsyncTask<T>> task) : task_(task), is_done_(false) {}
 
   virtual ~Future<T>() {}
 
-  static Future Failure(T val) {
-    return Future(std::make_shared<Error<T>>(val));
+  static Future Failure(T val = T()) { return Future(val); }
+
+  virtual T get() {
+    if (!is_done_ && task_ != nullptr) {
+      result_ = task_->get();
+      is_done_ = true;
+    }
+    return result_;
   }
 
-  virtual T get() { return task_->get(); }
-
 private:
+  Future(T result) : task_(nullptr), is_done_(true), result_(result) {}
+
   shared_ptr<AsyncTask<T>> task_;
+  T result_;
+  bool is_done_;
 };
 
 #endif /* FUTURE_H */

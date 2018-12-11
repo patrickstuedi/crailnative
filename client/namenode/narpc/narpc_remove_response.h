@@ -34,7 +34,10 @@ public:
   NarpcRemoveResponse(RpcClient *client) : RemoveResponse(), client_(client) {}
   virtual ~NarpcRemoveResponse() {}
 
-  RemoveResponse get() { return *this; }
+  RemoveResponse get() {
+    client_->PollResponse();
+    return *this;
+  }
 
 private:
   RpcClient *client_;
