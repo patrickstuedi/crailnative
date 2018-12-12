@@ -37,6 +37,20 @@ public:
   RpcMessage(shared_ptr<Serializable> header,
              shared_ptr<ByteBuffer> payload = nullptr)
       : header_(header), payload_(payload) {}
+  RpcMessage(const RpcMessage &message) {
+    this->header_ = message.header_;
+    this->payload_ = message.payload_;
+  }
+
+  RpcMessage &operator=(const RpcMessage &other) {
+    if (&other == this) {
+      return *this;
+    }
+
+    this->header_ = other.header_;
+    this->payload_ = other.payload_;
+    return *this;
+  }
 
   shared_ptr<Serializable> Header() { return header_; };
   shared_ptr<ByteBuffer> Payload() { return payload_; };
