@@ -42,6 +42,11 @@ public:
   CrailNode(FileInfo file_info, shared_ptr<NamenodeClient> namenode_client,
             shared_ptr<StorageCache> storage_cache,
             shared_ptr<BlockCache> block_cache);
+  CrailNode(const CrailNode &other) : file_info_(other.file_info_) {
+    this->namenode_client_ = other.namenode_client_;
+    this->storage_cache_ = other.storage_cache_;
+    this->block_cache_ = other.block_cache_;
+  }
   virtual ~CrailNode() = default;
 
   bool valid() const { return file_info_.fd() >= 0; }

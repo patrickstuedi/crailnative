@@ -44,11 +44,8 @@ public:
   CrailFile(FileInfo file_info, shared_ptr<NamenodeClient> namenode_client,
             shared_ptr<StorageCache> storage_cache,
             shared_ptr<BlockCache> block_cache);
-  CrailFile(CrailNode &&node) : CrailNode(std::move(node)){};
-  CrailFile(const CrailNode &node) : CrailNode(node){};
+  CrailFile(const CrailFile &file) = default;
   virtual ~CrailFile() = default;
-
-  CrailFile &operator=(CrailFile other) { return *this; };
 
   unique_ptr<CrailOutputstream> outputstream();
   unique_ptr<CrailInputstream> inputstream();
