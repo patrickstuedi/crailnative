@@ -49,6 +49,15 @@ public:
   }
   virtual ~CrailNode() = default;
 
+  CrailNode &operator=(CrailNode other) {
+    this->file_info_ = other.file_info_;
+    this->namenode_client_ = other.namenode_client_;
+    this->storage_cache_ = other.storage_cache_;
+    this->block_cache_ = other.block_cache_;
+
+    return *this;
+  }
+
   bool valid() const { return file_info_.fd() >= 0; }
   int type() const { return file_info_.type(); }
   unsigned long long fd() const { return file_info_.fd(); }

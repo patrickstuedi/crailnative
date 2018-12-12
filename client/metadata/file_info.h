@@ -29,7 +29,6 @@
 class FileInfo : public Serializable {
 public:
   FileInfo();
-  FileInfo(const FileInfo &info) = default;
   virtual ~FileInfo() = default;
 
   int Write(ByteBuffer &buf) const;

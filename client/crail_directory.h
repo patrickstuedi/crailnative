@@ -38,7 +38,6 @@ public:
   CrailDirectory(FileInfo file_info, shared_ptr<NamenodeClient> namenode_client,
                  shared_ptr<StorageCache> storage_cache,
                  shared_ptr<BlockCache> block_cache);
-  CrailDirectory(const CrailDirectory &directory) = default;
   virtual ~CrailDirectory();
 
   int Enumerate();

@@ -44,7 +44,6 @@ public:
   CrailFile(FileInfo file_info, shared_ptr<NamenodeClient> namenode_client,
             shared_ptr<StorageCache> storage_cache,
             shared_ptr<BlockCache> block_cache);
-  CrailFile(const CrailFile &file) = default;
   virtual ~CrailFile() = default;
 
   unique_ptr<CrailOutputstream> outputstream();
