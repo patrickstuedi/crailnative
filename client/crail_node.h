@@ -50,6 +50,10 @@ public:
   virtual ~CrailNode() = default;
 
   CrailNode &operator=(CrailNode other) {
+    if (&other == this) {
+      return *this;
+    }
+
     this->file_info_ = other.file_info_;
     this->namenode_client_ = other.namenode_client_;
     this->storage_cache_ = other.storage_cache_;
