@@ -1,3 +1,4 @@
 python/c++:
 - https://pybind11.readthedocs.io/en/stable/advanced/pycpp
+- https://docs.python-guide.org/scenarios/clibs/
 
