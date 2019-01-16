@@ -1,4 +1,5 @@
 python/c++:
 - https://pybind11.readthedocs.io/en/stable/advanced/pycpp
 - https://docs.python-guide.org/scenarios/clibs/
+- https://stackoverflow.com/questions/41210347/how-to-see-c-function-invocations-behind-the-swig-interface-tensorflow
 
