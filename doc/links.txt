@@ -2,7 +2,12 @@ python/c++:
 - https://pybind11.readthedocs.io/en/stable/advanced/pycpp
 - https://intermediate-and-advanced-software-carpentry.readthedocs.io/en/latest/c++-wrapping.html
 - https://docs.python-guide.org/scenarios/clibs/
+
+tensorflow python/c++ interface:
 - https://stackoverflow.com/questions/41210347/how-to-see-c-function-invocations-behind-the-swig-interface-tensorflow
 - https://stackoverflow.com/questions/46852955/find-the-caller-stack-of-a-tf-c-function-called-in-python
 - https://groups.google.com/a/tensorflow.org/forum/#!topic/discuss/LBySP9kGABM
+
+pytorch python/c++ interface:
+- https://pytorch.org/blog/a-tour-of-pytorch-internals-1/
 
