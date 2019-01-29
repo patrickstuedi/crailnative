@@ -33,6 +33,7 @@
 #include "common/crail_constants.h"
 #include "directory_record.h"
 #include "metadata/filename.h"
+#include "namenode/narpc/narpc_namenode_client.h"
 #include "storage/storage_client.h"
 
 using namespace crail;

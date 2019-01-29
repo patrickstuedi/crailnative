@@ -24,8 +24,6 @@
 #ifndef CRAIL_NODE_H
 #define CRAIL_NODE_H
 
-#include <memory>
-
 #include "common/block_cache.h"
 #include "common/file_type.h"
 #include "crail_store.h"

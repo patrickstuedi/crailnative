@@ -24,8 +24,6 @@
 #ifndef CRAIL_INPUTSTREAM_H
 #define CRAIL_INPUTSTREAM_H
 
-#include <memory>
-
 #include "common/block_cache.h"
 #include "common/byte_buffer.h"
 #include "common/future.h"

@@ -24,8 +24,6 @@
 #ifndef CRAIL_FILE_H
 #define CRAIL_FILE_H
 
-#include <memory>
-
 #include "common/block_cache.h"
 #include "common/file_type.h"
 #include "crail_inputstream.h"

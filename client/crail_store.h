@@ -24,14 +24,10 @@
 #ifndef CRAIL_STORE_H
 #define CRAIL_STORE_H
 
-#include <memory>
 #include <string>
 
-#include "common/file_type.h"
 #include "common/future.h"
-#include "crail_inputstream.h"
 #include "crail_outputstream.h"
-#include "namenode/narpc/narpc_namenode_client.h"
 #include "storage/storage_cache.h"
 
 using namespace std;
