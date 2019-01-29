@@ -78,4 +78,5 @@ install (FILES
 	namenode/getblock_response.h
 	namenode/remove_response.h
 	namenode/void_response.h
+	namenode/namenode_response.h
 	DESTINATION /include/namenode)
