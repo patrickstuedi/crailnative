@@ -79,4 +79,5 @@ install (FILES
 	namenode/remove_response.h
 	namenode/void_response.h
 	namenode/namenode_response.h
+	namenode/ioctl_response.h
 	DESTINATION /include/namenode)
