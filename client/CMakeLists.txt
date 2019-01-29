@@ -71,3 +71,6 @@ install (FILES
 	metadata/file_info.h
 	metadata/filename.h 
 	DESTINATION /include/metadata)
+install (FILES
+	namenode/namenode_client.h
+	DESTINATION /include/namenode)
