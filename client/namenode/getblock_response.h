@@ -24,8 +24,6 @@
 #ifndef GETBLOCK_RESPONSE_H
 #define GETBLOCK_RESPONSE_H
 
-#include <memory>
-
 #include "metadata/block_info.h"
 #include "namenode_response.h"
 

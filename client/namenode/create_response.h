@@ -26,7 +26,6 @@
 
 #include <memory>
 
-#include "common/future.h"
 #include "common/serializable.h"
 #include "metadata/block_info.h"
 #include "metadata/file_info.h"

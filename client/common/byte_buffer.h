@@ -24,7 +24,7 @@
 #ifndef BYTE_BUFFER_H
 #define BYTE_BUFFER_H
 
-#include <memory>
+#include <string>
 
 using namespace std;
 

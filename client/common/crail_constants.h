@@ -24,10 +24,6 @@
 #ifndef CRAIL_CONSTANTS_H
 #define CRAIL_CONSTANTS_H
 
-#include <string>
-
-using namespace std;
-
 namespace crail {
 
 const int kDirectoryDepth = 16;

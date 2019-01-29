@@ -24,7 +24,6 @@
 #ifndef NAMENODE_CLIENT_H
 #define NAMENODE_CLIENT_H
 
-#include <atomic>
 #include <string>
 
 #include "common/future.h"

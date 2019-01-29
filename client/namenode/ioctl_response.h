@@ -24,9 +24,6 @@
 #ifndef IOCTL_RESPONSE_H
 #define IOCTL_RESPONSE_H
 
-#include "common/serializable.h"
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
 #include "namenode_response.h"
 
 using namespace crail;

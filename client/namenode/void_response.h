@@ -24,11 +24,6 @@
 #ifndef VOID_RESPONSE_H
 #define VOID_RESPONSE_H
 
-#include <memory>
-
-#include "common/future.h"
-#include "metadata/block_info.h"
-#include "metadata/file_info.h"
 #include "namenode_response.h"
 
 class VoidResponse : public NamenodeResponse {

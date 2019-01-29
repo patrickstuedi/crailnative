@@ -24,6 +24,7 @@
 #ifndef DIRECTORY_RECORD_H
 #define DIRECTORY_RECORD_H
 
+#include <memory>
 #include <string>
 
 #include "common/byte_buffer.h"
