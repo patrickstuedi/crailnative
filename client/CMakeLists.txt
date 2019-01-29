@@ -73,4 +73,9 @@ install (FILES
 	DESTINATION /include/metadata)
 install (FILES
 	namenode/namenode_client.h
+	namenode/create_response.h
+	namenode/lookup_response.h
+	namenode/getblock_response.h
+	namenode/remove_response.h
+	namenode/void_response.h
 	DESTINATION /include/namenode)
