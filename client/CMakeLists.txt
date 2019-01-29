@@ -65,4 +65,9 @@ install (FILES
 	common/serializable.h
 	common/block_cache.h
 	DESTINATION /include/common)
-
+install (FILES
+	metadata/block_info.h
+	metadata/datanode_info.h
+	metadata/file_info.h
+	metadata/filename.h 
+	DESTINATION /include/metadata)
