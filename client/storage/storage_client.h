@@ -24,8 +24,6 @@
 #ifndef STORAGE_CLIENT_H
 #define STORAGE_CLIENT_H
 
-#include <memory>
-
 #include "common/byte_buffer.h"
 #include "common/future.h"
 

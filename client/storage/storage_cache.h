@@ -25,7 +25,6 @@
 #define STORAGE_CACHE_H
 
 #include "storage_client.h"
-#include <memory>
 #include <unordered_map>
 
 using namespace std;
