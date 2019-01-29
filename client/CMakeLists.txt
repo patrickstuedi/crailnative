@@ -81,3 +81,7 @@ install (FILES
 	namenode/namenode_response.h
 	namenode/ioctl_response.h
 	DESTINATION /include/namenode)
+install (FILES
+	storage/storage_client.h
+	storage/storage_cache.h
+	DESTINATION /include/storage)
