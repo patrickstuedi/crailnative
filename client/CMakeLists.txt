@@ -63,5 +63,6 @@ install (FILES
 	common/crail_constants.h
 	common/future.h
 	common/serializable.h
+	common/block_cache.h
 	DESTINATION /include/common)
 
