@@ -57,4 +57,11 @@ install (FILES
 	crail_inputstream.h
 	directory_record.h
 	DESTINATION /include)
+install (FILES
+	common/file_type.h
+	common/byte_buffer.h
+	common/crail_constants.h
+	common/future.h
+	common/serializable.h
+	DESTINATION /include/common)
 
