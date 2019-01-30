@@ -1,5 +1,5 @@
 set(CMAKE_CXX_FLAGS "-fPIC -O3 -g")
-add_library (cppcrail SHARED 
+add_library (crail SHARED 
 	client/crail_store.cc
 	client/crail_node.cc
 	client/crail_file.cc
@@ -46,7 +46,7 @@ add_library (cppcrail SHARED
 	client/utils/crail_networking.cc
 	)
 
-install(TARGETS cppcrail DESTINATION /lib)
+install(TARGETS crail DESTINATION /lib)
 install (FILES 
 	client/crail_store.h
 	client/crail_node.h
