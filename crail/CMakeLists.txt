@@ -1,5 +1,4 @@
 set(CMAKE_CXX_FLAGS "-fPIC -O3 -g")
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_library (cppcrail SHARED 
 	client/crail_store.cc
 	client/crail_node.cc

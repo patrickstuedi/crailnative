@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "getblock_response.h"
+#include "crail/client/namenode/getblock_response.h"
 
 GetblockResponse::GetblockResponse() : NamenodeResponse() {}
 

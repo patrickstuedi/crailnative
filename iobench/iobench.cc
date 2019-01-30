@@ -21,6 +21,8 @@
  * limitations under the License.
  */
 
+#include "iobench/iobench.h"
+
 #include <chrono>
 #include <cstring>
 #include <iostream>
@@ -28,8 +30,6 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
-
-#include "iobench.h"
 
 #include "crail/client/crail_file.h"
 #include "crail/client/utils/micro_clock.h"
