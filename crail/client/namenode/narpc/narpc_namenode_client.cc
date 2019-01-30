@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "narpc_namenode_client.h"
+#include "crail/client/namenode/narpc/narpc_namenode_client.h"
 
 #include <arpa/inet.h>
 #include <errno.h>

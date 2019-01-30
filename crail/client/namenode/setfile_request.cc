@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "setfile_request.h"
+#include "crail/client/namenode/setfile_request.h"
 
 SetfileRequest::SetfileRequest(FileInfo file_info, bool close)
     : NamenodeRequest(static_cast<short>(RpcCommand::Setfile),

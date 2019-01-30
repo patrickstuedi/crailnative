@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "namenode_request.h"
+#include "crail/client/namenode/namenode_request.h"
 
 NamenodeRequest::NamenodeRequest(short cmd, short type)
     : cmd_(cmd), type_(type) {}

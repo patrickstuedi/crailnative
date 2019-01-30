@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "narpc_write_response.h"
+#include "crail/client/storage/narpc/narpc_write_response.h"
 
 NarpcWriteResponse::NarpcWriteResponse(RpcClient *client)
     : NarpcStorageResponse(-1, -1), client_(client), ret_(-1) {}

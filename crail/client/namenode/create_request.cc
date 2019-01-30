@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "create_request.h"
+#include "crail/client/namenode/create_request.h"
 
 CreateRequest::CreateRequest(Filename &name, int type, int storage_class,
                              int location_class, int enumerable)

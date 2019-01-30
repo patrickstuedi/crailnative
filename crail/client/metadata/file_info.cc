@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "file_info.h"
+#include "crail/client/metadata/file_info.h"
 
 #include <iostream>
 

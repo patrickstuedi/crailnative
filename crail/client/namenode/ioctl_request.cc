@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "ioctl_request.h"
+#include "crail/client/namenode/ioctl_request.h"
 
 IoctlRequest::IoctlRequest(unsigned char op, Filename &name)
     : NamenodeRequest(static_cast<short>(RpcCommand::Ioctl),

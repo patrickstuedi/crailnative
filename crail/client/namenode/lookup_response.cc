@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "lookup_response.h"
+#include "crail/client/namenode/lookup_response.h"
 
 #include <iostream>
 

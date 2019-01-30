@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "create_response.h"
+#include "crail/client/namenode/create_response.h"
 
 CreateResponse::CreateResponse()
     : NamenodeResponse(), file_block_(new BlockInfo()),

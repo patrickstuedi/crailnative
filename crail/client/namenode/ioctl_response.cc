@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "ioctl_response.h"
+#include "crail/client/namenode/ioctl_response.h"
 
 IoctlResponse::IoctlResponse() : NamenodeResponse() {}
 

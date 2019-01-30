@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "lookup_request.h"
+#include "crail/client/namenode/lookup_request.h"
 
 LookupRequest::LookupRequest(Filename &name)
     : NamenodeRequest(static_cast<short>(RpcCommand::Lookup),

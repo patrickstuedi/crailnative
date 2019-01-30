@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "narpc_write_request.h"
+#include "crail/client/storage/narpc/narpc_write_request.h"
 #include <iostream>
 
 using namespace std;

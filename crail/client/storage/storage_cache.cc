@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "storage_cache.h"
+#include "crail/client/storage/storage_cache.h"
 #include <iostream>
 
 #include "crail/client/common/crail_constants.h"

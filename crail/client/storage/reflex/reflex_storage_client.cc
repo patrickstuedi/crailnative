@@ -21,9 +21,9 @@
  * limitations under the License.
  */
 
-#include <iostream>
-
 #include "crail/client/storage/reflex/reflex_storage_client.h"
+
+#include <iostream>
 
 using namespace std;
 

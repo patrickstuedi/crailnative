@@ -21,11 +21,12 @@
  * limitations under the License.
  */
 
+#include "crail/client/storage/narpc/narpc_storage_client.h"
+
 #include <iostream>
 
 #include "crail/client/storage/narpc/narpc_read_request.h"
 #include "crail/client/storage/narpc/narpc_read_response.h"
-#include "crail/client/storage/narpc/narpc_storage_client.h"
 #include "crail/client/storage/narpc/narpc_storage_request.h"
 #include "crail/client/storage/narpc/narpc_storage_response.h"
 #include "crail/client/storage/narpc/narpc_write_request.h"

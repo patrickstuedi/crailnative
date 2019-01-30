@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "namenode_response.h"
+#include "crail/client/namenode/namenode_response.h"
 
 NamenodeResponse::NamenodeResponse() : type_(-1), error_(-1) {}
 

@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "remove_response.h"
+#include "crail/client/namenode/remove_response.h"
 
 RemoveResponse::RemoveResponse()
     : NamenodeResponse(), file_info_(new FileInfo()),

@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "void_response.h"
+#include "crail/client/namenode/void_response.h"
 
 VoidResponse::VoidResponse() : NamenodeResponse(), error_(-1) {}
 

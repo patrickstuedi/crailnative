@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "reflex_client.h"
+#include "crail/client/reflex/reflex_client.h"
 
 #include <arpa/inet.h>
 #include <errno.h>

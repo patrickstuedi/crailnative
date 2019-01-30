@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "remove_request.h"
+#include "crail/client/namenode/remove_request.h"
 
 RemoveRequest::RemoveRequest(Filename &name, bool recursive)
     : NamenodeRequest(static_cast<short>(RpcCommand::Removefile),

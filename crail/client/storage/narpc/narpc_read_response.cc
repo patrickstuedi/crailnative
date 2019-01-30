@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "narpc_read_response.h"
+#include "crail/client/storage/narpc/narpc_read_response.h"
 
 #include <iostream>
 

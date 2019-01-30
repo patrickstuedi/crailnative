@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "getblock_request.h"
+#include "crail/client/namenode/getblock_request.h"
 
 GetblockRequest::GetblockRequest(long long fd, long long token,
                                  long long position, long long capacity)

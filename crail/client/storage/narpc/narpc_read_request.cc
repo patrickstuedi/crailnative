@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "narpc_read_request.h"
+#include "crail/client/storage/narpc/narpc_read_request.h"
 
 NarpcReadRequest::NarpcReadRequest(int key, long long address, int length)
     : NarpcStorageRequest(static_cast<int>(NarpcStorageRequestType::Read)),
