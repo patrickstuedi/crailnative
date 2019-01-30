@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "crail_networking.h"
+#include "crail/client/utils/crail_networking.h"
 
 #include <sstream>
 

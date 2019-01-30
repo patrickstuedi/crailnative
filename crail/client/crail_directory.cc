@@ -21,13 +21,13 @@
  * limitations under the License.
  */
 
-#include "crail_directory.h"
+#include "crail/client/crail_directory.h"
 
 #include <iostream>
 #include <memory>
 
-#include "crail_inputstream.h"
-#include "directory_record.h"
+#include "crail/client/crail_inputstream.h"
+#include "crail/client/directory_record.h"
 
 CrailDirectory::CrailDirectory(FileInfo file_info,
                                shared_ptr<NamenodeClient> namenode_client,

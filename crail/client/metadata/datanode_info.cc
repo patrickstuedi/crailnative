@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "datanode_info.h"
+#include "crail/client/metadata/datanode_info.h"
 
 #include <iostream>
 #include <sstream>

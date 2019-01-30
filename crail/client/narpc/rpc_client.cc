@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "rpc_client.h"
+#include "crail/client/narpc/rpc_client.h"
 
 #include <arpa/inet.h>
 #include <errno.h>

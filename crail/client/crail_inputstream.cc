@@ -21,15 +21,15 @@
  * limitations under the License.
  */
 
-#include "crail_inputstream.h"
+#include "crail/client/crail_inputstream.h"
 
 #include <iostream>
 #include <memory>
 
-#include "namenode/getblock_response.h"
-#include "storage/narpc/narpc_storage_client.h"
-#include "storage/storage_client.h"
-#include "utils/crail_networking.h"
+#include "crail/client/namenode/getblock_response.h"
+#include "crail/client/storage/narpc/narpc_storage_client.h"
+#include "crail/client/storage/storage_client.h"
+#include "crail/client/utils/crail_networking.h"
 
 CrailInputstream::CrailInputstream(shared_ptr<NamenodeClient> namenode_client,
                                    shared_ptr<StorageCache> storage_cache,

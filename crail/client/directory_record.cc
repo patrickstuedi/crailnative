@@ -21,7 +21,8 @@
  * limitations under the License.
  */
 
-#include "directory_record.h"
+#include "crail/client/directory_record.h"
+
 #include <iostream>
 #include <string.h>
 

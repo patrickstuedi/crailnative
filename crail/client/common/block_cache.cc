@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "block_cache.h"
+#include "crail/client/common/block_cache.h"
 
 #include <iostream>
 

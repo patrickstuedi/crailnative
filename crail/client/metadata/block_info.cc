@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "block_info.h"
+#include "crail/client/metadata/block_info.h"
 
 #include <iostream>
 

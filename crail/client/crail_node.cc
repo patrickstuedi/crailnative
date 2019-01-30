@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "crail_node.h"
+#include "crail/client/crail_node.h"
 
 CrailNode::CrailNode(FileInfo file_info,
                      shared_ptr<NamenodeClient> namenode_client,

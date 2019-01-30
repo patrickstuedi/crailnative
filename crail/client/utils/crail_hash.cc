@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "crail_hash.h"
+#include "crail/client/utils/crail_hash.h"
 
 int file_hash(string name) {
   const char *str = name.c_str();

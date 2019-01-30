@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "crail_store.h"
+#include "crail/client/crail_store.h"
 
 #include <arpa/inet.h>
 #include <iostream>
@@ -30,11 +30,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "common/crail_constants.h"
-#include "directory_record.h"
-#include "metadata/filename.h"
-#include "namenode/narpc/narpc_namenode_client.h"
-#include "storage/storage_client.h"
+#include "crail/client/common/crail_constants.h"
+#include "crail/client/directory_record.h"
+#include "crail/client/metadata/filename.h"
+#include "crail/client/namenode/narpc/narpc_namenode_client.h"
+#include "crail/client/storage/storage_client.h"
 
 using namespace crail;
 
