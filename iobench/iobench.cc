@@ -31,8 +31,8 @@
 
 #include "iobench.h"
 
-#include "crail_file.h"
-#include "utils/micro_clock.h"
+#include "crail/client/crail_file.h"
+#include "crail/client/utils/micro_clock.h"
 
 using namespace std;
 
