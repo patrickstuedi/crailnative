@@ -28,6 +28,7 @@
 
 #include "crail/client/common/future.h"
 #include "crail/client/crail_outputstream.h"
+#include "crail/client/metadata/filename.h"
 #include "crail/client/storage/storage_cache.h"
 
 using namespace std;
