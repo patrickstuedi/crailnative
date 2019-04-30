@@ -326,6 +326,16 @@ int Iobench::GetKey(char data[], int len, string src_file) {
   return 0;
 }
 
+void usage() {
+  cout << "iobench -t "
+          "[\"GetFile|CopyFromLocal|CopyToLocal|Write|Read|PutKey|GetKey|"
+          "PutBenchmark|GetBenchmark\"]"
+       << endl;
+  cout << "\t-f <filename> -k <loop> -s <size> -a <IP address> -p <port> -d "
+          "<destination file> -e"
+       << endl;
+}
+
 int main(int argc, char *argv[]) {
   Settings settings;
   setDefaults(settings);
@@ -361,6 +371,7 @@ int main(int argc, char *argv[]) {
 
   if (settings.operation == Operation::Undefined) {
     cout << "Operation undefined " << endl;
+    usage();
     return -1;
   }
 
