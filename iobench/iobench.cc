@@ -46,7 +46,8 @@ enum class Operation {
   PutKey = 6,
   GetKey = 7,
   PutBenchmark = 8,
-  GetBenchmark = 9
+  GetBenchmark = 9,
+  Cat = 10
 };
 
 struct Settings {
@@ -79,6 +80,8 @@ Operation getOperation(string name) {
     return Operation::PutBenchmark;
   } else if (name == "GetBenchmark") {
     return Operation::GetBenchmark;
+  } else if (name == "Cat") {
+    return Operation::Cat;
   } else {
     return Operation::Undefined;
   }
@@ -101,6 +104,16 @@ void setDefaults(Settings &settings) {
   settings.size = 1024;
   settings.dstfile = "/dst";
   settings.enumerable = false;
+}
+
+void usage() {
+  cout << "iobench -t "
+          "[\"GetFile|CopyFromLocal|CopyToLocal|Write|Read|PutKey|GetKey|"
+          "PutBenchmark|GetBenchmark|Cat\"]"
+       << endl;
+  cout << "\t-f <filename> -k <loop> -s <size> -a <IP address> -p <port> -d "
+          "<destination file> -e"
+       << endl;
 }
 
 Iobench::Iobench(string address, int port) { crail_.Initialize(address, port); }
@@ -194,6 +207,26 @@ int Iobench::CopyToLocal(string src_file, string local_file) {
     buf->Clear();
   }
   fclose(fp);
+  inputstream->Close();
+
+  return 0;
+}
+
+int Iobench::Cat(string src_file) {
+  CrailFile file = crail_.Lookup<CrailFile>(src_file).get();
+  if (!file.valid()) {
+    cout << "lookup node failed" << endl;
+    return -1;
+  }
+
+  unique_ptr<CrailInputstream> inputstream = file.inputstream();
+
+  shared_ptr<ByteBuffer> buf = make_shared<ByteBuffer>(kBufferSize);
+  while (inputstream->Read(buf).get() > 0) {
+    buf->Flip();
+    std::cout.write(reinterpret_cast<const char *>(buf->get_bytes()),
+                    buf->remaining());
+  }
   inputstream->Close();
 
   return 0;
@@ -326,16 +359,6 @@ int Iobench::GetKey(char data[], int len, string src_file) {
   return 0;
 }
 
-void usage() {
-  cout << "iobench -t "
-          "[\"GetFile|CopyFromLocal|CopyToLocal|Write|Read|PutKey|GetKey|"
-          "PutBenchmark|GetBenchmark\"]"
-       << endl;
-  cout << "\t-f <filename> -k <loop> -s <size> -a <IP address> -p <port> -d "
-          "<destination file> -e"
-       << endl;
-}
-
 int main(int argc, char *argv[]) {
   Settings settings;
   setDefaults(settings);
@@ -426,6 +449,8 @@ int main(int argc, char *argv[]) {
 
     double _latency = clock.Duration() / settings.loop;
     cout << "Latency " << _latency << "[us/op]" << endl;
+  } else if (settings.operation == Operation::Cat) {
+    res = iobench.Cat(settings.filename);
   }
   return res;
 }

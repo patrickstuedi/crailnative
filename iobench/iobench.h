@@ -38,6 +38,7 @@ public:
   int GetFile(string &filename, const int loop);
   int CopyFromLocal(string local_file, string dst_file, bool enumerable);
   int CopyToLocal(string src_file, string local_file);
+  int Cat(string src_file);
   int Write(string dst_file, int len, int loop);
   int Read(string src_file, int len, int loop);
   int PutKey(const char data[], int len, string dst_file, bool enumerable);
