@@ -226,6 +226,7 @@ int Iobench::Cat(string src_file) {
     buf->Flip();
     std::cout.write(reinterpret_cast<const char *>(buf->get_bytes()),
                     buf->remaining());
+    buf->Clear();
   }
   inputstream->Close();
 

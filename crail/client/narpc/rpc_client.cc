@@ -121,6 +121,7 @@ int RpcClient::IssueRequest(RpcMessage &request, RpcMessage &response) {
       cout << "Error when sending RPC payload" << endl;
       return -1;
     }
+    payload->set_position(payload->position() + payload->remaining());
   }
 
   // int _total = _metadata + _data;
@@ -165,6 +166,7 @@ int RpcClient::PollResponse() {
       cout << "Error receiving rpc payload" << endl;
       return -1;
     }
+    payload->set_position(payload->position() + payload->remaining());
   }
 
   // int _total = kNarpcHeader + size;

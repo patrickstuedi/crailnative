@@ -55,13 +55,14 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
     return Future<int>::Failure(-1);
   }
 
-  int buf_original_limit = buf->limit();
   int block_offset = position_ % kBlockSize;
   int block_remaining = kBlockSize - block_offset;
 
   if (block_remaining < buf->remaining()) {
     buf->set_limit(buf->position() + block_remaining);
   }
+
+  this->position_ += buf->remaining();
 
   BlockInfo &block_info = block_cache_->GetBlock(position_);
   if (!block_info.valid()) {
@@ -91,10 +92,6 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   long long block_addr = block_info.addr() + block_offset;
   Future<int> storage_response =
       storage_client->WriteData(block_info.lkey(), block_addr, buf);
-
-  this->position_ += buf->remaining();
-  buf->set_position(buf->position() + buf->remaining());
-  buf->set_limit(buf_original_limit);
 
   return storage_response;
 }
