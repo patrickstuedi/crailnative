@@ -38,10 +38,8 @@ namespace crail {
 
 class CrailStore {
 public:
-  CrailStore();
+  CrailStore(string address, int port);
   virtual ~CrailStore();
-
-  int Initialize(string address, int port);
 
   template <class T>
   Future<T> Create(string &name, int storage_class, int location_class,

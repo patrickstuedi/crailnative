@@ -26,7 +26,7 @@
 
 #include "crail/client/common/future.h"
 #include "crail/client/namenode/lookup_response.h"
-#include "crail/client/narpc/rpc_client.h"
+#include "narpc/rpc_client.h"
 
 class NarpcLookupResponse : public LookupResponse,
                             public AsyncTask<LookupResponse> {

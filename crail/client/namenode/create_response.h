@@ -44,8 +44,8 @@ public:
     return NamenodeResponse::Size() + file_info_.Size() * 2 +
            file_block_->Size() * 2;
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   FileInfo file() const { return file_info_; }
   FileInfo parent() const { return parent_info_; }

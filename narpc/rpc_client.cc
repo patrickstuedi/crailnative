@@ -44,7 +44,10 @@ RpcClient::RpcClient(int address, int port, bool nodelay)
 
 RpcClient::~RpcClient() { Close(); }
 
-int RpcClient::Close() { stream_.Close(); }
+int RpcClient::Close() {
+  stream_.Close();
+  return 0;
+}
 
 int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
                             shared_ptr<RpcMessage> response) {

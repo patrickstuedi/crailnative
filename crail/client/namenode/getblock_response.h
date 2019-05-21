@@ -37,8 +37,8 @@ public:
   int Size() const {
     return NamenodeResponse::Size() + block_info_.Size() + sizeof(short);
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   BlockInfo &block_info() { return block_info_; }
 

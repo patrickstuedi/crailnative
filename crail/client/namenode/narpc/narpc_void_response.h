@@ -26,7 +26,7 @@
 
 #include "crail/client/common/future.h"
 #include "crail/client/namenode/void_response.h"
-#include "crail/client/narpc/rpc_client.h"
+#include "narpc/rpc_client.h"
 
 class NarpcVoidResponse : public VoidResponse, public AsyncTask<VoidResponse> {
 public:

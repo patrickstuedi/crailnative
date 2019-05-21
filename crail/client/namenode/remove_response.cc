@@ -29,20 +29,24 @@ RemoveResponse::RemoveResponse()
 
 RemoveResponse::~RemoveResponse() {}
 
-int RemoveResponse::Write(ByteBuffer &buf) const {
-  NamenodeResponse::Write(buf);
+int RemoveResponse::Write(Networkstream &stream) const {
+  NamenodeResponse::Write(stream);
 
-  file_info_->Write(buf);
-  parent_info_->Write(buf);
+  /*
+file_info_->Write(buf);
+parent_info_->Write(buf);
+  */
 
   return 0;
 }
 
-int RemoveResponse::Update(ByteBuffer &buf) {
-  NamenodeResponse::Update(buf);
+int RemoveResponse::Update(Networkstream &stream) {
+  NamenodeResponse::Update(stream);
 
-  file_info_->Update(buf);
-  parent_info_->Update(buf);
+  /*
+file_info_->Update(buf);
+parent_info_->Update(buf);
+  */
 
   return 0;
 }

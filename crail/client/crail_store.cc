@@ -38,17 +38,14 @@
 
 using namespace crail;
 
-CrailStore::CrailStore()
-    : namenode_client_(new NarpcNamenodeClient()),
+CrailStore::CrailStore(string address, int port)
+    : namenode_client_(
+          new NarpcNamenodeClient((int)inet_addr(address.c_str()), port)),
       storage_cache_(new StorageCache()) {}
 
 CrailStore::~CrailStore() {
   this->namenode_client_->Close();
   storage_cache_->Close();
-}
-
-int CrailStore::Initialize(string address, int port) {
-  return this->namenode_client_->Connect((int)inet_addr(address.c_str()), port);
 }
 
 int CrailStore::Remove(string &name, bool recursive) {

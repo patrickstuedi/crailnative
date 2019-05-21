@@ -38,8 +38,8 @@ public:
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() + block_info_->Size();
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(Networkstream &stream) const;
+  int Update(Networkstream &stream);
 
   FileInfo file() const { return file_info_; }
   shared_ptr<BlockInfo> file_block() const { return block_info_; }

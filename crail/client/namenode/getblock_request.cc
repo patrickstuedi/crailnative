@@ -31,24 +31,28 @@ GetblockRequest::GetblockRequest(long long fd, long long token,
 
 GetblockRequest::~GetblockRequest() {}
 
-int GetblockRequest::Write(ByteBuffer &buf) const {
-  NamenodeRequest::Write(buf);
+int GetblockRequest::Write(Networkstream &stream) const {
+  NamenodeRequest::Write(stream);
 
-  buf.PutLong(fd_);
-  buf.PutLong(token_);
-  buf.PutLong(position_);
-  buf.PutLong(capacity_);
+  /*
+buf.PutLong(fd_);
+buf.PutLong(token_);
+buf.PutLong(position_);
+buf.PutLong(capacity_);
+  */
 
   return Size();
 }
 
-int GetblockRequest::Update(ByteBuffer &buf) {
-  NamenodeRequest::Update(buf);
+int GetblockRequest::Update(Networkstream &stream) {
+  NamenodeRequest::Update(stream);
 
-  fd_ = buf.GetLong();
-  token_ = buf.GetLong();
-  position_ = buf.GetLong();
-  capacity_ = buf.GetLong();
+  /*
+fd_ = buf.GetLong();
+token_ = buf.GetLong();
+position_ = buf.GetLong();
+capacity_ = buf.GetLong();
+  */
 
   return Size();
 }

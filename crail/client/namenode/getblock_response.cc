@@ -27,20 +27,24 @@ GetblockResponse::GetblockResponse() : NamenodeResponse() {}
 
 GetblockResponse::~GetblockResponse() {}
 
-int GetblockResponse::Write(ByteBuffer &buf) const {
-  NamenodeResponse::Write(buf);
+int GetblockResponse::Write(NetworkStream &stream) const {
+  NamenodeResponse::Write(stream);
 
-  block_info_.Write(buf);
-  buf.PutShort(error_);
+  /*
+block_info_.Write(buf);
+buf.PutShort(error_);
+  */
 
   return 0;
 }
 
-int GetblockResponse::Update(ByteBuffer &buf) {
-  NamenodeResponse::Update(buf);
+int GetblockResponse::Update(NetworkStream &stream) {
+  NamenodeResponse::Update(stream);
 
-  block_info_.Update(buf);
-  this->error_ = buf.GetShort();
+  /*
+block_info_.Update(buf);
+this->error_ = buf.GetShort();
+  */
 
   return 0;
 }

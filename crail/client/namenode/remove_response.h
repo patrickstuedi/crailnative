@@ -35,8 +35,8 @@ public:
   virtual ~RemoveResponse();
 
   int Size() const { return NamenodeResponse::Size() + file_info_->Size() * 2; }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(Networkstream &stream) const;
+  int Update(Networkstream &stream);
 
   shared_ptr<FileInfo> file() const { return file_info_; }
   shared_ptr<FileInfo> parent() const { return parent_info_; }

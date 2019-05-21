@@ -36,8 +36,8 @@ public:
   virtual ~GetblockRequest();
 
   int Size() const { return NamenodeRequest::Size() + sizeof(long long) * 4; };
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   long long fd() const { return fd_; }
   long long token() const { return token_; }

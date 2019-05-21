@@ -38,7 +38,6 @@
 class NamenodeClient {
 public:
   // Control ops
-  virtual int Connect(int address, int port) = 0;
   virtual int Close() = 0;
 
   // RPC calls

@@ -33,20 +33,24 @@ IoctlRequest::IoctlRequest(unsigned char op, Filename &name)
 
 IoctlRequest::~IoctlRequest() {}
 
-int IoctlRequest::Write(ByteBuffer &buf) const {
-  NamenodeRequest::Write(buf);
+int IoctlRequest::Write(NetworkStream &stream) const {
+  NamenodeRequest::Write(stream);
 
-  buf.PutByte(op_);
-  filename_.Write(buf);
+  /*
+    buf.PutByte(op_);
+    filename_.Write(buf);
+  */
 
   return Size();
 }
 
-int IoctlRequest::Update(ByteBuffer &buf) {
-  NamenodeRequest::Update(buf);
+int IoctlRequest::Update(NetworkStream &stream) {
+  NamenodeRequest::Update(stream);
 
-  op_ = buf.GetByte();
-  filename_.Update(buf);
+  /*
+op_ = buf.GetByte();
+filename_.Update(buf);
+  */
 
   return Size();
 }

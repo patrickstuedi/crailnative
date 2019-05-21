@@ -26,14 +26,16 @@
 
 #include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
+#include "narpc/network_stream.h"
+#include "narpc/rpc_message.h"
 
-class NamenodeResponse : public Serializable {
+class NamenodeResponse : public RpcMessage {
 public:
   NamenodeResponse();
   virtual ~NamenodeResponse();
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
 
   int type() const { return type_; }

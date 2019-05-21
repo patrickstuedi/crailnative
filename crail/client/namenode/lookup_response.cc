@@ -32,12 +32,13 @@ LookupResponse::LookupResponse()
 
 LookupResponse::~LookupResponse() {}
 
-int LookupResponse::Write(ByteBuffer &buf) const {
-  NamenodeResponse::Write(buf);
+int LookupResponse::Write(Networkstream &stream) const {
+  NamenodeResponse::Write(stream);
 
-  file_info_.Write(buf);
-  block_info_->Write(buf);
-
+  /*
+file_info_.Write(buf);
+block_info_->Write(buf);
+*/
   return 0;
 }
 

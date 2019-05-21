@@ -26,6 +26,8 @@
 
 #include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
+#include "narpc/network_stream.h"
+#include "narpc/rpc_message.h"
 
 using namespace crail;
 
@@ -46,13 +48,13 @@ enum class RequestType : short {
   Ioctl = 13
 };
 
-class NamenodeRequest : public Serializable {
+class NamenodeRequest : public RpcMessage {
 public:
   NamenodeRequest(short cmd, short type);
   virtual ~NamenodeRequest();
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetwworkStream &stream) const;
+  int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
 
 private:

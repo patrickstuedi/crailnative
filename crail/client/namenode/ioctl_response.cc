@@ -27,20 +27,24 @@ IoctlResponse::IoctlResponse() : NamenodeResponse() {}
 
 IoctlResponse::~IoctlResponse() {}
 
-int IoctlResponse::Write(ByteBuffer &buf) const {
-  NamenodeResponse::Write(buf);
+int IoctlResponse::Write(Networkstream &stream) const {
+  NamenodeResponse::Write(stream);
 
-  buf.PutByte(op_);
-  buf.PutLong(count_);
+  /*
+buf.PutByte(op_);
+buf.PutLong(count_);
+  */
 
   return 0;
 }
 
-int IoctlResponse::Update(ByteBuffer &buf) {
-  NamenodeResponse::Update(buf);
+int IoctlResponse::Update(Networkstream &stream) {
+  NamenodeResponse::Update(stream);
 
-  op_ = buf.GetByte();
-  count_ = buf.GetLong();
+  /*
+op_ = buf.GetByte();
+count_ = buf.GetLong();
+  */
 
   return 0;
 }

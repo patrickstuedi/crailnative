@@ -24,22 +24,22 @@
 #ifndef NARPC_STORAGE_CLIENT_H
 #define NARPC_STORAGE_CLIENT_H
 
-#include "crail/client/narpc/rpc_client.h"
 #include "crail/client/storage/storage_client.h"
+#include "narpc/rpc_client.h"
 
-class NarpcStorageClient : public RpcClient, public StorageClient {
+class NarpcStorageClient : public StorageClient {
 public:
-  NarpcStorageClient();
+  NarpcStorageClient(int address, int port);
   virtual ~NarpcStorageClient();
 
   static const bool kNodelay = true;
 
-  int Connect(int address, int port) {
-    return RpcClient::Connect(address, port);
-  }
-  int Close() { return RpcClient::Close(); }
+  int Close() { return rpc_client_.Close(); }
   Future<int> WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
   Future<int> ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
+
+private:
+  RpcClient rpc_client_;
 };
 
 #endif /* NARPC_STORAGE_CLIENT_H */

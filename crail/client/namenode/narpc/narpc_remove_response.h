@@ -26,7 +26,7 @@
 
 #include "crail/client/common/future.h"
 #include "crail/client/namenode/remove_response.h"
-#include "crail/client/narpc/rpc_client.h"
+#include "narpc/rpc_client.h"
 
 class NarpcRemoveResponse : public RemoveResponse,
                             public AsyncTask<RemoveResponse> {

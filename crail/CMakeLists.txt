@@ -9,10 +9,6 @@ add_library (crail SHARED
 	client/directory_record.cc
 	client/common/byte_buffer.cc
 	client/common/block_cache.cc
-	client/reflex/reflex_client.cc
-	client/reflex/reflex_header.cc
-	client/reflex/reflex_future.cc
-	client/narpc/rpc_client.cc
 	client/namenode/namenode_request.cc
 	client/namenode/namenode_response.cc
 	client/namenode/create_request.cc
@@ -36,7 +32,6 @@ add_library (crail SHARED
 	client/storage/narpc/narpc_write_response.cc
 	client/storage/narpc/narpc_read_request.cc
 	client/storage/narpc/narpc_read_response.cc
-	client/storage/reflex/reflex_storage_client.cc
 	client/metadata/filename.cc
 	client/metadata/file_info.cc
 	client/metadata/datanode_info.cc

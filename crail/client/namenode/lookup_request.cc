@@ -31,20 +31,24 @@ LookupRequest::LookupRequest(Filename &name)
 }
 LookupRequest::~LookupRequest() {}
 
-int LookupRequest::Write(ByteBuffer &buf) const {
-  NamenodeRequest::Write(buf);
+int LookupRequest::Write(Networkstream &stream) const {
+  NamenodeRequest::Write(stream);
 
-  filename_.Write(buf);
-  buf.PutInt(0);
+  /*
+filename_.Write(buf);
+buf.PutInt(0);
+  */
 
   return Size();
 }
 
-int LookupRequest::Update(ByteBuffer &buf) {
-  NamenodeRequest::Update(buf);
+int LookupRequest::Update(Networkstream &stream) {
+  NamenodeRequest::Update(stream);
 
-  filename_.Update(buf);
-  buf.GetInt();
+  /*
+filename_.Update(buf);
+buf.GetInt();
+  */
 
   return Size();
 }

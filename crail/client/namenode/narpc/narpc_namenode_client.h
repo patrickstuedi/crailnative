@@ -36,19 +36,16 @@
 #include "crail/client/namenode/namenode_client.h"
 #include "crail/client/namenode/remove_response.h"
 #include "crail/client/namenode/void_response.h"
-#include "crail/client/narpc/rpc_client.h"
+#include "narpc/rpc_client.h"
 
-class NarpcNamenodeClient : public RpcClient, public NamenodeClient {
+class NarpcNamenodeClient : public NamenodeClient {
 public:
   static const bool kNodelay = true;
 
-  NarpcNamenodeClient();
+  NarpcNamenodeClient(int address, int port);
   ~NarpcNamenodeClient();
 
-  int Connect(int address, int port) {
-    return RpcClient::Connect(address, port);
-  }
-  int Close() { return RpcClient::Close(); }
+  int Close() { return rpc_client_.Close(); }
 
   Future<CreateResponse> Create(Filename &name, int type, int storage_class,
                                 int location_class, int enumerable);
@@ -58,6 +55,9 @@ public:
   Future<VoidResponse> SetFile(FileInfo &file_info, bool close);
   Future<RemoveResponse> Remove(Filename &name, bool recursive);
   Future<IoctlResponse> Ioctl(unsigned char op, Filename &name);
+
+private:
+  RpcClient rpc_client_;
 };
 
 #endif /* NARPC_NAMENODE_CLIENT_H */
