@@ -39,7 +39,8 @@
 #include "narpc/network_utils.h"
 
 NetworkStream::NetworkStream(int address, int port, bool nodelay)
-    : isConnected(false), address_(address), port_(port), nodelay_(nodelay) {
+    : isConnected(false), address_(address), port_(port), nodelay_(nodelay),
+      vec_count_(0) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
 }
 
@@ -74,24 +75,15 @@ int NetworkStream::Connect() {
   return 0;
 }
 
-int NetworkStream::SendBytes(unsigned char *buf, int size) {
-  int res = send(socket_, buf, (size_t)size, (int)0);
-  if (res < 0) {
-    return res;
-  }
-  int remaining = size - res;
-  while (remaining > 0) {
-    int offset = size - remaining;
-    res = send(socket_, buf + offset, (size_t)remaining, (int)0);
-    if (res < 0) {
-      return res;
-    }
-    remaining -= res;
-  }
-  return remaining;
+int NetworkStream::Write(unsigned char *buf, int size) {
+  iov[vec_count_].iov_base = buf;
+  iov[vec_count_].iov_len = size;
+  vec_count_++;
+
+  return 0;
 }
 
-int NetworkStream::RecvBytes(unsigned char *buf, int size) {
+int NetworkStream::Read(unsigned char *buf, int size) {
   int sum = 0;
   while (sum < size) {
     int res = recv(socket_, buf + sum, (size_t)(size - sum), MSG_DONTWAIT);
@@ -108,6 +100,11 @@ int NetworkStream::RecvBytes(unsigned char *buf, int size) {
   }
 
   return sum != size ? -1 : 0;
+}
+
+void NetworkStream::Flush() {
+  writev(socket_, iov, vec_count_);
+  vec_count_ = 0;
 }
 
 void NetworkStream::Close() {}

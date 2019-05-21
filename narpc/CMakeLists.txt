@@ -3,7 +3,6 @@ add_library (narpc SHARED
 	rpc_client.cc
 	network_stream.cc
 	network_utils.cc
-	rpc_message.cc
 	)
 
 install(TARGETS narpc DESTINATION /lib)

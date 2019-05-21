@@ -46,98 +46,40 @@ RpcClient::~RpcClient() { Close(); }
 
 int RpcClient::Close() { stream_.Close(); }
 
-int RpcClient::IssueRequest(RpcMessage &request, RpcMessage &response) {
+int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
+                            shared_ptr<RpcMessage> response) {
   unsigned long long ticket = counter_++ % RpcClient::kMaxTicket;
   if (ticket == 0) {
     ticket++;
   }
   responseMap_[ticket] = response;
-  buf_.Clear();
 
-  // narpc header (size, ticket)
-  shared_ptr<Serializable> header = request.Header();
-  AddNaRPCHeader(buf_, header->Size(), ticket);
-  // create file request
-  header->Write(buf_);
+  // write narpc header (size, ticket)
+  int *_tmpint = (int *)header_;
+  *_tmpint = htonl(request->Size());
+  _tmpint++;
+  long long *_tmplong = (long long *)_tmpint;
+  *_tmplong = htobe64(ticket);
 
-  // issue request
-  buf_.Flip();
-  // int _metadata = buf_.remaining();
-  if (SendBytes(buf_.get_bytes(), buf_.remaining()) < 0) {
-    cout << "Error when sending rpc message " << endl;
-    return -1;
-  }
-
-  shared_ptr<ByteBuffer> payload = request.Payload();
-  // int _data = 0;
-  if (payload) {
-    //_data = payload->remaining();
-    if (SendBytes(payload->get_bytes(), payload->remaining()) < 0) {
-      cout << "Error when sending RPC payload" << endl;
-      return -1;
-    }
-    payload->set_position(payload->position() + payload->remaining());
-  }
-
-  // int _total = _metadata + _data;
-  // cout << "transmitting message, port " << port_ << ", size " << _total <<
-  // endl;
+  // write actual rpc message
+  request->Write(stream_);
+  stream_.Flush();
 
   return 0;
 }
 
 int RpcClient::PollResponse() {
-  // recv resp header
-  buf_.Clear();
-  if (RecvBytes(buf_.get_bytes(), kNarpcHeader) < 0) {
-    cout << "Error receiving rpc header" << endl;
-    return -1;
-  }
-  int size = buf_.GetInt();
-  long long ticket = buf_.GetLong();
+  // recv narpc header
+  stream_.Read(header_, kNarpcHeader);
+  int *_tmpint = (int *)header_;
+  int size = ntohl(*_tmpint);
+  _tmpint++;
+  long long *_tmplong = (long long *)_tmpint;
+  long long ticket = be64toh(*_tmplong);
 
-  RpcMessage &response = responseMap_[ticket];
-  // responseMap_[ticket] = nullptr;
-
-  shared_ptr<ByteBuffer> payload = response.Payload();
-  int payload_size = 0;
-  if (payload) {
-    payload_size = payload->remaining();
-  }
-
-  // recv resp obj
-  buf_.Clear();
-  int header_size = size - payload_size;
-  if (RecvBytes(buf_.get_bytes(), header_size) < 0) {
-    cout << "Error receiving rpc message" << endl;
-    return -1;
-  }
-
-  shared_ptr<Serializable> header = response.Header();
-  header->Update(buf_);
-
-  if (payload) {
-    if (RecvBytes(payload->get_bytes(), payload->remaining()) < 0) {
-      cout << "Error receiving rpc payload" << endl;
-      return -1;
-    }
-    payload->set_position(payload->position() + payload->remaining());
-  }
-
-  // int _total = kNarpcHeader + size;
-  // cout << "receiving message, port " << port_ << ", size " << _total << endl;
+  // recv message
+  shared_ptr<RpcMessage> response = responseMap_[ticket];
+  response->Update(stream_);
 
   return 0;
-}
-
-void RpcClient::AddNaRPCHeader(ByteBuffer &buf, int size,
-                               unsigned long long ticket) {
-  buf.PutInt(size);
-  buf.PutLong(ticket);
-}
-
-long long RpcClient::RemoveNaRPCHeader(ByteBuffer &buf) {
-  buf.GetInt();
-  long long ticket = buf.GetLong();
-  return ticket;
 }

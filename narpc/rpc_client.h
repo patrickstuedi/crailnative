@@ -50,18 +50,16 @@ public:
   static const int kRpcHeader = 4;
   static const int kMaxTicket = 8;
 
-  int IssueRequest(RpcMessage &request, RpcMessage &response);
+  int IssueRequest(shared_ptr<RpcMessage> request,
+                   shared_ptr<RpcMessage> response);
   int PollResponse();
   int Close();
 
 private:
-  void AddNaRPCHeader(ByteBuffer &buf, int size, unsigned long long ticket);
-  long long RemoveNaRPCHeader(ByteBuffer &buf);
-
   NetworkStream stream_;
   atomic<unsigned long long> counter_;
-  RpcMessage responseMap_[kMaxTicket];
-  ByteBuffer buf_;
+  shared_ptr<RpcMessage> responseMap_[kMaxTicket];
+  unsigned char header_[12];
 };
 
 #endif /* RPC_CLIENT_H */

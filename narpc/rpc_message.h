@@ -32,11 +32,9 @@ using namespace std;
 
 class RpcMessage {
 public:
-  RpcMessage() = default;
-  virtual ~RpcMessage();
-
-  void Update(NetworkStream &stream);
-  void Write(NetworkStream &stream);
+  virtual int Size() = 0;
+  virtual void Update(NetworkStream &stream) = 0;
+  virtual void Write(NetworkStream &stream) = 0;
 };
 
 #endif /* RPC_MESSAGE_H */

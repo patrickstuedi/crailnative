@@ -24,6 +24,12 @@
 #ifndef NETWORK_STREAM_H
 #define NETWORK_STREAM_H
 
+#include <fcntl.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+
 class NetworkStream {
 public:
   NetworkStream(int address, int port, bool nodelay);
@@ -32,8 +38,9 @@ public:
   int Connect();
   void Close();
 
-  int SendBytes(unsigned char *buf, int size);
-  int RecvBytes(unsigned char *buf, int size);
+  int Write(unsigned char *buf, int size);
+  void Flush();
+  int Read(unsigned char *buf, int size);
 
 private:
   int socket_;
@@ -41,6 +48,9 @@ private:
   bool nodelay_;
   int address_;
   int port_;
+
+  struct iovec iov[3];
+  int vec_count_;
 };
 
 #endif /* NETWORK_STREAM_H */
