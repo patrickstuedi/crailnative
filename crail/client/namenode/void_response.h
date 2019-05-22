@@ -32,8 +32,8 @@ public:
   virtual ~VoidResponse();
 
   int Size() const { return NamenodeResponse::Size() + sizeof(error_); }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
 private:
   short error_;

@@ -26,7 +26,6 @@
 
 #include "crail/client/common/crail_constants.h"
 #include "crail/client/storage/narpc/narpc_storage_client.h"
-#include "crail/client/storage/reflex/reflex_storage_client.h"
 
 using namespace crail;
 
@@ -41,34 +40,37 @@ void StorageCache::Close() {
   }
 }
 
+/*
 int StorageCache::Put(long long position, shared_ptr<StorageClient> client) {
   long long key = ComputeKey(position);
   cache_.insert({key, client});
   return 0;
 }
+*/
 
-shared_ptr<StorageClient> StorageCache::Get(long long position,
-                                            int storage_class) {
-  long long key = ComputeKey(position);
+shared_ptr<StorageClient> StorageCache::Get(DatanodeInfo dn_info) {
+  long long key = dn_info.Key();
   auto iter = cache_.find(key);
   if (iter != cache_.end()) {
     return iter->second;
   } else {
-    shared_ptr<StorageClient> client = CreateClient(storage_class);
-    Put(key, client);
+    shared_ptr<StorageClient> client = CreateClient(dn_info);
+    cache_.insert({key, client});
     return client;
   }
 }
 
-shared_ptr<StorageClient> StorageCache::CreateClient(int storage_class) {
-  if (storage_class == 0) {
-    return make_shared<NarpcStorageClient>();
+shared_ptr<StorageClient> StorageCache::CreateClient(DatanodeInfo dn_info) {
+  if (dn_info.storage_class() == 0) {
+    return make_shared<NarpcStorageClient>(dn_info.addr(), dn_info.port());
   } else {
-    return make_shared<ReflexStorageClient>();
+    return make_shared<NarpcStorageClient>(dn_info.addr(), dn_info.port());
   }
 }
 
+/*
 long long StorageCache::ComputeKey(long long position) {
   long long count = position / kBlockSize;
   return count * kBlockSize;
 }
+*/

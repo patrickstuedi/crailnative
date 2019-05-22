@@ -29,10 +29,10 @@
 
 #include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
-#include "crail/client/narpc/rpc_client.h"
 #include "crail/client/storage/narpc/narpc_storage_request.h"
+#include "narpc/rpc_client.h"
 
-class NarpcReadRequest : public NarpcStorageRequest, public Serializable {
+class NarpcReadRequest : public NarpcStorageRequest {
 public:
   NarpcReadRequest(int key, long long address, int length);
   virtual ~NarpcReadRequest();
@@ -41,8 +41,8 @@ public:
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +
            sizeof(int);
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
 private:
   int key_;

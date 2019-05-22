@@ -41,6 +41,8 @@ add_library (crail SHARED
 	client/utils/crail_networking.cc
 	)
 
+target_link_libraries (crail LINK_PUBLIC narpc)
+
 install(TARGETS crail DESTINATION /lib)
 install (FILES 
 	client/crail_store.h

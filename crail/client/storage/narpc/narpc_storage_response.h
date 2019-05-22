@@ -26,16 +26,17 @@
 
 #include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
+#include "narpc/rpc_message.h"
 
 using namespace crail;
 
-class NarpcStorageResponse : public Serializable {
+class NarpcStorageResponse : public RpcMessage {
 public:
   NarpcStorageResponse(int error, int type);
   virtual ~NarpcStorageResponse();
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
   int Size() const { return sizeof(int) * 2; }
 
   int error() const { return error_; }

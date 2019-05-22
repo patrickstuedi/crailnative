@@ -38,7 +38,8 @@
 class NamenodeClient {
 public:
   // Control ops
-  virtual int Close() = 0;
+  virtual int Connect() = 0;
+  virtual void Close() = 0;
 
   // RPC calls
   virtual Future<CreateResponse> Create(Filename &name, int type,

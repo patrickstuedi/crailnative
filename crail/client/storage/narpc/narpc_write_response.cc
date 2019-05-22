@@ -28,18 +28,22 @@ NarpcWriteResponse::NarpcWriteResponse(RpcClient *client)
 
 NarpcWriteResponse::~NarpcWriteResponse() {}
 
-int NarpcWriteResponse::Write(ByteBuffer &buf) const {
-  NarpcStorageResponse::Write(buf);
+int NarpcWriteResponse::Write(NetworkStream &stream) const {
+  NarpcStorageResponse::Write(stream);
 
-  buf.PutInt(ret_);
+  /*
+buf.PutInt(ret_);
+  */
 
   return 0;
 }
 
-int NarpcWriteResponse::Update(ByteBuffer &buf) {
-  NarpcStorageResponse::Update(buf);
+int NarpcWriteResponse::Update(NetworkStream &stream) {
+  NarpcStorageResponse::Update(stream);
 
-  ret_ = buf.GetInt();
+  /*
+    ret_ = buf.GetInt();
+  */
 
   return 0;
 }

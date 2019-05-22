@@ -28,8 +28,8 @@
 
 #include "crail/client//storage/narpc/narpc_storage_response.h"
 #include "crail/client/common/future.h"
-#include "crail/client/narpc/rpc_client.h"
-#include "crail/client/narpc/rpc_message.h"
+#include "narpc/rpc_client.h"
+#include "narpc/rpc_message.h"
 
 using namespace std;
 
@@ -39,8 +39,8 @@ public:
   virtual ~NarpcReadResponse();
 
   int Size() const { return length_; }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   int get();
 

@@ -29,12 +29,12 @@
 
 #include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
-#include "crail/client/narpc/rpc_client.h"
 #include "crail/client/storage/narpc/narpc_storage_request.h"
+#include "narpc/rpc_client.h"
 
 using namespace std;
 
-class NarpcWriteRequest : public NarpcStorageRequest, public Serializable {
+class NarpcWriteRequest : public NarpcStorageRequest {
 public:
   NarpcWriteRequest(int key, long long address, int length);
   virtual ~NarpcWriteRequest();
@@ -43,8 +43,8 @@ public:
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +
            sizeof(int) * 2 + length_;
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
 private:
   int key_;

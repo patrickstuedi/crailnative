@@ -25,7 +25,10 @@
 #define STORAGE_CACHE_H
 
 #include "crail/client/storage/storage_client.h"
+
 #include <unordered_map>
+
+#include "crail/client/metadata/datanode_info.h"
 
 using namespace std;
 using namespace crail;
@@ -35,13 +38,13 @@ public:
   StorageCache();
   virtual ~StorageCache();
 
-  shared_ptr<StorageClient> Get(long long key, int storage_class);
+  shared_ptr<StorageClient> Get(DatanodeInfo dn_info);
   void Close();
 
 private:
-  int Put(long long key, shared_ptr<StorageClient> endpoint);
-  shared_ptr<StorageClient> CreateClient(int storage_class);
-  long long ComputeKey(long long position);
+  // int Put(DatanodeInfo &dn_info, shared_ptr<StorageClient> endpoint);
+  shared_ptr<StorageClient> CreateClient(DatanodeInfo dn_info);
+  // long long ComputeKey(long long position);
 
   unordered_map<long long, shared_ptr<StorageClient>> cache_;
 };

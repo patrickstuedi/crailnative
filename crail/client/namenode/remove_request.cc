@@ -32,7 +32,7 @@ RemoveRequest::RemoveRequest(Filename &name, bool recursive)
 }
 RemoveRequest::~RemoveRequest() {}
 
-int RemoveRequest::Write(Networkstream &stream) const {
+int RemoveRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 
   /*
@@ -44,7 +44,7 @@ buf.PutInt(recursive);
   return Size();
 }
 
-int RemoveRequest::Update(Networkstream &stream) {
+int RemoveRequest::Update(NetworkStream &stream) {
   NamenodeRequest::Update(stream);
 
   /*

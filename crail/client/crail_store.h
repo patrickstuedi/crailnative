@@ -41,6 +41,8 @@ public:
   CrailStore(string address, int port);
   virtual ~CrailStore();
 
+  void Initialize() { namenode_client_->Connect(); }
+
   template <class T>
   Future<T> Create(string &name, int storage_class, int location_class,
                    bool enumerable) {

@@ -81,12 +81,8 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   int address = block_info.datanode().addr();
   int port = block_info.datanode().port();
 
-  shared_ptr<StorageClient> storage_client = storage_cache_->Get(
-      block_info.datanode().Key(), block_info.datanode().storage_class());
-  if (storage_client->Connect(address, port) < 0) {
-    return Future<int>::Failure(-1);
-  }
-
+  shared_ptr<StorageClient> storage_client =
+      storage_cache_->Get(block_info.datanode());
   long long block_addr = block_info.addr() + block_offset;
   Future<int> storage_response =
       storage_client->ReadData(block_info.lkey(), block_addr, buf);

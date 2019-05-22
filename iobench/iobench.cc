@@ -116,7 +116,9 @@ void usage() {
        << endl;
 }
 
-Iobench::Iobench(string address, int port) { crail_.Initialize(address, port); }
+Iobench::Iobench(string address, int port) : crail_(address, port) {
+  crail_.Initialize();
+}
 
 Iobench::~Iobench() {}
 

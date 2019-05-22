@@ -45,7 +45,8 @@ public:
   NarpcNamenodeClient(int address, int port);
   ~NarpcNamenodeClient();
 
-  int Close() { return rpc_client_.Close(); }
+  int Connect() { return rpc_client_.Connect(); }
+  void Close() { rpc_client_.Close(); }
 
   Future<CreateResponse> Create(Filename &name, int type, int storage_class,
                                 int location_class, int enumerable);

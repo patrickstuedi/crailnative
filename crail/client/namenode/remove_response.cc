@@ -29,7 +29,7 @@ RemoveResponse::RemoveResponse()
 
 RemoveResponse::~RemoveResponse() {}
 
-int RemoveResponse::Write(Networkstream &stream) const {
+int RemoveResponse::Write(NetworkStream &stream) const {
   NamenodeResponse::Write(stream);
 
   /*
@@ -40,7 +40,7 @@ parent_info_->Write(buf);
   return 0;
 }
 
-int RemoveResponse::Update(Networkstream &stream) {
+int RemoveResponse::Update(NetworkStream &stream) {
   NamenodeResponse::Update(stream);
 
   /*

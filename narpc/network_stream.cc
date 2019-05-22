@@ -75,6 +75,14 @@ int NetworkStream::Connect() {
   return 0;
 }
 
+void NetworkStream::Close() {
+  if (!isConnected) {
+    return;
+  }
+  isConnected = false;
+  ::close(socket_);
+}
+
 int NetworkStream::Write(unsigned char *buf, int size) {
   iov[vec_count_].iov_base = buf;
   iov[vec_count_].iov_len = size;
@@ -106,5 +114,3 @@ void NetworkStream::Flush() {
   writev(socket_, iov, vec_count_);
   vec_count_ = 0;
 }
-
-void NetworkStream::Close() {}

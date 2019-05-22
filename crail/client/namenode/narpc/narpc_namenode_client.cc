@@ -59,7 +59,7 @@ Future<CreateResponse> NarpcNamenodeClient::Create(Filename &name, int type,
   shared_ptr<CreateRequest> request = make_shared<CreateRequest>(
       name, type, storage_class, location_class, enumerable);
   shared_ptr<NarpcCreateResponse> response =
-      make_shared<NarpcCreateResponse>(this);
+      make_shared<NarpcCreateResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<CreateResponse>::Failure();
@@ -70,7 +70,7 @@ Future<CreateResponse> NarpcNamenodeClient::Create(Filename &name, int type,
 Future<LookupResponse> NarpcNamenodeClient::Lookup(Filename &name) {
   shared_ptr<LookupRequest> request = make_shared<LookupRequest>(name);
   shared_ptr<NarpcLookupResponse> response =
-      make_shared<NarpcLookupResponse>(this);
+      make_shared<NarpcLookupResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<LookupResponse>::Failure();
@@ -85,7 +85,7 @@ Future<GetblockResponse> NarpcNamenodeClient::GetBlock(long long fd,
   shared_ptr<GetblockRequest> request =
       make_shared<GetblockRequest>(fd, token, position, capacity);
   shared_ptr<NarpcGetBlockResponse> response =
-      make_shared<NarpcGetBlockResponse>(this);
+      make_shared<NarpcGetBlockResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<GetblockResponse>::Failure();
@@ -97,7 +97,8 @@ Future<VoidResponse> NarpcNamenodeClient::SetFile(FileInfo &file_info,
                                                   bool close) {
   shared_ptr<SetfileRequest> request =
       make_shared<SetfileRequest>(file_info, close);
-  shared_ptr<NarpcVoidResponse> request = make_shared<NarpcVoidResponse>(this);
+  shared_ptr<NarpcVoidResponse> response =
+      make_shared<NarpcVoidResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<VoidResponse>::Failure();
@@ -110,19 +111,19 @@ Future<RemoveResponse> NarpcNamenodeClient::Remove(Filename &name,
   shared_ptr<RemoveRequest> request =
       make_shared<RemoveRequest>(name, recursive);
   shared_ptr<NarpcRemoveResponse> response =
-      make_shared<NarpcRemoveResponse>(this);
+      make_shared<NarpcRemoveResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<RemoveResponse>::Failure();
   }
-  return Future<RemoveResponse>(response;
+  return Future<RemoveResponse>(response);
 }
 
 Future<IoctlResponse> NarpcNamenodeClient::Ioctl(unsigned char op,
                                                  Filename &name) {
   shared_ptr<IoctlRequest> request = make_shared<IoctlRequest>(op, name);
   shared_ptr<NarpcIoctlResponse> response =
-      make_shared<NarpcIoctlResponse>(this);
+      make_shared<NarpcIoctlResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<IoctlResponse>::Failure();

@@ -27,16 +27,20 @@ VoidResponse::VoidResponse() : NamenodeResponse(), error_(-1) {}
 
 VoidResponse::~VoidResponse() {}
 
-int VoidResponse::Write(ByteBuffer &buf) const {
-  NamenodeResponse::Write(buf);
+int VoidResponse::Write(NetworkStream &stream) const {
+  NamenodeResponse::Write(stream);
 
-  buf.PutInt(error_);
+  /*
+buf.PutInt(error_);
+  */
   return 0;
 }
 
-int VoidResponse::Update(ByteBuffer &buf) {
-  NamenodeResponse::Update(buf);
+int VoidResponse::Update(NetworkStream &stream) {
+  NamenodeResponse::Update(stream);
 
-  error_ = buf.GetInt();
+  /*
+error_ = buf.GetInt();
+  */
   return 0;
 }

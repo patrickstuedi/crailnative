@@ -53,7 +53,7 @@ public:
   NamenodeRequest(short cmd, short type);
   virtual ~NamenodeRequest();
 
-  int Write(NetwworkStream &stream) const;
+  int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
 

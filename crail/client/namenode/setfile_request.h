@@ -41,8 +41,8 @@ public:
   int Size() const {
     return NamenodeRequest::Size() + file_info_.Size() + sizeof(int);
   }
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   const FileInfo file_info() const { return file_info_; }
 

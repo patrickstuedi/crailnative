@@ -36,8 +36,8 @@ public:
   int Size() const {
     return NamenodeResponse::Size() + sizeof(op_) + sizeof(long long);
   }
-  int Write(Networkstream &stream) const;
-  int Update(Networkstream &stream);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   long long count() const { return count_; }
 

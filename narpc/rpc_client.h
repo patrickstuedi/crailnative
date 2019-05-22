@@ -46,20 +46,24 @@ public:
   RpcClient(int address, int port, bool nodelay);
   virtual ~RpcClient();
 
-  static const int kNarpcHeader = 12;
-  static const int kRpcHeader = 4;
-  static const int kMaxTicket = 8;
+  int Connect();
+  void Close();
 
   int IssueRequest(shared_ptr<RpcMessage> request,
                    shared_ptr<RpcMessage> response);
   int PollResponse();
-  int Close();
 
 private:
+  static const int kNarpcHeader = 12;
+  static const int kRpcHeader = 4;
+  static const int kMaxTicket = 8;
+
   NetworkStream stream_;
   atomic<unsigned long long> counter_;
   shared_ptr<RpcMessage> responseMap_[kMaxTicket];
   unsigned char header_[12];
+  int address_;
+  int port_;
 };
 
 #endif /* RPC_CLIENT_H */

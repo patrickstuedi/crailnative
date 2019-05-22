@@ -32,13 +32,15 @@ public:
   NarpcStorageClient(int address, int port);
   virtual ~NarpcStorageClient();
 
-  static const bool kNodelay = true;
+  int Connect() { return rpc_client_.Connect(); }
+  void Close() { rpc_client_.Close(); }
 
-  int Close() { return rpc_client_.Close(); }
   Future<int> WriteData(int key, long long address, shared_ptr<ByteBuffer> buf);
   Future<int> ReadData(int key, long long address, shared_ptr<ByteBuffer> buf);
 
 private:
+  static const bool kNodelay = true;
+
   RpcClient rpc_client_;
 };
 

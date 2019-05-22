@@ -32,24 +32,28 @@ NarpcWriteRequest::NarpcWriteRequest(int key, long long address, int length)
 
 NarpcWriteRequest::~NarpcWriteRequest() {}
 
-int NarpcWriteRequest::Write(ByteBuffer &buf) const {
-  NarpcStorageRequest::Write(buf);
+int NarpcWriteRequest::Write(NetworkStream &stream) const {
+  NarpcStorageRequest::Write(stream);
 
-  buf.PutInt(key_);
-  buf.PutLong(address_);
-  buf.PutInt(length_);
-  buf.PutInt(length_);
+  /*
+buf.PutInt(key_);
+buf.PutLong(address_);
+buf.PutInt(length_);
+buf.PutInt(length_);
+  */
 
   return 0;
 }
 
-int NarpcWriteRequest::Update(ByteBuffer &buf) {
-  NarpcStorageRequest::Update(buf);
+int NarpcWriteRequest::Update(NetworkStream &stream) {
+  NarpcStorageRequest::Update(stream);
 
-  key_ = buf.GetInt();
-  address_ = buf.GetLong();
-  length_ = buf.GetInt();
-  length_ = buf.GetInt();
+  /*
+    key_ = buf.GetInt();
+    address_ = buf.GetLong();
+    length_ = buf.GetInt();
+    length_ = buf.GetInt();
+  */
 
   return 0;
 }

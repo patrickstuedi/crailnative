@@ -31,7 +31,7 @@ GetblockRequest::GetblockRequest(long long fd, long long token,
 
 GetblockRequest::~GetblockRequest() {}
 
-int GetblockRequest::Write(Networkstream &stream) const {
+int GetblockRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 
   /*
@@ -44,7 +44,7 @@ buf.PutLong(capacity_);
   return Size();
 }
 
-int GetblockRequest::Update(Networkstream &stream) {
+int GetblockRequest::Update(NetworkStream &stream) {
   NamenodeRequest::Update(stream);
 
   /*

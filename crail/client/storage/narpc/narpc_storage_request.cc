@@ -27,14 +27,18 @@ NarpcStorageRequest::NarpcStorageRequest(int type) : type_(type) {}
 
 NarpcStorageRequest::~NarpcStorageRequest() {}
 
-int NarpcStorageRequest::Write(ByteBuffer &buf) const {
-  buf.PutInt(type_);
+int NarpcStorageRequest::Write(NetworkStream &stream) const {
+  /*
+buf.PutInt(type_);
+  */
 
   return Size();
 }
 
-int NarpcStorageRequest::Update(ByteBuffer &buf) {
-  this->type_ = buf.GetInt();
+int NarpcStorageRequest::Update(NetworkStream &stream) {
+  /*
+this->type_ = buf.GetInt();
+  */
 
   return Size();
 }

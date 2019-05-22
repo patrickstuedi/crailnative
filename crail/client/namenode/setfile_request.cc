@@ -32,21 +32,25 @@ SetfileRequest::SetfileRequest(FileInfo file_info, bool close)
 
 SetfileRequest::~SetfileRequest() {}
 
-int SetfileRequest::Write(ByteBuffer &buf) const {
-  NamenodeRequest::Write(buf);
+int SetfileRequest::Write(NetworkStream &stream) const {
+  NamenodeRequest::Write(stream);
 
-  file_info_.Write(buf);
-  int _close = close_ ? 1 : 0;
-  buf.PutInt(_close);
+  /*
+file_info_.Write(buf);
+int _close = close_ ? 1 : 0;
+buf.PutInt(_close);
+  */
 
   return Size();
 }
 
-int SetfileRequest::Update(ByteBuffer &buf) {
-  NamenodeRequest::Update(buf);
+int SetfileRequest::Update(NetworkStream &stream) {
+  NamenodeRequest::Update(stream);
 
-  file_info_.Update(buf);
-  buf.GetInt();
+  /*
+file_info_.Update(buf);
+buf.GetInt();
+  */
 
   return Size();
 }

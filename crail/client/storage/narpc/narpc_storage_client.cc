@@ -37,14 +37,14 @@ using namespace std;
 NarpcStorageClient::NarpcStorageClient(int address, int port)
     : rpc_client_(address, port, NarpcStorageClient::kNodelay) {}
 
-NarpcStorageClient::~NarpcStorageClient() {}
+NarpcStorageClient::~NarpcStorageClient() { rpc_client_.Close(); }
 
 Future<int> NarpcStorageClient::WriteData(int key, long long address,
                                           shared_ptr<ByteBuffer> buf) {
   shared_ptr<NarpcWriteRequest> request =
       make_shared<NarpcWriteRequest>(key, address, buf->remaining());
   shared_ptr<NarpcWriteResponse> response =
-      make_shared<NarpcWriteResponse>(this);
+      make_shared<NarpcWriteResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<int>::Failure(-1);
@@ -56,7 +56,8 @@ Future<int> NarpcStorageClient::ReadData(int key, long long address,
                                          shared_ptr<ByteBuffer> buf) {
   shared_ptr<NarpcReadRequest> request =
       make_shared<NarpcReadRequest>(key, address, buf->remaining());
-  shared_ptr<NarpcReadResponse> response = make_shared<NarpcReadResponse>(this);
+  shared_ptr<NarpcReadResponse> response =
+      make_shared<NarpcReadResponse>(&rpc_client_);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<int>::Failure(-1);

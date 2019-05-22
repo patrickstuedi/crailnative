@@ -25,7 +25,8 @@
 #define NARPC_STORAGE_REQUEST_H
 
 #include "crail/client/common/byte_buffer.h"
-#include "crail/client/narpc/rpc_message.h"
+#include "narpc/network_stream.h"
+#include "narpc/rpc_message.h"
 
 using namespace crail;
 
@@ -36,8 +37,8 @@ public:
   NarpcStorageRequest(int type);
   virtual ~NarpcStorageRequest();
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
   int Size() const { return sizeof(int); }
 
 private:
