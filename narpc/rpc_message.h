@@ -33,7 +33,7 @@ using namespace std;
 class RpcMessage {
 public:
   virtual int Size() const = 0;
-  virtual int Update(NetworkStream &stream);
+  virtual int Update(NetworkStream &stream) = 0;
   virtual int Write(NetworkStream &stream) const = 0;
 };
 

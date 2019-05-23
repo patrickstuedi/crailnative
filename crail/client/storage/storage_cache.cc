@@ -55,6 +55,7 @@ shared_ptr<StorageClient> StorageCache::Get(DatanodeInfo dn_info) {
     return iter->second;
   } else {
     shared_ptr<StorageClient> client = CreateClient(dn_info);
+    client->Connect();
     cache_.insert({key, client});
     return client;
   }
