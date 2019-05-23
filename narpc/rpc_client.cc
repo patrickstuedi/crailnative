@@ -56,6 +56,9 @@ int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
   }
   responseMap_[ticket] = response;
 
+  cout << "RpcClient::IssueRequest, message " << request->Name() << ", size "
+       << request->Size() << endl;
+
   // write narpc header (size, ticket)
   int *_tmpint = (int *)header_;
   *_tmpint = htonl(request->Size());

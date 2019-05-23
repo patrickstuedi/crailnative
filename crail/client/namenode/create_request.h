@@ -42,6 +42,7 @@ public:
                 int enumerable);
   virtual ~CreateRequest();
 
+  virtual string Name() const { return "CreateRequest"; }
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + 4 * sizeof(int);
   }

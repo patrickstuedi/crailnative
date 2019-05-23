@@ -34,6 +34,7 @@ public:
   NamenodeResponse();
   virtual ~NamenodeResponse();
 
+  string Name() const { return "NamenodeResponse"; }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
