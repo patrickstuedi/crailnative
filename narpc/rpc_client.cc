@@ -65,6 +65,7 @@ int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
   _tmpint++;
   long long *_tmplong = (long long *)_tmpint;
   *_tmplong = htobe64(ticket);
+  stream_.Write(header_, kNarpcHeader);
 
   // write actual rpc message
   request->Write(stream_);

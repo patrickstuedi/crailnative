@@ -61,6 +61,7 @@ public:
 private:
   short cmd_;
   short type_;
+  ByteBuffer buffer_;
 };
 
 #endif /* NAMENODE_REQUEST_H */

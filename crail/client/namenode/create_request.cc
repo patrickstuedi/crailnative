@@ -28,8 +28,15 @@ CreateRequest::CreateRequest(Filename &name, int type, int storage_class,
     : NamenodeRequest(static_cast<short>(RpcCommand::Create),
                       static_cast<short>(RequestType::Create)),
       filename_(name), type_(type), storage_class_(storage_class),
-      location_class_(location_class), enumerable_(enumerable) {
+      location_class_(location_class), enumerable_(enumerable),
+      buffer_(filename_.Size() + 4 * sizeof(int)) {
   this->filename_ = std::move(name);
+  filename_.Write(buffer_);
+  buffer_.PutInt(type_);
+  buffer_.PutInt(storage_class_);
+  buffer_.PutInt(location_class_);
+  buffer_.PutInt(enumerable_);
+  buffer_.Clear();
 }
 
 CreateRequest::~CreateRequest() {}
@@ -37,13 +44,7 @@ CreateRequest::~CreateRequest() {}
 int CreateRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 
-  /*
-filename_.Write(buf);
-buf.PutInt(type_);
-buf.PutInt(storage_class_);
-buf.PutInt(location_class_);
-buf.PutInt(enumerable_);
-  */
+  stream.Write(buffer_.get_bytes(), buffer_.size());
 
   return Size();
 }
