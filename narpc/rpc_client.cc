@@ -77,14 +77,19 @@ int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
 int RpcClient::PollResponse() {
   // recv narpc header
   stream_.Read(header_, kNarpcHeader);
+  stream_.Sync();
   int *_tmpint = (int *)header_;
   int size = ntohl(*_tmpint);
   _tmpint++;
   long long *_tmplong = (long long *)_tmpint;
   long long ticket = be64toh(*_tmplong);
 
+  cout << "receiving message, ticket " << ticket << ", size " << size << endl;
+
   // recv message
   shared_ptr<RpcMessage> response = responseMap_[ticket];
+
+  cout << "response message " << response->Name() << endl;
   response->Update(stream_);
 
   return 0;

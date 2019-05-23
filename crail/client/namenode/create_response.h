@@ -40,6 +40,7 @@ public:
   CreateResponse();
   virtual ~CreateResponse();
 
+  virtual string Name() const { return "CreateResponse"; }
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() * 2 +
            file_block_->Size() * 2;
@@ -57,6 +58,7 @@ private:
   FileInfo parent_info_;
   shared_ptr<BlockInfo> file_block_;
   shared_ptr<BlockInfo> parent_block_;
+  ByteBuffer buffer_;
 };
 
 #endif /* CREATE_RESPONSE_H */

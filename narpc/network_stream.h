@@ -41,6 +41,7 @@ public:
   int Write(unsigned char *buf, int size);
   void Flush();
   int Read(unsigned char *buf, int size);
+  void Sync();
 
 private:
   int socket_;

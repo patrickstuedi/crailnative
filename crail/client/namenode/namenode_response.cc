@@ -23,7 +23,8 @@
 
 #include "crail/client/namenode/namenode_response.h"
 
-NamenodeResponse::NamenodeResponse() : type_(-1), error_(-1) {}
+NamenodeResponse::NamenodeResponse()
+    : type_(-1), error_(-1), buffer_(sizeof(short) * 2) {}
 
 NamenodeResponse::~NamenodeResponse() {}
 
@@ -35,10 +36,18 @@ int NamenodeResponse::Write(NetworkStream &stream) const {
 }
 
 int NamenodeResponse::Update(NetworkStream &stream) {
+  stream.Read(buffer_.get_bytes(), buffer_.size());
   // this->type_ = buf.GetShort();
   // this->error_ = buf.GetShort();
 
   return Size();
+}
+
+void NamenodeResponse::Sync() {
+  if (buffer_.remaining() == buffer_.size()) {
+    this->type_ = buffer_.GetShort();
+    this->error_ = buffer_.GetShort();
+  }
 }
 
 // int NamenodeResponse::Get() { return this->rpc_client_->PollResponse(); }

@@ -92,25 +92,21 @@ int NetworkStream::Write(unsigned char *buf, int size) {
 }
 
 int NetworkStream::Read(unsigned char *buf, int size) {
-  int sum = 0;
-  while (sum < size) {
-    int res = recv(socket_, buf + sum, (size_t)(size - sum), MSG_DONTWAIT);
+  iov[vec_count_].iov_base = buf;
+  iov[vec_count_].iov_len = size;
+  vec_count_++;
 
-    if (res < 0) {
-      if (errno == EAGAIN) {
-        continue;
-      }
-      // return res;
-      break;
-    }
+  return 0;
+}
 
-    sum += res;
-  }
-
-  return sum != size ? -1 : 0;
+void NetworkStream::Sync() {
+  cout << "Syncing iovec, count " << vec_count_ << endl;
+  readv(socket_, iov, vec_count_);
+  vec_count_ = 0;
 }
 
 void NetworkStream::Flush() {
+  cout << "Flushing iovec, count " << vec_count_ << endl;
   writev(socket_, iov, vec_count_);
   vec_count_ = 0;
 }

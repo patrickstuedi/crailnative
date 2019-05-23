@@ -39,12 +39,21 @@ public:
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
 
-  int type() const { return type_; }
-  int error() const { return error_; }
+  int type() {
+    Sync();
+    return type_;
+  }
+  int error() {
+    Sync();
+    return error_;
+  }
 
 private:
+  void Sync();
+
   short type_;
   short error_;
+  ByteBuffer buffer_;
 };
 
 #endif /* NAMENODE_RESPONSE_H */
