@@ -25,6 +25,7 @@
 #define CREATE_RESPONSE_H
 
 #include <memory>
+#include <ostream>
 
 #include "crail/client/common/serializable.h"
 #include "crail/client/metadata/block_info.h"
@@ -39,6 +40,11 @@ class CreateResponse : public NamenodeResponse {
 public:
   CreateResponse();
   virtual ~CreateResponse();
+
+  friend ostream &operator<<(ostream &stream, CreateResponse const *message) {
+    stream << "CreateResponse" << endl;
+    return stream;
+  }
 
   virtual string Name() const { return "CreateResponse"; }
   int Size() const {

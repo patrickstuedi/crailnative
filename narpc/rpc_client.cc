@@ -89,7 +89,8 @@ int RpcClient::PollResponse() {
   // recv message
   shared_ptr<RpcMessage> response = responseMap_[ticket];
 
-  cout << "response message " << response->Name() << endl;
+  cout << "response message:: " << response->Name()
+       << ", operator:: " << response.get() << endl;
   response->Update(stream_);
 
   return 0;

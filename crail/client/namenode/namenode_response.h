@@ -24,15 +24,25 @@
 #ifndef NAMENODE_RESPONSE_H
 #define NAMENODE_RESPONSE_H
 
+#include <ostream>
+
 #include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
 #include "narpc/network_stream.h"
 #include "narpc/rpc_message.h"
 
+using namespace std;
+
 class NamenodeResponse : public RpcMessage {
 public:
   NamenodeResponse();
   virtual ~NamenodeResponse();
+
+  friend ostream &operator<<(ostream &stream,
+                             NamenodeResponse const *response) {
+    stream << "NamenodeResponse" << endl;
+    return stream;
+  }
 
   string Name() const { return "NamenodeResponse"; }
   int Write(NetworkStream &stream) const;

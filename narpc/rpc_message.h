@@ -25,6 +25,7 @@
 #define RPC_MESSAGE_H
 
 #include <memory>
+#include <ostream>
 #include <string>
 
 #include "narpc/network_stream.h"
@@ -33,6 +34,11 @@ using namespace std;
 
 class RpcMessage {
 public:
+  friend ostream &operator<<(ostream &stream, RpcMessage const *message) {
+    stream << "RpcMessage" << endl;
+    return stream;
+  }
+
   virtual string Name() const = 0;
   virtual int Size() const = 0;
   virtual int Update(NetworkStream &stream) = 0;
