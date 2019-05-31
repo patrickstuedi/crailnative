@@ -41,22 +41,22 @@ public:
   virtual string ToString() const = 0;
 
   friend ostream &operator<<(ostream &stream, RpcMessage const &message) {
-    stream << message.ToString() << endl;
+    stream << message.ToString();
     return stream;
   }
 
   friend ostream &operator<<(ostream &stream, RpcMessage *message) {
-    stream << message->ToString() << endl;
+    stream << message->ToString();
     return stream;
   }
 
   friend ostream &operator<<(ostream &stream, unique_ptr<RpcMessage> message) {
-    stream << message->ToString() << endl;
+    stream << message->ToString();
     return stream;
   }
 
   friend ostream &operator<<(ostream &stream, shared_ptr<RpcMessage> message) {
-    stream << message->ToString() << endl;
+    stream << message->ToString();
     return stream;
   }
 };

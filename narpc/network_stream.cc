@@ -100,13 +100,13 @@ int NetworkStream::Read(unsigned char *buf, int size) {
 }
 
 void NetworkStream::Sync() {
-  cout << "Syncing iovec, count " << vec_count_ << endl;
+  // cout << "Syncing iovec, count " << vec_count_ << endl;
   readv(socket_, iov, vec_count_);
   vec_count_ = 0;
 }
 
 void NetworkStream::Flush() {
-  cout << "Flushing iovec, count " << vec_count_ << endl;
+  // cout << "Flushing iovec, count " << vec_count_ << endl;
   writev(socket_, iov, vec_count_);
   vec_count_ = 0;
 }
