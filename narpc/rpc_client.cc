@@ -88,8 +88,10 @@ int RpcClient::PollResponse() {
 
   // recv message
   shared_ptr<RpcMessage> response = responseMap_[ticket];
-  cout << "response message:: " << response << endl;
   response->Update(stream_);
+  stream_.Sync();
+  response->Sync();
+  cout << "response message:: " << response << endl;
 
   return 0;
 }

@@ -40,6 +40,7 @@ public:
 
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+  virtual void Sync();
   int Size() const { return sizeof(short) * 2; }
 
   int type() {
@@ -55,8 +56,6 @@ public:
   string ToString() const { return "NamenodeResponse"; }
 
 private:
-  void Sync();
-
   short type_;
   short error_;
   ByteBuffer buffer_;

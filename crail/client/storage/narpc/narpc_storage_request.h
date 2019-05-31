@@ -39,6 +39,7 @@ public:
 
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+  void Sync() {}
   int Size() const { return sizeof(int); }
   string ToString() const { return "NarpcStorageRequest"; }
 

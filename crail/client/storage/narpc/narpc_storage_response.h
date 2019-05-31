@@ -37,6 +37,7 @@ public:
 
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+  void Sync() {}
   int Size() const { return sizeof(int) * 2; }
 
   int error() const { return error_; }

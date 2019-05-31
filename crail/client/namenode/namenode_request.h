@@ -55,6 +55,7 @@ public:
 
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+  virtual void Sync() {}
   int Size() const { return sizeof(short) * 2; }
   virtual string ToString() const { return "NamenodeRequest"; }
 

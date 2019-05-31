@@ -56,3 +56,11 @@ parent_block_->Update(buf);
 
   return 0;
 }
+
+void CreateResponse::Sync() {
+  NamenodeResponse::Sync();
+  file_info_.Update(buffer_);
+  parent_info_.Update(buffer_);
+  file_block_->Update(buffer_);
+  parent_block_->Update(buffer_);
+}

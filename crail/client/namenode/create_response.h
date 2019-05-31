@@ -47,6 +47,7 @@ public:
   }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+  virtual void Sync();
 
   FileInfo file() const { return file_info_; }
   FileInfo parent() const { return parent_info_; }
