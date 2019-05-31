@@ -26,6 +26,7 @@
 
 #include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
+#include "crail/client/utils/crail_networking.h"
 
 using namespace crail;
 
@@ -51,9 +52,7 @@ public:
   int addr() { return ip_address_; }
   bool valid() { return ip_address_ && port_; }
   string ToString() const {
-    return "DatanodeInfo:: " + to_string(storage_type_) + ", " +
-           to_string(storage_class_) + ", " + to_string(ip_address_) + ", " +
-           to_string(port_);
+    return "DatanodeInfo:: " + GetAddress(ip_address_, port_);
   }
 
 private:

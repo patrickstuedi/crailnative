@@ -48,7 +48,9 @@ public:
   unsigned long long token() const { return token_; }
   unsigned long long modification_time() const { return modification_time_; }
   void set_capacity(unsigned long long capacity) { this->capacity_ = capacity; }
-  string ToString() const { return "FileInfo"; }
+  string ToString() const {
+    return "FileInfo:: " + to_string(fd_) + ", " + to_string(capacity_);
+  }
 
 private:
   unsigned long long fd_;
