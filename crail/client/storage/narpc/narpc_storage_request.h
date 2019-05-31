@@ -37,10 +37,10 @@ public:
   NarpcStorageRequest(int type);
   virtual ~NarpcStorageRequest();
 
-  string ToString() const { return "NarpcStorageRequest"; }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(int); }
+  string ToString() const { return "NarpcStorageRequest"; }
 
 private:
   int type_;

@@ -53,10 +53,10 @@ public:
   NamenodeRequest(short cmd, short type);
   virtual ~NamenodeRequest();
 
-  virtual string ToString() const { return "NamenodeRequest"; }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
+  virtual string ToString() const { return "NamenodeRequest"; }
 
 private:
   short cmd_;

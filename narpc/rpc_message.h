@@ -34,10 +34,10 @@ using namespace std;
 
 class RpcMessage {
 public:
-  virtual string ToString() const = 0;
   virtual int Size() const = 0;
   virtual int Update(NetworkStream &stream) = 0;
   virtual int Write(NetworkStream &stream) const = 0;
+  virtual string ToString() const = 0;
 
   friend ostream &operator<<(ostream &stream, RpcMessage const &message) {
     stream << message.ToString() << endl;

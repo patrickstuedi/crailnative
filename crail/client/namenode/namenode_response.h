@@ -38,7 +38,6 @@ public:
   NamenodeResponse();
   virtual ~NamenodeResponse();
 
-  string ToString() const { return "NamenodeResponse"; }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
@@ -52,6 +51,8 @@ public:
     Sync();
     return error_;
   }
+
+  string ToString() const { return "NamenodeResponse"; }
 
 private:
   void Sync();

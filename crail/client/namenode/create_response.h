@@ -41,7 +41,6 @@ public:
   CreateResponse();
   virtual ~CreateResponse();
 
-  virtual string ToString() const { return "CreateResponse"; }
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() * 2 +
            file_block_->Size() * 2;
@@ -53,6 +52,12 @@ public:
   FileInfo parent() const { return parent_info_; }
   shared_ptr<BlockInfo> file_block() const { return file_block_; }
   shared_ptr<BlockInfo> parent_block() const { return parent_block_; }
+
+  virtual string ToString() const {
+    return "CreateResponse:: " + file_info_.ToString() + ", " +
+           parent_info_.ToString() + ", " + file_block_->ToString() + ", " +
+           parent_block_->ToString();
+  }
 
 private:
   FileInfo file_info_;

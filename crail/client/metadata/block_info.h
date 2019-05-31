@@ -49,6 +49,7 @@ public:
   int length() const { return length_; }
   int lkey() const { return lkey_; }
   bool valid() { return datanode_info_.valid(); }
+  string ToString() const { return "BlockInfo:: " + datanode_info_.ToString(); }
 
 private:
   DatanodeInfo datanode_info_;

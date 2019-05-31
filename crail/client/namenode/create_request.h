@@ -42,7 +42,6 @@ public:
                 int enumerable);
   virtual ~CreateRequest();
 
-  virtual string ToString() const { return "CreateRequest"; }
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + 4 * sizeof(int);
   }
@@ -54,6 +53,7 @@ public:
   int storage_class() const { return storage_class_; }
   int location_class() const { return location_class_; }
   int enumerable() const { return enumerable_; }
+  virtual string ToString() const { return "CreateRequest"; }
 
 private:
   Filename filename_;

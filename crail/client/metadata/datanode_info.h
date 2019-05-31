@@ -50,6 +50,11 @@ public:
   int port() const { return port_; }
   int addr() { return ip_address_; }
   bool valid() { return ip_address_ && port_; }
+  string ToString() const {
+    return "DatanodeInfo:: " + to_string(storage_type_) + ", " +
+           to_string(storage_class_) + ", " + to_string(ip_address_) + ", " +
+           to_string(port_);
+  }
 
 private:
   int storage_type_;

@@ -35,13 +35,13 @@ public:
   NarpcStorageResponse(int error, int type);
   virtual ~NarpcStorageResponse();
 
-  string ToString() const { return "NarpcStorageResponse"; }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(int) * 2; }
 
   int error() const { return error_; }
   int type() const { return type_; }
+  string ToString() const { return "NarpcStorageResponse"; }
 
 private:
   int error_;
