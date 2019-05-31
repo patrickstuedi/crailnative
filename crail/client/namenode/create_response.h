@@ -41,12 +41,7 @@ public:
   CreateResponse();
   virtual ~CreateResponse();
 
-  friend ostream &operator<<(ostream &stream, CreateResponse const *message) {
-    stream << "CreateResponse" << endl;
-    return stream;
-  }
-
-  virtual string Name() const { return "CreateResponse"; }
+  virtual string ToString() const { return "CreateResponse"; }
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() * 2 +
            file_block_->Size() * 2;

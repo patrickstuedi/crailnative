@@ -34,15 +34,30 @@ using namespace std;
 
 class RpcMessage {
 public:
-  friend ostream &operator<<(ostream &stream, RpcMessage const *message) {
-    stream << "RpcMessage" << endl;
-    return stream;
-  }
-
-  virtual string Name() const = 0;
+  virtual string ToString() const = 0;
   virtual int Size() const = 0;
   virtual int Update(NetworkStream &stream) = 0;
   virtual int Write(NetworkStream &stream) const = 0;
+
+  friend ostream &operator<<(ostream &stream, RpcMessage const &message) {
+    stream << message.ToString() << endl;
+    return stream;
+  }
+
+  friend ostream &operator<<(ostream &stream, RpcMessage *message) {
+    stream << message->ToString() << endl;
+    return stream;
+  }
+
+  friend ostream &operator<<(ostream &stream, unique_ptr<RpcMessage> message) {
+    stream << message->ToString() << endl;
+    return stream;
+  }
+
+  friend ostream &operator<<(ostream &stream, shared_ptr<RpcMessage> message) {
+    stream << message->ToString() << endl;
+    return stream;
+  }
 };
 
 #endif /* RPC_MESSAGE_H */

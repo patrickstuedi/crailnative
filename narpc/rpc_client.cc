@@ -56,8 +56,8 @@ int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
   }
   responseMap_[ticket] = response;
 
-  cout << "RpcClient::IssueRequest, message " << request->Name() << ", size "
-       << request->Size() << endl;
+  cout << "RpcClient::IssueRequest, message " << request->ToString()
+       << ", size " << request->Size() << endl;
 
   // write narpc header (size, ticket)
   int *_tmpint = (int *)header_;
@@ -88,9 +88,7 @@ int RpcClient::PollResponse() {
 
   // recv message
   shared_ptr<RpcMessage> response = responseMap_[ticket];
-
-  cout << "response message:: " << response->Name()
-       << ", operator:: " << response.get() << endl;
+  cout << "response message:: " << response << endl;
   response->Update(stream_);
 
   return 0;

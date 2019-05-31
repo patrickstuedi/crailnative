@@ -38,13 +38,7 @@ public:
   NamenodeResponse();
   virtual ~NamenodeResponse();
 
-  friend ostream &operator<<(ostream &stream,
-                             NamenodeResponse const *response) {
-    stream << "NamenodeResponse" << endl;
-    return stream;
-  }
-
-  string Name() const { return "NamenodeResponse"; }
+  string ToString() const { return "NamenodeResponse"; }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(short) * 2; }
@@ -53,6 +47,7 @@ public:
     Sync();
     return type_;
   }
+
   int error() {
     Sync();
     return error_;
