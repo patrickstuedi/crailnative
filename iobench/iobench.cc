@@ -365,6 +365,7 @@ int Iobench::GetKey(char data[], int len, string src_file) {
 int main(int argc, char *argv[]) {
   Settings settings;
   setDefaults(settings);
+  printSettings(settings);
 
   int opt = 0;
   while ((opt = getopt(argc, argv, "t:f:k:s:a:p:d:e")) != -1) {
@@ -389,6 +390,7 @@ int main(int argc, char *argv[]) {
       break;
     case 'd':
       settings.dstfile = optarg;
+      break;
     case 'e':
       settings.enumerable = true;
       break;
@@ -409,7 +411,8 @@ int main(int argc, char *argv[]) {
   if (settings.operation == Operation::GetFile) {
     res = iobench.GetFile(settings.filename, settings.loop);
   } else if (settings.operation == Operation::CopyFromLocal) {
-    res = iobench.CopyFromLocal(settings.filename, settings.dstfile, true);
+    res = iobench.CopyFromLocal(settings.filename, settings.dstfile,
+                                settings.enumerable);
   } else if (settings.operation == Operation::CopyToLocal) {
     res = iobench.CopyToLocal(settings.filename, settings.dstfile);
   } else if (settings.operation == Operation::Write) {

@@ -62,10 +62,9 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
     buf->set_limit(buf->position() + block_remaining);
   }
 
-  this->position_ += buf->remaining();
-
   BlockInfo &block_info = block_cache_->GetBlock(position_);
   if (!block_info.valid()) {
+    cout << "block is invalid" << endl;
     GetblockResponse get_block_res =
         namenode_client_
             ->GetBlock(file_info_.fd(), file_info_.token(), position_,
@@ -78,8 +77,11 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 
     block_info = get_block_res.block_info();
     block_cache_->PutBlock(position_, block_info);
+  } else {
+    cout << "block is valid " << endl;
   }
 
+  this->position_ += buf->remaining();
   int address = block_info.datanode().addr();
   int port = block_info.datanode().port();
 

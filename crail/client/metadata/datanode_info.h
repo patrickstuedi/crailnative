@@ -33,6 +33,7 @@ using namespace crail;
 class DatanodeInfo : public Serializable {
 public:
   DatanodeInfo();
+  DatanodeInfo(const DatanodeInfo &dn_info) = default;
   virtual ~DatanodeInfo();
 
   int Write(ByteBuffer &buf) const;
@@ -53,6 +54,15 @@ public:
   bool valid() { return ip_address_ && port_; }
   string ToString() const {
     return "DatanodeInfo:: " + GetAddress(ip_address_, port_);
+  }
+  DatanodeInfo &operator=(const DatanodeInfo &other) {
+    storage_type_ = other.storage_type_;
+    storage_class_ = other.storage_class_;
+    location_class_ = other.location_class_;
+    ip_address_ = other.ip_address_;
+    port_ = other.port_;
+
+    return *this;
   }
 
 private:

@@ -61,8 +61,6 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
     buf->set_limit(buf->position() + file_remaining);
   }
 
-  this->position_ += buf->remaining();
-
   BlockInfo block_info = block_cache_->GetBlock(position_);
   if (!block_info.valid()) {
     GetblockResponse get_block_res =
@@ -78,6 +76,7 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
     block_cache_->PutBlock(position_, block_info);
   }
 
+  this->position_ += buf->remaining();
   int address = block_info.datanode().addr();
   int port = block_info.datanode().port();
 

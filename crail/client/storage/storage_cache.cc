@@ -49,6 +49,7 @@ int StorageCache::Put(long long position, shared_ptr<StorageClient> client) {
 */
 
 shared_ptr<StorageClient> StorageCache::Get(DatanodeInfo dn_info) {
+  cout << "StorageCache::Get dn_info " << dn_info.ToString() << endl;
   long long key = dn_info.Key();
   auto iter = cache_.find(key);
   if (iter != cache_.end()) {

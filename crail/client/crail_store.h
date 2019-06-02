@@ -24,6 +24,7 @@
 #ifndef CRAIL_STORE_H
 #define CRAIL_STORE_H
 
+#include <iostream>
 #include <string>
 
 #include "crail/client/common/future.h"
@@ -106,11 +107,13 @@ private:
     }
 
     auto file_info = create_res.file();
+    cout << "file " << file_info.ToString() << endl;
     AddBlock(file_info.fd(), 0, create_res.file_block());
 
     long long dir_offset = file_info.dir_offset();
     if (dir_offset >= 0) {
       auto parent_info = create_res.parent();
+      cout << "parent_info " << parent_info.ToString() << endl;
       AddBlock(parent_info.fd(), dir_offset, create_res.parent_block());
       string _name = filename.name();
       WriteDirectoryRecord(parent_info, _name, dir_offset, 1);

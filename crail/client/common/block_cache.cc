@@ -32,11 +32,13 @@ BlockCache::BlockCache(int fd) : fd_(fd) {}
 BlockCache::~BlockCache() {}
 
 int BlockCache::PutBlock(long long offset, BlockInfo block) {
+  cout << "BlockCache::Put fd " << fd_ << ", offset " << offset << endl;
   cache_.insert({offset, block});
   return 0;
 }
 
 BlockInfo &BlockCache::GetBlock(long long offset) {
+  cout << "BlockCache::Get fd " << fd_ << ", offset " << offset << endl;
   auto iter = cache_.find(offset);
   if (iter != cache_.end()) {
     return cache_[offset];
