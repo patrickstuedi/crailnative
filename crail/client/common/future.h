@@ -45,13 +45,10 @@ public:
 
   virtual T get() {
     if (!is_done_ && task_ != nullptr) {
-      cout << "Future::get task " << task_.get() << endl;
       result_ = task_->get();
       is_done_ = true;
-      return result_;
-    } else {
-      return result_;
     }
+    return result_;
   }
 
 private:

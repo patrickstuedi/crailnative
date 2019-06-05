@@ -77,8 +77,6 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 
     block_info = get_block_res.block_info();
     block_cache_->PutBlock(position_, block_info);
-  } else {
-    cout << "block is valid " << endl;
   }
 
   this->position_ += buf->remaining();

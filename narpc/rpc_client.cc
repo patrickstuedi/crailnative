@@ -84,14 +84,12 @@ int RpcClient::PollResponse() {
   long long *_tmplong = (long long *)_tmpint;
   long long ticket = be64toh(*_tmplong);
 
-  cout << "receiving message, ticket " << ticket << ", size " << size << endl;
-
   // recv message
   shared_ptr<RpcMessage> response = responseMap_[ticket];
   response->Update(stream_);
   stream_.Sync();
   response->Sync();
-  cout << "response message:: " << response << endl;
+  cout << "RpcMessage::PollResponse response message:: " << response << endl;
 
   return 0;
 }

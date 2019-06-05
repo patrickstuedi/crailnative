@@ -65,11 +65,12 @@ int NetworkStream::Connect() {
 
   string addressport = NetworkUtils::GetAddress(address_, port_);
   if (connect(socket_, (struct sockaddr *)&addr_, sizeof(addr_)) == -1) {
-    string message = "cannot connect to server, " + addressport;
+    string message =
+        "NetworkStream::Connect cannot connect to server, " + addressport;
     perror(message.c_str());
     return -1;
   } else {
-    cout << "connected to " << addressport << endl;
+    cout << "NetworkStream::Connect connected to " << addressport << endl;
   }
   isConnected = true;
   return 0;
