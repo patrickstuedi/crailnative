@@ -43,15 +43,9 @@ public:
   virtual void Sync();
   int Size() const { return sizeof(short) * 2; }
 
-  int type() {
-    Sync();
-    return type_;
-  }
+  int type() { return type_; }
 
-  int error() {
-    Sync();
-    return error_;
-  }
+  int error() { return error_; }
 
   string ToString() const { return "NamenodeResponse"; }
 
