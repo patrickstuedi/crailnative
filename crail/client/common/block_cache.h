@@ -25,6 +25,7 @@
 #define BLOCK_CACHE_H
 
 #include "crail/client/metadata/block_info.h"
+#include <map>
 #include <unordered_map>
 
 using namespace std;
@@ -40,7 +41,7 @@ public:
 
 private:
   int fd_;
-  unordered_map<long long, BlockInfo> cache_;
+  map<long long, BlockInfo> cache_;
   BlockInfo cache_miss_;
 };
 

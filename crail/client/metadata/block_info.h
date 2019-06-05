@@ -31,7 +31,7 @@
 class BlockInfo : public Serializable {
 public:
   BlockInfo();
-  BlockInfo(const BlockInfo &block_info) = default;
+  // BlockInfo(const BlockInfo &block_info) = default;
   virtual ~BlockInfo();
 
   int Write(ByteBuffer &buf) const;
@@ -51,14 +51,17 @@ public:
   int lkey() const { return lkey_; }
   bool valid() { return datanode_info_.valid(); }
   string ToString() const { return "BlockInfo:: " + datanode_info_.ToString(); }
-  BlockInfo &operator=(const BlockInfo &other) {
-    datanode_info_ = other.datanode_info_;
-    lba_ = other.lba_;
-    addr_ = other.addr_;
-    length_ = other.length_;
-    lkey_ = other.lkey_;
-    return *this;
-  }
+
+  /*
+BlockInfo &operator=(const BlockInfo &other) {
+datanode_info_ = other.datanode_info_;
+lba_ = other.lba_;
+addr_ = other.addr_;
+length_ = other.length_;
+lkey_ = other.lkey_;
+return *this;
+}
+  */
 
 private:
   DatanodeInfo datanode_info_;

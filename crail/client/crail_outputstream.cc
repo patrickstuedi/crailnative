@@ -64,7 +64,6 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 
   BlockInfo &block_info = block_cache_->GetBlock(position_);
   if (!block_info.valid()) {
-    cout << "block is invalid" << endl;
     GetblockResponse get_block_res =
         namenode_client_
             ->GetBlock(file_info_.fd(), file_info_.token(), position_,

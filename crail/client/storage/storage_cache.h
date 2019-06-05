@@ -26,6 +26,7 @@
 
 #include "crail/client/storage/storage_client.h"
 
+#include <map>
 #include <unordered_map>
 
 #include "crail/client/metadata/datanode_info.h"
@@ -46,7 +47,7 @@ private:
   shared_ptr<StorageClient> CreateClient(DatanodeInfo dn_info);
   // long long ComputeKey(long long position);
 
-  unordered_map<long long, shared_ptr<StorageClient>> cache_;
+  map<long long, shared_ptr<StorageClient>> cache_;
 };
 
 #endif /* STORAGE_CACHE_H */

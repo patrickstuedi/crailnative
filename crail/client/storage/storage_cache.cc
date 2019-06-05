@@ -36,20 +36,10 @@ StorageCache::~StorageCache() {}
 void StorageCache::Close() {
   for (std::pair<long long, shared_ptr<StorageClient>> element : cache_) {
     element.second->Close();
-    // std::cout << element.first << " :: " << element.second << std::endl;
   }
 }
 
-/*
-int StorageCache::Put(long long position, shared_ptr<StorageClient> client) {
-  long long key = ComputeKey(position);
-  cache_.insert({key, client});
-  return 0;
-}
-*/
-
 shared_ptr<StorageClient> StorageCache::Get(DatanodeInfo dn_info) {
-  cout << "StorageCache::Get dn_info " << dn_info.ToString() << endl;
   long long key = dn_info.Key();
   auto iter = cache_.find(key);
   if (iter != cache_.end()) {
@@ -69,10 +59,3 @@ shared_ptr<StorageClient> StorageCache::CreateClient(DatanodeInfo dn_info) {
     return make_shared<NarpcStorageClient>(dn_info.addr(), dn_info.port());
   }
 }
-
-/*
-long long StorageCache::ComputeKey(long long position) {
-  long long count = position / kBlockSize;
-  return count * kBlockSize;
-}
-*/
