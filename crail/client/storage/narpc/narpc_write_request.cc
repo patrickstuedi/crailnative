@@ -26,22 +26,27 @@
 
 using namespace std;
 
-NarpcWriteRequest::NarpcWriteRequest(int key, long long address, int length)
+NarpcWriteRequest::NarpcWriteRequest(int key, long long address,
+                                     shared_ptr<ByteBuffer> payload)
     : NarpcStorageRequest(static_cast<int>(NarpcStorageRequestType::Write)),
-      key_(key), address_(address), length_(length) {}
+      key_(key), address_(address), length_(payload->remaining()),
+      payload_(payload),
+      buffer_(sizeof(int) + sizeof(long long) + sizeof(int) * 2) {
+  buffer_.PutInt(key_);
+  buffer_.PutLong(address_);
+  buffer_.PutInt(length_);
+  buffer_.PutInt(length_);
+  buffer_.Clear();
+}
 
 NarpcWriteRequest::~NarpcWriteRequest() {}
 
 int NarpcWriteRequest::Write(NetworkStream &stream) const {
   NarpcStorageRequest::Write(stream);
 
-  /*
-buf.PutInt(key_);
-buf.PutLong(address_);
-buf.PutInt(length_);
-buf.PutInt(length_);
-  */
-
+  cout << "NarpcWriteRequest::Write payload " << payload_->remaining() << endl;
+  stream.Write(buffer_.get_bytes(), buffer_.size());
+  stream.Write(payload_->get_bytes(), payload_->remaining());
   return 0;
 }
 

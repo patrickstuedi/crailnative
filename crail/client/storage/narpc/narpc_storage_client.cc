@@ -42,7 +42,7 @@ NarpcStorageClient::~NarpcStorageClient() { rpc_client_.Close(); }
 Future<int> NarpcStorageClient::WriteData(int key, long long address,
                                           shared_ptr<ByteBuffer> buf) {
   shared_ptr<NarpcWriteRequest> request =
-      make_shared<NarpcWriteRequest>(key, address, buf->remaining());
+      make_shared<NarpcWriteRequest>(key, address, buf);
   shared_ptr<NarpcWriteResponse> response =
       make_shared<NarpcWriteResponse>(&rpc_client_);
 

@@ -50,8 +50,9 @@ private:
   int address_;
   int port_;
 
-  struct iovec iov[3];
+  struct iovec iov[4];
   int vec_count_;
+  int bytes_;
 };
 
 #endif /* NETWORK_STREAM_H */

@@ -36,7 +36,7 @@ using namespace std;
 
 class NarpcWriteRequest : public NarpcStorageRequest {
 public:
-  NarpcWriteRequest(int key, long long address, int length);
+  NarpcWriteRequest(int key, long long address, shared_ptr<ByteBuffer> payload);
   virtual ~NarpcWriteRequest();
 
   int Size() const {
@@ -45,11 +45,14 @@ public:
   }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+  string ToString() const { return "NarpcWriteRequest"; }
 
 private:
   int key_;
   long long address_;
   int length_;
+  shared_ptr<ByteBuffer> payload_;
+  ByteBuffer buffer_;
 };
 
 #endif /* NARPC_WRITE_REQUEST_H */

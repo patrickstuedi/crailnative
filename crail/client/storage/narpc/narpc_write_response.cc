@@ -49,6 +49,10 @@ int NarpcWriteResponse::Update(NetworkStream &stream) {
 }
 
 int NarpcWriteResponse::get() {
+  if (client_) {
+    while (true)
+      ;
+  }
   client_->PollResponse();
   return ret_;
 }

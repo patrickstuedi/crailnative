@@ -40,7 +40,7 @@
 
 NetworkStream::NetworkStream(int address, int port, bool nodelay)
     : isConnected(false), address_(address), port_(port), nodelay_(nodelay),
-      vec_count_(0) {
+      vec_count_(0), bytes_(0) {
   this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
 }
 
@@ -88,6 +88,7 @@ int NetworkStream::Write(unsigned char *buf, int size) {
   iov[vec_count_].iov_base = buf;
   iov[vec_count_].iov_len = size;
   vec_count_++;
+  bytes_ += size;
 
   return 0;
 }
@@ -107,7 +108,8 @@ void NetworkStream::Sync() {
 }
 
 void NetworkStream::Flush() {
-  // cout << "Flushing iovec, count " << vec_count_ << endl;
+  cout << "Flushing iovec, count " << vec_count_ << ", bytes " << bytes_
+       << endl;
   writev(socket_, iov, vec_count_);
   vec_count_ = 0;
 }

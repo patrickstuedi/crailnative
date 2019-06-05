@@ -45,6 +45,7 @@ public:
 
 private:
   int type_;
+  ByteBuffer buffer_;
 };
 
 #endif /* NARPC_STORAGE_REQUEST_H */
