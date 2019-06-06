@@ -43,6 +43,10 @@ public:
   long long token() const { return token_; }
   long long position() const { return position_; }
   long long capacity() const { return capacity_; }
+  virtual string ToString() const {
+    return "GetblockRequest:: " + to_string(fd_) + ", " + to_string(token_) +
+           ", " + to_string(position_) + ", " + to_string(capacity_);
+  }
 
 private:
   long long fd_;
