@@ -97,6 +97,7 @@ int NetworkStream::Read(unsigned char *buf, int size) {
   iov[vec_count_].iov_base = buf;
   iov[vec_count_].iov_len = size;
   vec_count_++;
+  bytes_ += size;
 
   return 0;
 }
@@ -105,6 +106,7 @@ void NetworkStream::Sync() {
   int ret = readv(socket_, iov, vec_count_);
   cout << "Syncing iovec, count " << vec_count_ << ", ret " << ret << endl;
   vec_count_ = 0;
+  bytes_ = 0;
 }
 
 void NetworkStream::Flush() {
@@ -112,4 +114,5 @@ void NetworkStream::Flush() {
        << endl;
   writev(socket_, iov, vec_count_);
   vec_count_ = 0;
+  bytes_ = 0;
 }

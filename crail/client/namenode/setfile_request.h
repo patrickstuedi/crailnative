@@ -45,10 +45,15 @@ public:
   int Update(NetworkStream &stream);
 
   const FileInfo file_info() const { return file_info_; }
+  virtual string ToString() const {
+    return "SetfileRequest:: " + file_info_.ToString() + ", " +
+           to_string(close_);
+  }
 
 private:
   FileInfo file_info_;
   bool close_;
+  ByteBuffer buffer_;
 };
 
 #endif /* SETFILE_REQUEST_H */

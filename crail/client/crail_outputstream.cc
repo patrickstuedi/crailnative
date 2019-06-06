@@ -48,6 +48,7 @@ CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
 CrailOutputstream::~CrailOutputstream() {}
 
 Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
+  cout << "CrailInputstream::Write buf->remaining " << buf->remaining() << endl;
   if (buf->remaining() < 0) {
     return Future<int>::Failure(-1);
   }
@@ -57,6 +58,7 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
 
   int block_offset = position_ % kBlockSize;
   int block_remaining = kBlockSize - block_offset;
+  int buf_original_limit = buf->limit();
 
   if (block_remaining < buf->remaining()) {
     buf->set_limit(buf->position() + block_remaining);
@@ -87,6 +89,9 @@ Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
   long long block_addr = block_info.addr() + block_offset;
   Future<int> storage_response =
       storage_client->WriteData(block_info.lkey(), block_addr, buf);
+
+  buf->set_position(buf->position() + buf->remaining());
+  buf->set_limit(buf_original_limit);
 
   return storage_response;
 }

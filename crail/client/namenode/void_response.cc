@@ -21,26 +21,28 @@
  * limitations under the License.
  */
 
+#include <iostream>
+
 #include "crail/client/namenode/void_response.h"
 
-VoidResponse::VoidResponse() : NamenodeResponse(), error_(-1) {}
+VoidResponse::VoidResponse()
+    : NamenodeResponse(), error_(-1), buffer_(sizeof(short)) {}
 
 VoidResponse::~VoidResponse() {}
 
 int VoidResponse::Write(NetworkStream &stream) const {
   NamenodeResponse::Write(stream);
 
-  /*
-buf.PutInt(error_);
-  */
   return 0;
 }
 
 int VoidResponse::Update(NetworkStream &stream) {
   NamenodeResponse::Update(stream);
 
-  /*
-error_ = buf.GetInt();
-  */
+  cout << "reading buffer size " << buffer_.size() << endl;
+  stream.Read(buffer_.get_bytes(), buffer_.size());
+
   return 0;
 }
+
+void VoidResponse::Sync() { error_ = buffer_.GetShort(); }

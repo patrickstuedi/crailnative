@@ -50,6 +50,7 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
     return Future<int>::Failure(-1);
   }
 
+  int buf_original_limit = buf->limit();
   int block_offset = position_ % kBlockSize;
   int block_remaining = kBlockSize - block_offset;
   unsigned long long file_remaining = file_info_.capacity() - position_;
@@ -85,6 +86,9 @@ Future<int> CrailInputstream::Read(shared_ptr<ByteBuffer> buf) {
   long long block_addr = block_info.addr() + block_offset;
   Future<int> storage_response =
       storage_client->ReadData(block_info.lkey(), block_addr, buf);
+
+  buf->set_position(buf->position() + buf->remaining());
+  buf->set_limit(buf_original_limit);
 
   return storage_response;
 }

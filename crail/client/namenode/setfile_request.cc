@@ -21,13 +21,19 @@
  * limitations under the License.
  */
 
+#include <iostream>
+
 #include "crail/client/namenode/setfile_request.h"
 
 SetfileRequest::SetfileRequest(FileInfo file_info, bool close)
     : NamenodeRequest(static_cast<short>(RpcCommand::Setfile),
                       static_cast<short>(RequestType::Setfile)),
-      file_info_(file_info) {
-  this->close_ = close;
+      file_info_(file_info), close_(close),
+      buffer_(file_info_.Size() + sizeof(int)) {
+  file_info_.Write(buffer_);
+  int _close = close_ ? 1 : 0;
+  buffer_.PutInt(_close);
+  buffer_.Clear();
 }
 
 SetfileRequest::~SetfileRequest() {}
@@ -35,12 +41,7 @@ SetfileRequest::~SetfileRequest() {}
 int SetfileRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 
-  /*
-file_info_.Write(buf);
-int _close = close_ ? 1 : 0;
-buf.PutInt(_close);
-  */
-
+  stream.Write(buffer_.get_bytes(), buffer_.size());
   return Size();
 }
 
