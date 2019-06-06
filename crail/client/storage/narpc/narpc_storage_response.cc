@@ -28,22 +28,18 @@
 using namespace std;
 
 NarpcStorageResponse::NarpcStorageResponse(int error, int type)
-    : error_(error), type_(type) {}
+    : error_(error), type_(type), buffer_(sizeof(int) * 2) {}
 
 NarpcStorageResponse::~NarpcStorageResponse() {}
 
-int NarpcStorageResponse::Write(NetworkStream &stream) const {
-  /*
-buf.PutInt(error_);
-buf.PutInt(type_);
-  */
+int NarpcStorageResponse::Write(NetworkStream &stream) const { return 0; }
+
+int NarpcStorageResponse::Update(NetworkStream &stream) {
+  stream.Read(buffer_.get_bytes(), buffer_.size());
   return 0;
 }
 
-int NarpcStorageResponse::Update(NetworkStream &stream) {
-  /*
-error_ = buf.GetInt();
-type_ = buf.GetInt();
-  */
-  return 0;
+void NarpcStorageResponse::Sync() {
+  error_ = buffer_.GetInt();
+  type_ = buffer_.GetInt();
 }

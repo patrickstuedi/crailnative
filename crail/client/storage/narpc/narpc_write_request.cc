@@ -44,7 +44,6 @@ NarpcWriteRequest::~NarpcWriteRequest() {}
 int NarpcWriteRequest::Write(NetworkStream &stream) const {
   NarpcStorageRequest::Write(stream);
 
-  cout << "NarpcWriteRequest::Write payload " << payload_->remaining() << endl;
   stream.Write(buffer_.get_bytes(), buffer_.size());
   stream.Write(payload_->get_bytes(), payload_->remaining());
   return 0;

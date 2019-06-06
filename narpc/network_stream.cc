@@ -102,8 +102,8 @@ int NetworkStream::Read(unsigned char *buf, int size) {
 }
 
 void NetworkStream::Sync() {
-  // cout << "Syncing iovec, count " << vec_count_ << endl;
-  readv(socket_, iov, vec_count_);
+  int ret = readv(socket_, iov, vec_count_);
+  cout << "Syncing iovec, count " << vec_count_ << ", ret " << ret << endl;
   vec_count_ = 0;
 }
 

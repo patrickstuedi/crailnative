@@ -48,8 +48,6 @@ public:
   int GetInt();
   long long GetLong();
   void GetBytes(char value[], int length);
-  void PrintBytes(string message);
-  void Zero();
 
   ByteBuffer &Clear() {
     position_ = 0;
@@ -63,13 +61,16 @@ public:
     return *this;
   }
 
+  void PrintBytes(string message);
+  void Zero();
   int size() const { return size_; }
+  int remaining() const { return limit_ - position_; }
+  unsigned char *get_bytes() const { return buf_ + position_; }
+
   int position() const { return position_; }
   void set_position(int new_position) { this->position_ = new_position; }
   int limit() const { return limit_; }
   void set_limit(int new_limit) { this->limit_ = new_limit; }
-  int remaining() const { return limit_ - position_; }
-  unsigned char *get_bytes() const { return buf_ + position_; }
   ByteOrder order() { return order_; }
   void set_order(ByteOrder order) { this->order_ = order; }
 

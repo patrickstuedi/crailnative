@@ -37,16 +37,17 @@ public:
 
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
-  void Sync() {}
+  void Sync();
   int Size() const { return sizeof(int) * 2; }
 
   int error() const { return error_; }
   int type() const { return type_; }
-  string ToString() const { return "NarpcStorageResponse"; }
+  virtual string ToString() const { return "NarpcStorageResponse"; }
 
 private:
   int error_;
   int type_;
+  ByteBuffer buffer_;
 };
 
 #endif /* NARPC_STORAGE_RESPONSE_H */

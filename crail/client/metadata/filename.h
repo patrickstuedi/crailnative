@@ -45,7 +45,8 @@ public:
   int Size() const;
 
   int component() { return components_[length_ - 1]; }
-  string name() { return name_; }
+  string name() const { return name_; }
+  string ToString() const { return "Filename:: " + name(); }
 
 private:
   int length_;
