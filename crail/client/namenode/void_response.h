@@ -31,7 +31,7 @@ public:
   VoidResponse();
   virtual ~VoidResponse();
 
-  int Size() const { return NamenodeResponse::Size() + sizeof(error_); }
+  int Size() const { return NamenodeResponse::Size(); }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   void Sync();
@@ -39,7 +39,6 @@ public:
 
 private:
   short error_;
-  ByteBuffer buffer_;
 };
 
 #endif /* VOID_RESPONSE_H */

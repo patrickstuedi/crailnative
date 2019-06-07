@@ -25,8 +25,7 @@
 
 #include "crail/client/namenode/void_response.h"
 
-VoidResponse::VoidResponse()
-    : NamenodeResponse(), error_(-1), buffer_(sizeof(short)) {}
+VoidResponse::VoidResponse() : NamenodeResponse(), error_(-1) {}
 
 VoidResponse::~VoidResponse() {}
 
@@ -39,10 +38,7 @@ int VoidResponse::Write(NetworkStream &stream) const {
 int VoidResponse::Update(NetworkStream &stream) {
   NamenodeResponse::Update(stream);
 
-  cout << "reading buffer size " << buffer_.size() << endl;
-  stream.Read(buffer_.get_bytes(), buffer_.size());
-
   return 0;
 }
 
-void VoidResponse::Sync() { error_ = buffer_.GetShort(); }
+void VoidResponse::Sync() {}
