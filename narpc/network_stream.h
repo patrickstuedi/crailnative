@@ -29,6 +29,12 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/uio.h>
+#include <vector>
+
+#include "ioutils/byte_buffer.h"
+
+using namespace crail;
+using namespace std;
 
 class NetworkStream {
 public:
@@ -53,6 +59,8 @@ private:
   struct iovec iov[4];
   int vec_count_;
   int bytes_;
+
+  vector<ByteBuffer> buffer_list_;
 };
 
 #endif /* NETWORK_STREAM_H */

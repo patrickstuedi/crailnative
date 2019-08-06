@@ -5,6 +5,8 @@ add_library (narpc STATIC
 	network_utils.cc
 	)
 
+target_link_libraries (narpc LINK_PUBLIC ioutils)
+
 #install(TARGETS narpc DESTINATION /lib)
 #install (FILES 
 #	rpc_client.h
