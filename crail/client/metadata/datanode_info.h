@@ -24,9 +24,9 @@
 #ifndef DATANODE_INFO_H
 #define DATANODE_INFO_H
 
-#include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
 #include "crail/client/utils/crail_networking.h"
+#include "ioutils/byte_buffer.h"
 
 using namespace crail;
 

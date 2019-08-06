@@ -7,7 +7,6 @@ add_library (crail SHARED
 	client/crail_outputstream.cc
 	client/crail_inputstream.cc
 	client/directory_record.cc
-	client/common/byte_buffer.cc
 	client/common/block_cache.cc
 	client/namenode/namenode_request.cc
 	client/namenode/namenode_response.cc
@@ -41,7 +40,7 @@ add_library (crail SHARED
 	client/utils/crail_networking.cc
 	)
 
-target_link_libraries (crail LINK_PUBLIC narpc)
+target_link_libraries (crail LINK_PUBLIC narpc ioutils)
 
 install(TARGETS crail DESTINATION /lib)
 install (FILES 
@@ -54,7 +53,6 @@ install (FILES
 	DESTINATION /include/crail/client)
 install (FILES
 	client/common/file_type.h
-	client/common/byte_buffer.h
 	client/common/crail_constants.h
 	client/common/future.h
 	client/common/serializable.h

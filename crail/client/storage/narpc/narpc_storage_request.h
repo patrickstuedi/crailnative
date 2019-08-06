@@ -24,7 +24,7 @@
 #ifndef NARPC_STORAGE_REQUEST_H
 #define NARPC_STORAGE_REQUEST_H
 
-#include "crail/client/common/byte_buffer.h"
+#include "ioutils/byte_buffer.h"
 #include "narpc/network_stream.h"
 #include "narpc/rpc_message.h"
 

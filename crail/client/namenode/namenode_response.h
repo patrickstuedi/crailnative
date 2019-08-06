@@ -26,8 +26,8 @@
 
 #include <ostream>
 
-#include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
+#include "ioutils/byte_buffer.h"
 #include "narpc/network_stream.h"
 #include "narpc/rpc_message.h"
 

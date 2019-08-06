@@ -27,10 +27,10 @@
 #include <memory>
 #include <string>
 
-#include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
 #include "crail/client/metadata/filename.h"
 #include "crail/client/namenode/namenode_request.h"
+#include "ioutils/byte_buffer.h"
 
 using namespace std;
 

@@ -25,10 +25,10 @@
 #define CRAIL_OUTPUTSTREAM_H
 
 #include "crail/client/common/block_cache.h"
-#include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/future.h"
 #include "crail/client/namenode/namenode_client.h"
 #include "crail/client/storage/storage_cache.h"
+#include "ioutils/byte_buffer.h"
 
 using namespace crail;
 using namespace std;

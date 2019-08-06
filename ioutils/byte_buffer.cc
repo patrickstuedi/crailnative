@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-#include "crail/client/common/byte_buffer.h"
+#include "ioutils/byte_buffer.h"
 
 #include <arpa/inet.h>
 #include <endian.h>

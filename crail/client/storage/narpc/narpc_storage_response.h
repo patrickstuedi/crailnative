@@ -24,8 +24,8 @@
 #ifndef NARPC_STORAGE_RESPONSE_H
 #define NARPC_STORAGE_RESPONSE_H
 
-#include "crail/client/common/byte_buffer.h"
 #include "crail/client/common/serializable.h"
+#include "ioutils/byte_buffer.h"
 #include "narpc/rpc_message.h"
 
 using namespace crail;
