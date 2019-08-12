@@ -24,23 +24,14 @@
 #include "crail/client/namenode/namenode_request.h"
 
 NamenodeRequest::NamenodeRequest(short cmd, short type)
-    : cmd_(cmd), type_(type), buffer_(sizeof(short) * 2) {
-  buffer_.set_order(ByteOrder::BigEndian);
-  buffer_.PutShort(cmd_);
-  buffer_.PutShort(type_);
-  buffer_.Clear();
-}
+    : cmd_(cmd), type_(type) {}
 
 NamenodeRequest::~NamenodeRequest() {}
 
 int NamenodeRequest::Write(NetworkStream &stream) const {
-  stream.Write(buffer_.get_bytes(), buffer_.size());
+  stream.PutShort(cmd_);
+  stream.PutShort(type_);
   return Size();
 }
 
-int NamenodeRequest::Update(NetworkStream &stream) {
-  // this->cmd_ = buf.GetShort();
-  // this->type_ = buf.GetShort();
-
-  return Size();
-}
+int NamenodeRequest::Update(NetworkStream &stream) { return Size(); }

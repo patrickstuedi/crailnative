@@ -38,52 +38,31 @@
 
 #include "narpc/network_utils.h"
 
-NetworkStream::NetworkStream(int address, int port, bool nodelay)
-    : isConnected(false), address_(address), port_(port), nodelay_(nodelay),
-      vec_count_(0), bytes_(0) {
-  this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
-}
+NetworkStream::NetworkStream() : vec_count_(0), bytes_(0), metadata_(1024) {}
 
 NetworkStream::~NetworkStream() {}
 
-int NetworkStream::Connect() {
-  if (isConnected) {
-    return 0;
-  }
+void NetworkStream::PutByte(unsigned char value) { metadata_.PutByte(value); }
 
-  int yes = 0;
-  if (nodelay_) {
-    yes = 1;
-  }
-  setsockopt(socket_, IPPROTO_TCP, TCP_NODELAY, (char *)&yes, sizeof(int));
+void NetworkStream::PutInt(int value) { metadata_.PutInt(value); }
 
-  struct sockaddr_in addr_;
-  addr_.sin_family = AF_INET;
-  addr_.sin_port = htons(port_);
-  memset(&(addr_.sin_zero), 0, 8);
-  addr_.sin_addr.s_addr = address_;
+void NetworkStream::PutShort(short value) { metadata_.PutShort(value); }
 
-  string addressport = NetworkUtils::GetAddress(address_, port_);
-  if (connect(socket_, (struct sockaddr *)&addr_, sizeof(addr_)) == -1) {
-    string message =
-        "NetworkStream::Connect cannot connect to server, " + addressport;
-    perror(message.c_str());
-    return -1;
-  } else {
-    cout << "NetworkStream::Connect connected to " << addressport << endl;
-  }
-  isConnected = true;
-  return 0;
+void NetworkStream::PutLong(long long value) { metadata_.PutLong(value); }
+
+void NetworkStream::PutData(shared_ptr<ByteBuffer> buffer) {
+  data_.push_back(buffer);
 }
 
-void NetworkStream::Close() {
-  if (!isConnected) {
-    return;
-  }
-  isConnected = false;
-  ::close(socket_);
-}
+unsigned char NetworkStream::GetByte() { return metadata_.GetByte(); }
 
+short NetworkStream::GetShort() { return metadata_.GetShort(); }
+
+int NetworkStream::GetInt() { return metadata_.GetInt(); }
+
+long long NetworkStream::GetLong() { return metadata_.GetLong(); }
+
+/*
 int NetworkStream::Write(unsigned char *buf, int size) {
   iov[vec_count_].iov_base = buf;
   iov[vec_count_].iov_len = size;
@@ -116,3 +95,4 @@ void NetworkStream::Flush() {
   vec_count_ = 0;
   bytes_ = 0;
 }
+*/

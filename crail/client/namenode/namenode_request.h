@@ -55,7 +55,7 @@ public:
 
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
-  virtual void Sync() {}
+
   int Size() const { return sizeof(short) * 2; }
   virtual string ToString() const {
     return "NamenodeRequest:: " + to_string(cmd_) + ", " + to_string(type_);
@@ -64,7 +64,6 @@ public:
 private:
   short cmd_;
   short type_;
-  ByteBuffer buffer_;
 };
 
 #endif /* NAMENODE_REQUEST_H */

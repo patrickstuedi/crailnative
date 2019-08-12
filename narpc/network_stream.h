@@ -25,6 +25,7 @@
 #define NETWORK_STREAM_H
 
 #include <fcntl.h>
+#include <memory>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -38,29 +39,39 @@ using namespace std;
 
 class NetworkStream {
 public:
-  NetworkStream(int address, int port, bool nodelay);
+  NetworkStream();
   virtual ~NetworkStream();
 
-  int Connect();
-  void Close();
+  void PutByte(unsigned char value);
+  void PutShort(short value);
+  void PutInt(int value);
+  void PutLong(long long value);
+  void PutData(shared_ptr<ByteBuffer> data);
 
-  int Write(unsigned char *buf, int size);
-  void Flush();
-  int Read(unsigned char *buf, int size);
-  void Sync();
+  unsigned char GetByte();
+  short GetShort();
+  int GetInt();
+  long long GetLong();
+  void GetData(shared_ptr<ByteBuffer> data);
+
+  int Write(int socket) { return 0; }
+  int Read(int socket) { return 0; }
+
+  // old API
+  /*
+int Write(unsigned char *buf, int size);
+void Flush();
+int Read(unsigned char *buf, int size);
+void Sync();
+  */
 
 private:
-  int socket_;
-  bool isConnected;
-  bool nodelay_;
-  int address_;
-  int port_;
-
   struct iovec iov[4];
   int vec_count_;
   int bytes_;
 
-  vector<ByteBuffer> buffer_list_;
+  ByteBuffer metadata_;
+  vector<shared_ptr<ByteBuffer>> data_;
 };
 
 #endif /* NETWORK_STREAM_H */

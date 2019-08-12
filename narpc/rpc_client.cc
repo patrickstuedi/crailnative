@@ -35,18 +35,55 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "narpc/network_utils.h"
+
 using namespace std;
 
 RpcClient::RpcClient(int address, int port, bool nodelay)
-    : stream_(address, port, nodelay) {
+    : isConnected_(false), address_(address), port_(port), nodelay_(nodelay) {
   this->counter_ = 1;
+  this->socket_ = socket(AF_INET, SOCK_STREAM, 0);
 }
 
-RpcClient::~RpcClient() { stream_.Close(); }
+RpcClient::~RpcClient() { Close(); }
 
-int RpcClient::Connect() { return stream_.Connect(); }
+int RpcClient::Connect() {
+  if (isConnected_) {
+    return 0;
+  }
 
-void RpcClient::Close() { stream_.Close(); }
+  int yes = 0;
+  if (nodelay_) {
+    yes = 1;
+  }
+  setsockopt(socket_, IPPROTO_TCP, TCP_NODELAY, (char *)&yes, sizeof(int));
+
+  struct sockaddr_in addr_;
+  addr_.sin_family = AF_INET;
+  addr_.sin_port = htons(port_);
+  memset(&(addr_.sin_zero), 0, 8);
+  addr_.sin_addr.s_addr = address_;
+
+  string addressport = NetworkUtils::GetAddress(address_, port_);
+  if (connect(socket_, (struct sockaddr *)&addr_, sizeof(addr_)) == -1) {
+    string message =
+        "NetworkStream::Connect cannot connect to server, " + addressport;
+    perror(message.c_str());
+    return -1;
+  } else {
+    cout << "NetworkStream::Connect connected to " << addressport << endl;
+  }
+  isConnected_ = true;
+  return 0;
+}
+
+void RpcClient::Close() {
+  if (!isConnected_) {
+    return;
+  }
+  isConnected_ = false;
+  ::close(socket_);
+}
 
 int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
                             shared_ptr<RpcMessage> response) {
@@ -60,35 +97,50 @@ int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
        << request->Size() << ")" << endl;
 
   // write narpc header (size, ticket)
-  int *_tmpint = (int *)header_;
-  *_tmpint = htonl(request->Size());
-  _tmpint++;
-  long long *_tmplong = (long long *)_tmpint;
-  *_tmplong = htobe64(ticket);
-  stream_.Write(header_, kNarpcHeader);
+  /*
+int *_tmpint = (int *)header_;
+*_tmpint = htonl(request->Size());
+_tmpint++;
+long long *_tmplong = (long long *)_tmpint;
+*_tmplong = htobe64(ticket);
+stream_.Write(header_, kNarpcHeader);
+  */
 
-  // write actual rpc message
+  // serialize header
+  stream_.PutInt(request->Size());
+  stream_.PutLong(ticket);
+
+  // serialize rpc message
   request->Write(stream_);
-  stream_.Flush();
+
+  // write message to network
+  stream_.Write(socket_);
+  // stream_.Flush();
 
   return 0;
 }
 
 int RpcClient::PollResponse() {
   // recv narpc header
-  stream_.Read(header_, kNarpcHeader);
-  stream_.Sync();
-  int *_tmpint = (int *)header_;
-  int size = ntohl(*_tmpint);
-  _tmpint++;
-  long long *_tmplong = (long long *)_tmpint;
-  long long ticket = be64toh(*_tmplong);
+  stream_.Read(socket_);
+
+  /*
+stream_.Read(header_, kNarpcHeader);
+stream_.Sync();
+int *_tmpint = (int *)header_;
+int size = ntohl(*_tmpint);
+_tmpint++;
+long long *_tmplong = (long long *)_tmpint;
+long long ticket = be64toh(*_tmplong);
+  */
+  int size = stream_.GetInt();
+  long long ticket = stream_.GetLong();
 
   // recv message
   shared_ptr<RpcMessage> response = responseMap_[ticket];
   response->Update(stream_);
-  stream_.Sync();
-  response->Sync();
+  // stream_.Sync();
+  // response->Sync();
   cout << "RpcMessage::PollResponse " << response << " (size "
        << response->Size() << ")" << endl;
 
