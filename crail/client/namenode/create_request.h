@@ -63,7 +63,6 @@ private:
   int storage_class_;
   int location_class_;
   int enumerable_;
-  ByteBuffer buffer_;
 };
 } // namespace crail
 
