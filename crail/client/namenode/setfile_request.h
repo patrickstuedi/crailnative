@@ -53,7 +53,6 @@ public:
 private:
   FileInfo file_info_;
   bool close_;
-  ByteBuffer buffer_;
 };
 
 #endif /* SETFILE_REQUEST_H */

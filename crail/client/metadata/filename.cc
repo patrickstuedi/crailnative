@@ -103,6 +103,15 @@ index++;
 
 Filename::~Filename() {}
 
+int Filename::Write(NetworkStream &stream) const {
+  stream.PutInt(length_);
+  for (int i = 0; i < kDirectoryDepth; i++) {
+    stream.PutInt(components_[i]);
+  }
+
+  return Size();
+}
+
 int Filename::Write(ByteBuffer &buf) const {
   buf.PutInt(length_);
   for (int i = 0; i < kDirectoryDepth; i++) {

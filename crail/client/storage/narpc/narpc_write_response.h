@@ -43,13 +43,11 @@ public:
   int Size() const { return NarpcStorageResponse::Size() + sizeof(int); }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
-  void Sync();
   virtual string ToString() const { return "NarpcWriteResponse"; }
 
 private:
   RpcClient *client_;
   int ret_;
-  ByteBuffer buffer_;
 };
 
 #endif /* NARPC_WRITE_RESPONSE_H */

@@ -25,8 +25,7 @@
 
 CreateResponse::CreateResponse()
     : NamenodeResponse(), file_block_(new BlockInfo()),
-      parent_block_(new BlockInfo()),
-      buffer_(file_info_.Size() * 2 + file_block_->Size() * 2) {}
+      parent_block_(new BlockInfo()) {}
 
 CreateResponse::~CreateResponse() {}
 
@@ -46,7 +45,6 @@ parent_block_->Write(buf);
 int CreateResponse::Update(NetworkStream &stream) {
   NamenodeResponse::Update(stream);
 
-  stream.Read(buffer_.get_bytes(), buffer_.size());
   /*
 file_info_.Update(buf);
 parent_info_.Update(buf);
@@ -55,12 +53,4 @@ parent_block_->Update(buf);
   */
 
   return 0;
-}
-
-void CreateResponse::Sync() {
-  NamenodeResponse::Sync();
-  file_info_.Update(buffer_);
-  parent_info_.Update(buffer_);
-  file_block_->Update(buffer_);
-  parent_block_->Update(buffer_);
 }

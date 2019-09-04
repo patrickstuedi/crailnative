@@ -24,8 +24,7 @@
 #include "crail/client/storage/narpc/narpc_write_response.h"
 
 NarpcWriteResponse::NarpcWriteResponse(RpcClient *client)
-    : NarpcStorageResponse(-1, -1), client_(client), ret_(-1),
-      buffer_(sizeof(int)) {}
+    : NarpcStorageResponse(-1, -1), client_(client), ret_(-1) {}
 
 NarpcWriteResponse::~NarpcWriteResponse() {}
 
@@ -38,14 +37,7 @@ int NarpcWriteResponse::Write(NetworkStream &stream) const {
 int NarpcWriteResponse::Update(NetworkStream &stream) {
   NarpcStorageResponse::Update(stream);
 
-  stream.Read(buffer_.get_bytes(), buffer_.size());
-
   return 0;
-}
-
-void NarpcWriteResponse::Sync() {
-  NarpcStorageResponse::Sync();
-  ret_ = buffer_.GetInt();
 }
 
 int NarpcWriteResponse::get() {

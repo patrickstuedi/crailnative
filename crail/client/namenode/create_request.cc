@@ -30,13 +30,13 @@ CreateRequest::CreateRequest(Filename &name, int type, int storage_class,
       filename_(name), type_(type), storage_class_(storage_class),
       location_class_(location_class), enumerable_(enumerable) {
   this->filename_ = std::move(name);
-  filename_.Write(buffer_);
 }
 
 CreateRequest::~CreateRequest() {}
 
 int CreateRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
+  filename_.Write(stream);
   stream.PutInt(type_);
   stream.PutInt(storage_class_);
   stream.PutInt(location_class_);

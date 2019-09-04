@@ -47,7 +47,6 @@ public:
 private:
   int error_;
   int type_;
-  ByteBuffer buffer_;
 };
 
 #endif /* NARPC_STORAGE_RESPONSE_H */

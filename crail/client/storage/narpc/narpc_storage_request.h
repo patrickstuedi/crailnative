@@ -39,13 +39,11 @@ public:
 
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
-  void Sync() {}
   int Size() const { return sizeof(int); }
   string ToString() const { return "NarpcStorageRequest"; }
 
 private:
   int type_;
-  ByteBuffer buffer_;
 };
 
 #endif /* NARPC_STORAGE_REQUEST_H */

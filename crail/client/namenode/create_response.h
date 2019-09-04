@@ -47,7 +47,6 @@ public:
   }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
-  virtual void Sync();
 
   FileInfo file() const { return file_info_; }
   FileInfo parent() const { return parent_info_; }
@@ -65,7 +64,6 @@ private:
   FileInfo parent_info_;
   shared_ptr<BlockInfo> file_block_;
   shared_ptr<BlockInfo> parent_block_;
-  ByteBuffer buffer_;
 };
 
 #endif /* CREATE_RESPONSE_H */

@@ -56,7 +56,6 @@ private:
   long long address_;
   int length_;
   shared_ptr<ByteBuffer> payload_;
-  ByteBuffer buffer_;
 };
 
 #endif /* NARPC_WRITE_REQUEST_H */

@@ -23,18 +23,10 @@
 
 #include "crail/client/storage/narpc/narpc_storage_request.h"
 
-NarpcStorageRequest::NarpcStorageRequest(int type)
-    : type_(type), buffer_(sizeof(int)) {
-  buffer_.PutInt(type_);
-  buffer_.Clear();
-}
+NarpcStorageRequest::NarpcStorageRequest(int type) : type_(type) {}
 
 NarpcStorageRequest::~NarpcStorageRequest() {}
 
-int NarpcStorageRequest::Write(NetworkStream &stream) const {
-
-  stream.Write(buffer_.get_bytes(), buffer_.size());
-  return Size();
-}
+int NarpcStorageRequest::Write(NetworkStream &stream) const { return Size(); }
 
 int NarpcStorageRequest::Update(NetworkStream &stream) { return Size(); }
