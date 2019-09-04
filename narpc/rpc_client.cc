@@ -92,19 +92,10 @@ int RpcClient::IssueRequest(shared_ptr<RpcMessage> request,
     ticket++;
   }
   responseMap_[ticket] = response;
+  stream_.Clear();
 
   cout << "RpcClient::IssueRequest " << request->ToString() << " (size "
        << request->Size() << ")" << endl;
-
-  // write narpc header (size, ticket)
-  /*
-int *_tmpint = (int *)header_;
-*_tmpint = htonl(request->Size());
-_tmpint++;
-long long *_tmplong = (long long *)_tmpint;
-*_tmplong = htobe64(ticket);
-stream_.Write(header_, kNarpcHeader);
-  */
 
   // serialize header
   stream_.PutInt(request->Size());
@@ -115,15 +106,28 @@ stream_.Write(header_, kNarpcHeader);
 
   // write message to network
   stream_.Write(socket_);
-  // stream_.Flush();
 
   return 0;
 }
 
 int RpcClient::PollResponse() {
-  // recv narpc header
-  stream_.Read(socket_);
+  stream_.Clear();
 
+  // recv narpc header
+  stream_.Read(socket_, kNarpcHeader);
+
+  int msg_size = stream_.GetInt();
+  long long msg_ticket = stream_.GetLong();
+
+  cout << "receiving size " << msg_size << ", ticket " << msg_ticket << endl;
+  shared_ptr<RpcMessage> msg_response = responseMap_[msg_ticket];
+  stream_.Read(socket_, msg_size);
+  msg_response->Update(stream_);
+  cout << "RpcMessage::PollResponse " << msg_response << " (size "
+       << msg_response->Size() << ")" << endl;
+
+  while (true)
+    ;
   /*
 stream_.Read(header_, kNarpcHeader);
 stream_.Sync();

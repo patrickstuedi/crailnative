@@ -47,23 +47,18 @@ public:
   void PutInt(int value);
   void PutLong(long long value);
   void PutData(shared_ptr<ByteBuffer> data);
+  void PutBytes(const char value[], int length);
 
   unsigned char GetByte();
   short GetShort();
   int GetInt();
   long long GetLong();
   void GetData(shared_ptr<ByteBuffer> data);
+  void GetBytes(char value[], int length);
 
-  int Write(int socket) { return 0; }
-  int Read(int socket) { return 0; }
-
-  // old API
-  /*
-int Write(unsigned char *buf, int size);
-void Flush();
-int Read(unsigned char *buf, int size);
-void Sync();
-  */
+  void Clear();
+  int Write(int socket);
+  int Read(int socket, int size);
 
 private:
   struct iovec iov[4];

@@ -27,17 +27,18 @@
 #include "crail/client/common/serializable.h"
 #include "crail/client/utils/crail_networking.h"
 #include "ioutils/byte_buffer.h"
+#include "narpc/network_stream.h"
 
 using namespace crail;
 
-class DatanodeInfo : public Serializable {
+class DatanodeInfo {
 public:
   DatanodeInfo();
   DatanodeInfo(const DatanodeInfo &dn_info) = default;
   virtual ~DatanodeInfo();
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   int Size() const {
     return sizeof(int) * 3 + sizeof(unsigned char) * 4 + sizeof(int);

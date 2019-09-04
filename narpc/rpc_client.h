@@ -58,16 +58,15 @@ private:
   static const int kRpcHeader = 4;
   static const int kMaxTicket = 8;
 
-  int socket_;
-  bool isConnected_;
-  bool nodelay_;
   int address_;
   int port_;
+  bool nodelay_;
+  int socket_;
+  bool isConnected_;
 
   NetworkStream stream_;
   atomic<unsigned long long> counter_;
   shared_ptr<RpcMessage> responseMap_[kMaxTicket];
-  unsigned char header_[12];
 };
 
 #endif /* RPC_CLIENT_H */

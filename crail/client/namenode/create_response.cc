@@ -45,12 +45,10 @@ parent_block_->Write(buf);
 int CreateResponse::Update(NetworkStream &stream) {
   NamenodeResponse::Update(stream);
 
-  /*
-file_info_.Update(buf);
-parent_info_.Update(buf);
-file_block_->Update(buf);
-parent_block_->Update(buf);
-  */
+  file_info_.Update(stream);
+  parent_info_.Update(stream);
+  file_block_->Update(stream);
+  parent_block_->Update(stream);
 
   return 0;
 }

@@ -42,6 +42,8 @@ NetworkStream::NetworkStream() : vec_count_(0), bytes_(0), metadata_(1024) {}
 
 NetworkStream::~NetworkStream() {}
 
+void NetworkStream::Clear() { metadata_.Clear(); }
+
 void NetworkStream::PutByte(unsigned char value) { metadata_.PutByte(value); }
 
 void NetworkStream::PutInt(int value) { metadata_.PutInt(value); }
@@ -54,6 +56,10 @@ void NetworkStream::PutData(shared_ptr<ByteBuffer> buffer) {
   data_.push_back(buffer);
 }
 
+void NetworkStream::PutBytes(const char buf[], int length) {
+  metadata_.PutBytes(buf, length);
+}
+
 unsigned char NetworkStream::GetByte() { return metadata_.GetByte(); }
 
 short NetworkStream::GetShort() { return metadata_.GetShort(); }
@@ -62,6 +68,58 @@ int NetworkStream::GetInt() { return metadata_.GetInt(); }
 
 long long NetworkStream::GetLong() { return metadata_.GetLong(); }
 
+void NetworkStream::GetBytes(char buf[], int length) {
+  return metadata_.GetBytes(buf, length);
+}
+
+int NetworkStream::Write(int socket) {
+  metadata_.Flip();
+  unsigned char *buf = metadata_.get_bytes();
+  int size = metadata_.remaining();
+
+  cout << "sending buf of size " << size << endl;
+  int res = send(socket, buf, (size_t)size, (int)0);
+  cout << "res " << res << endl;
+  if (res < 0) {
+    return res;
+  }
+  int remaining = size - res;
+  while (remaining > 0) {
+    int offset = size - remaining;
+    res = send(socket, buf + offset, (size_t)remaining, (int)0);
+    if (res < 0) {
+      return res;
+    }
+    remaining -= res;
+  }
+  return remaining;
+}
+
+int NetworkStream::Read(int socket, int size) {
+  unsigned char *buf = metadata_.get_bytes();
+  int old_pos = metadata_.position();
+
+  int sum = 0;
+  while (sum < size) {
+    int res = recv(socket, buf + sum, (size_t)(size - sum), MSG_DONTWAIT);
+
+    if (res < 0) {
+      if (errno == EAGAIN) {
+        continue;
+      }
+      // return res;
+      break;
+    }
+
+    sum += res;
+  }
+
+  metadata_.set_position(sum);
+  metadata_.Flip();
+  metadata_.set_position(old_pos);
+
+  return sum;
+}
 /*
 int NetworkStream::Write(unsigned char *buf, int size) {
   iov[vec_count_].iov_base = buf;

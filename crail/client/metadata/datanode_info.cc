@@ -51,22 +51,22 @@ DatanodeInfo::DatanodeInfo() {
 
 DatanodeInfo::~DatanodeInfo() {}
 
-int DatanodeInfo::Write(ByteBuffer &buf) const {
-  buf.PutInt(storage_type_);
-  buf.PutInt(storage_class_);
-  buf.PutInt(location_class_);
-  buf.PutBytes((char *)&ip_address_, 4);
-  buf.PutInt(port_);
+int DatanodeInfo::Write(NetworkStream &stream) const {
+  stream.PutInt(storage_type_);
+  stream.PutInt(storage_class_);
+  stream.PutInt(location_class_);
+  stream.PutBytes((char *)&ip_address_, 4);
+  stream.PutInt(port_);
 
   return 0;
 }
 
-int DatanodeInfo::Update(ByteBuffer &buf) {
-  storage_type_ = buf.GetInt();
-  storage_class_ = buf.GetInt();
-  location_class_ = buf.GetInt();
-  buf.GetBytes((char *)&ip_address_, 4);
-  port_ = buf.GetInt();
+int DatanodeInfo::Update(NetworkStream &stream) {
+  storage_type_ = stream.GetInt();
+  storage_class_ = stream.GetInt();
+  location_class_ = stream.GetInt();
+  stream.GetBytes((char *)&ip_address_, 4);
+  port_ = stream.GetInt();
 
   return 0;
 }

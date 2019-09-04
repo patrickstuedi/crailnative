@@ -25,14 +25,15 @@
 #define FILE_INFO_H
 
 #include "crail/client/common/serializable.h"
+#include "narpc/network_stream.h"
 
-class FileInfo : public Serializable {
+class FileInfo {
 public:
   FileInfo();
   virtual ~FileInfo() = default;
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   int Size() const {
     return sizeof(unsigned long long) * 2 + sizeof(int) +

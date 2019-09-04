@@ -37,24 +37,24 @@ FileInfo::FileInfo() {
   this->modification_time_ = -1;
 }
 
-int FileInfo::Write(ByteBuffer &buf) const {
-  buf.PutLong(fd_);
-  buf.PutLong(capacity_);
-  buf.PutInt(node_type_);
-  buf.PutLong(dir_offset_);
-  buf.PutLong(token_);
-  buf.PutLong(modification_time_);
+int FileInfo::Write(NetworkStream &stream) const {
+  stream.PutLong(fd_);
+  stream.PutLong(capacity_);
+  stream.PutInt(node_type_);
+  stream.PutLong(dir_offset_);
+  stream.PutLong(token_);
+  stream.PutLong(modification_time_);
 
   return 0;
 }
 
-int FileInfo::Update(ByteBuffer &buf) {
-  fd_ = buf.GetLong();
-  capacity_ = buf.GetLong();
-  node_type_ = buf.GetInt();
-  dir_offset_ = buf.GetLong();
-  token_ = buf.GetLong();
-  modification_time_ = buf.GetLong();
+int FileInfo::Update(NetworkStream &stream) {
+  fd_ = stream.GetLong();
+  capacity_ = stream.GetLong();
+  node_type_ = stream.GetInt();
+  dir_offset_ = stream.GetLong();
+  token_ = stream.GetLong();
+  modification_time_ = stream.GetLong();
 
   return 0;
 }

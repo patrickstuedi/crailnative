@@ -29,22 +29,22 @@ BlockInfo::BlockInfo() {}
 
 BlockInfo::~BlockInfo() {}
 
-int BlockInfo::Write(ByteBuffer &buf) const {
-  datanode_info_.Write(buf);
-  buf.PutLong(lba_);
-  buf.PutLong(addr_);
-  buf.PutInt(length_);
-  buf.PutInt(lkey_);
+int BlockInfo::Write(NetworkStream &stream) const {
+  datanode_info_.Write(stream);
+  stream.PutLong(lba_);
+  stream.PutLong(addr_);
+  stream.PutInt(length_);
+  stream.PutInt(lkey_);
 
   return 0;
 }
 
-int BlockInfo::Update(ByteBuffer &buf) {
-  datanode_info_.Update(buf);
-  lba_ = buf.GetLong();
-  addr_ = buf.GetLong();
-  length_ = buf.GetInt();
-  lkey_ = buf.GetInt();
+int BlockInfo::Update(NetworkStream &stream) {
+  datanode_info_.Update(stream);
+  lba_ = stream.GetLong();
+  addr_ = stream.GetLong();
+  length_ = stream.GetInt();
+  lkey_ = stream.GetInt();
 
   return 0;
 }

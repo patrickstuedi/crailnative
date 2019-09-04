@@ -27,15 +27,16 @@
 #include "crail/client/common/serializable.h"
 #include "crail/client/metadata/datanode_info.h"
 #include "ioutils/byte_buffer.h"
+#include "narpc/network_stream.h"
 
-class BlockInfo : public Serializable {
+class BlockInfo {
 public:
   BlockInfo();
   // BlockInfo(const BlockInfo &block_info) = default;
   virtual ~BlockInfo();
 
-  int Write(ByteBuffer &buf) const;
-  int Update(ByteBuffer &buf);
+  int Write(NetworkStream &stream) const;
+  int Update(NetworkStream &stream);
 
   int Size() const {
     return datanode_info_.Size() + sizeof(unsigned long long) * 2 +
