@@ -91,11 +91,11 @@ SendBytes(socket, databuf->get_bytes(), databuf->remaining());
   */
 
   int vec_index = 0;
-  struct iovec iov[4];
+  struct iovec iov[1 + data_.size()];
+
   iov[vec_index].iov_base = buf;
   iov[vec_index].iov_len = size;
   vec_index++;
-
   for (shared_ptr<ByteBuffer> databuf : data_) {
     iov[vec_index].iov_base = databuf->get_bytes();
     iov[vec_index].iov_len = databuf->remaining();
