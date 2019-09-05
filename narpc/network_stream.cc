@@ -39,12 +39,14 @@
 #include "crail/client/common/crail_constants.h"
 #include "narpc/network_utils.h"
 
-NetworkStream::NetworkStream()
-    : vec_count_(0), bytes_(0), metadata_(kBufferSize * 2) {}
+NetworkStream::NetworkStream() : bytes_(0), metadata_(kBufferSize * 2) {}
 
 NetworkStream::~NetworkStream() {}
 
-void NetworkStream::Clear() { metadata_.Clear(); }
+void NetworkStream::Clear() {
+  metadata_.Clear();
+  data_.clear();
+}
 
 void NetworkStream::PutByte(unsigned char value) { metadata_.PutByte(value); }
 
@@ -56,6 +58,7 @@ void NetworkStream::PutLong(long long value) { metadata_.PutLong(value); }
 
 void NetworkStream::PutData(shared_ptr<ByteBuffer> buffer) {
   data_.push_back(buffer);
+  // metadata_.PutBytes((const char *)buffer->get_bytes(), buffer->remaining());
 }
 
 void NetworkStream::PutBytes(const char buf[], int length) {
@@ -78,6 +81,37 @@ int NetworkStream::Write(int socket) {
   metadata_.Flip();
   unsigned char *buf = metadata_.get_bytes();
   int size = metadata_.remaining();
+
+  /*
+SendBytes(socket, buf, size);
+
+for (shared_ptr<ByteBuffer> databuf : data_) {
+SendBytes(socket, databuf->get_bytes(), databuf->remaining());
+}
+  */
+
+  int vec_index = 0;
+  struct iovec iov[4];
+  iov[vec_index].iov_base = buf;
+  iov[vec_index].iov_len = size;
+  vec_index++;
+
+  for (shared_ptr<ByteBuffer> databuf : data_) {
+    iov[vec_index].iov_base = databuf->get_bytes();
+    iov[vec_index].iov_len = databuf->remaining();
+    vec_index++;
+  }
+
+  SendBytesV(socket, iov, vec_index);
+
+  return 0;
+}
+
+int NetworkStream::SendBytesV(int socket, struct iovec *iov, int vec_count) {
+  return writev(socket, iov, vec_count);
+}
+
+int NetworkStream::SendBytes(int socket, unsigned char *buf, int size) {
 
   cout << "sending buf of size " << size << endl;
   int res = send(socket, buf, (size_t)size, (int)0);

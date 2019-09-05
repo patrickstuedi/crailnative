@@ -40,7 +40,7 @@ int NarpcWriteRequest::Write(NetworkStream &stream) const {
   stream.PutLong(address_);
   stream.PutInt(length_);
   stream.PutInt(length_);
-  stream.PutBytes((const char *)payload_->get_bytes(), payload_->remaining());
+  stream.PutData(payload_);
   return 0;
 }
 

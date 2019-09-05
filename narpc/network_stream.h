@@ -61,12 +61,17 @@ public:
   int Read(int socket, int size);
 
 private:
-  struct iovec iov[4];
-  int vec_count_;
-  int bytes_;
+  /*
+struct iovec iov[4];
+int vec_count_;
+  */
 
   ByteBuffer metadata_;
   vector<shared_ptr<ByteBuffer>> data_;
+  int bytes_;
+
+  int SendBytes(int socket, unsigned char *buf, int length);
+  int SendBytesV(int socket, struct iovec *iov, int vec_count);
 };
 
 #endif /* NETWORK_STREAM_H */
