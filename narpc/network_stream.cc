@@ -36,9 +36,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "crail/client/common/crail_constants.h"
 #include "narpc/network_utils.h"
 
-NetworkStream::NetworkStream() : vec_count_(0), bytes_(0), metadata_(1024) {}
+NetworkStream::NetworkStream()
+    : vec_count_(0), bytes_(0), metadata_(kBufferSize * 2) {}
 
 NetworkStream::~NetworkStream() {}
 
@@ -114,9 +116,12 @@ int NetworkStream::Read(int socket, int size) {
     sum += res;
   }
 
-  metadata_.set_position(sum);
+  metadata_.set_position(old_pos + sum);
   metadata_.Flip();
   metadata_.set_position(old_pos);
+
+  cout << "after read, pos " << metadata_.position() << ", limit "
+       << metadata_.limit() << endl;
 
   return sum;
 }

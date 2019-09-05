@@ -24,10 +24,14 @@
 #ifndef BLOCK_INFO_H
 #define BLOCK_INFO_H
 
+#include <string>
+
 #include "crail/client/common/serializable.h"
 #include "crail/client/metadata/datanode_info.h"
 #include "ioutils/byte_buffer.h"
 #include "narpc/network_stream.h"
+
+using namespace std;
 
 class BlockInfo {
 public:
@@ -51,7 +55,10 @@ public:
   int length() const { return length_; }
   int lkey() const { return lkey_; }
   bool valid() { return datanode_info_.valid(); }
-  string ToString() const { return "BlockInfo:: " + datanode_info_.ToString(); }
+  string ToString() const {
+    return "BlockInfo:: " + to_string(lba_) + ", " + to_string(addr_) + ", " +
+           to_string(length_) + " " + datanode_info_.ToString();
+  }
 
   /*
 BlockInfo &operator=(const BlockInfo &other) {

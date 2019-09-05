@@ -38,7 +38,7 @@ int VoidResponse::Write(NetworkStream &stream) const {
 int VoidResponse::Update(NetworkStream &stream) {
   NamenodeResponse::Update(stream);
 
+  error_ = stream.GetInt();
+
   return 0;
 }
-
-void VoidResponse::Sync() {}

@@ -35,11 +35,9 @@ SetfileRequest::~SetfileRequest() {}
 int SetfileRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 
-  /*
-file_info_.Write(stream);
-int _close = close_ ? 1 : 0;
-stream_.PutInt(_close);
-  */
+  file_info_.Write(stream);
+  int _close = close_ ? 1 : 0;
+  stream.PutInt(_close);
 
   return Size();
 }

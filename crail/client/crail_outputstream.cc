@@ -48,7 +48,8 @@ CrailOutputstream::CrailOutputstream(shared_ptr<NamenodeClient> namenode_client,
 CrailOutputstream::~CrailOutputstream() {}
 
 Future<int> CrailOutputstream::Write(shared_ptr<ByteBuffer> buf) {
-  cout << "CrailInputstream::Write buf->remaining " << buf->remaining() << endl;
+  cout << "CrailOutputstream::Write buf->remaining " << buf->remaining()
+       << endl;
   if (buf->remaining() < 0) {
     return Future<int>::Failure(-1);
   }

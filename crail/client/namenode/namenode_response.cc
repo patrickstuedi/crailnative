@@ -23,6 +23,10 @@
 
 #include "crail/client/namenode/namenode_response.h"
 
+#include <iostream>
+
+using namespace std;
+
 NamenodeResponse::NamenodeResponse() : type_(-1), error_(-1) {}
 
 NamenodeResponse::~NamenodeResponse() {}
@@ -32,5 +36,6 @@ int NamenodeResponse::Write(NetworkStream &stream) const { return Size(); }
 int NamenodeResponse::Update(NetworkStream &stream) {
   this->type_ = stream.GetShort();
   this->error_ = stream.GetShort();
+
   return Size();
 }

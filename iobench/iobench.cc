@@ -99,10 +99,10 @@ void setDefaults(Settings &settings) {
   settings.address = "127.0.0.1";
   settings.port = 9060;
   settings.operation = Operation::Undefined;
-  settings.filename = "/tmp";
+  settings.filename = "/tmp.dat";
   settings.loop = 1;
   settings.size = 1024;
-  settings.dstfile = "/dst";
+  settings.dstfile = "/dst.dat";
   settings.enumerable = false;
 }
 
@@ -235,11 +235,12 @@ int Iobench::Cat(string src_file) {
   return 0;
 }
 
-int Iobench::Write(string dst_file, int len, int loop) {
+int Iobench::Write(string dst_file, int len, int loop, bool enumerable) {
+
   MicroClock clock;
   clock.Start();
 
-  auto file = crail_.Create<CrailFile>(dst_file, 0, 0, true).get();
+  auto file = crail_.Create<CrailFile>(dst_file, 0, 0, enumerable).get();
   if (!file.valid()) {
     cout << "create node failed" << endl;
     return -1;
@@ -260,6 +261,7 @@ int Iobench::Write(string dst_file, int len, int loop) {
       }
     }
   }
+
   outputstream->Close().get();
 
   clock.Stop();
@@ -365,7 +367,6 @@ int Iobench::GetKey(char data[], int len, string src_file) {
 int main(int argc, char *argv[]) {
   Settings settings;
   setDefaults(settings);
-  printSettings(settings);
 
   int opt = 0;
   while ((opt = getopt(argc, argv, "t:f:k:s:a:p:d:e")) != -1) {
@@ -416,7 +417,8 @@ int main(int argc, char *argv[]) {
   } else if (settings.operation == Operation::CopyToLocal) {
     res = iobench.CopyToLocal(settings.filename, settings.dstfile);
   } else if (settings.operation == Operation::Write) {
-    res = iobench.Write(settings.filename, settings.size, settings.loop);
+    res = iobench.Write(settings.filename, settings.size, settings.loop,
+                        settings.enumerable);
   } else if (settings.operation == Operation::Read) {
     res = iobench.Read(settings.filename, settings.size, settings.loop);
   } else if (settings.operation == Operation::PutKey) {

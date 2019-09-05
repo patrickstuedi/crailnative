@@ -126,27 +126,5 @@ int RpcClient::PollResponse() {
   cout << "RpcMessage::PollResponse " << msg_response << " (size "
        << msg_response->Size() << ")" << endl;
 
-  while (true)
-    ;
-  /*
-stream_.Read(header_, kNarpcHeader);
-stream_.Sync();
-int *_tmpint = (int *)header_;
-int size = ntohl(*_tmpint);
-_tmpint++;
-long long *_tmplong = (long long *)_tmpint;
-long long ticket = be64toh(*_tmplong);
-  */
-  int size = stream_.GetInt();
-  long long ticket = stream_.GetLong();
-
-  // recv message
-  shared_ptr<RpcMessage> response = responseMap_[ticket];
-  response->Update(stream_);
-  // stream_.Sync();
-  // response->Sync();
-  cout << "RpcMessage::PollResponse " << response << " (size "
-       << response->Size() << ")" << endl;
-
   return 0;
 }

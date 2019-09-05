@@ -34,7 +34,6 @@ public:
   int Size() const { return NamenodeResponse::Size(); }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
-  void Sync();
   string ToString() const { return "VoidResponse:: " + to_string(error_); }
 
 private:

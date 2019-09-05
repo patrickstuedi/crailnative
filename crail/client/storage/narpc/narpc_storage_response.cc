@@ -34,4 +34,9 @@ NarpcStorageResponse::~NarpcStorageResponse() {}
 
 int NarpcStorageResponse::Write(NetworkStream &stream) const { return 0; }
 
-int NarpcStorageResponse::Update(NetworkStream &stream) { return 0; }
+int NarpcStorageResponse::Update(NetworkStream &stream) {
+  this->error_ = stream.GetInt();
+  this->type_ = stream.GetInt();
+
+  return 0;
+}

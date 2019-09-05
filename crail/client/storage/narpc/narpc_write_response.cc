@@ -37,6 +37,7 @@ int NarpcWriteResponse::Write(NetworkStream &stream) const {
 int NarpcWriteResponse::Update(NetworkStream &stream) {
   NarpcStorageResponse::Update(stream);
 
+  ret_ = stream.GetInt();
   return 0;
 }
 
