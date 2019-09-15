@@ -30,10 +30,8 @@ GetblockResponse::~GetblockResponse() {}
 int GetblockResponse::Write(NetworkStream &stream) const {
   NamenodeResponse::Write(stream);
 
-  /*
-block_info_.Write(buf);
-buf.PutShort(error_);
-  */
+  block_info_.Write(stream);
+  stream.PutShort(error_);
 
   return 0;
 }
@@ -41,10 +39,8 @@ buf.PutShort(error_);
 int GetblockResponse::Update(NetworkStream &stream) {
   NamenodeResponse::Update(stream);
 
-  /*
-block_info_.Update(buf);
-this->error_ = buf.GetShort();
-  */
+  block_info_.Update(stream);
+  this->error_ = stream.GetShort();
 
   return 0;
 }

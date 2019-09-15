@@ -34,12 +34,10 @@ GetblockRequest::~GetblockRequest() {}
 int GetblockRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 
-  /*
-buf.PutLong(fd_);
-buf.PutLong(token_);
-buf.PutLong(position_);
-buf.PutLong(capacity_);
-  */
+  stream.PutLong(fd_);
+  stream.PutLong(token_);
+  stream.PutLong(position_);
+  stream.PutLong(capacity_);
 
   return Size();
 }

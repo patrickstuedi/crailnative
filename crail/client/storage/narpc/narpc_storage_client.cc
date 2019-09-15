@@ -57,7 +57,7 @@ Future<int> NarpcStorageClient::ReadData(int key, long long address,
   shared_ptr<NarpcReadRequest> request =
       make_shared<NarpcReadRequest>(key, address, buf->remaining());
   shared_ptr<NarpcReadResponse> response =
-      make_shared<NarpcReadResponse>(&rpc_client_);
+      make_shared<NarpcReadResponse>(&rpc_client_, buf);
 
   if (rpc_client_.IssueRequest(request, response) < 0) {
     return Future<int>::Failure(-1);

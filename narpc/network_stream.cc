@@ -77,6 +77,10 @@ void NetworkStream::GetBytes(char buf[], int length) {
   return metadata_.GetBytes(buf, length);
 }
 
+void NetworkStream::GetData(shared_ptr<ByteBuffer> buffer) {
+  data_.push_back(buffer);
+}
+
 int NetworkStream::Write(int socket) {
   metadata_.Flip();
   unsigned char *buf = metadata_.get_bytes();

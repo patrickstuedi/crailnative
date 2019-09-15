@@ -35,7 +35,7 @@ using namespace std;
 
 class NarpcReadResponse : public NarpcStorageResponse, public AsyncTask<int> {
 public:
-  NarpcReadResponse(RpcClient *client);
+  NarpcReadResponse(RpcClient *client, shared_ptr<ByteBuffer> payload);
   virtual ~NarpcReadResponse();
 
   int Size() const { return length_; }
@@ -47,6 +47,7 @@ public:
 private:
   RpcClient *client_;
   int length_;
+  shared_ptr<ByteBuffer> payload_;
 };
 
 #endif /* NARPC_READ_RESPONSE_H */

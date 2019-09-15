@@ -27,8 +27,10 @@
 
 using namespace std;
 
-NarpcReadResponse::NarpcReadResponse(RpcClient *client)
-    : NarpcStorageResponse(-1, -1), client_(client), length_(-1) {}
+NarpcReadResponse::NarpcReadResponse(RpcClient *client,
+                                     shared_ptr<ByteBuffer> buf)
+    : NarpcStorageResponse(-1, -1), client_(client), length_(-1),
+      payload_(buf) {}
 
 NarpcReadResponse::~NarpcReadResponse() {}
 
@@ -45,9 +47,9 @@ buf.PutInt(length_);
 int NarpcReadResponse::Update(NetworkStream &stream) {
   NarpcStorageResponse::Update(stream);
 
-  /*
-length_ = buf.GetInt();
-  */
+  length_ = stream.GetInt();
+  // stream.Read(payload_->get_bytes(), payload_->remaining());
+  stream.GetData(payload_);
 
   return 0;
 }

@@ -32,12 +32,10 @@ NarpcReadRequest::~NarpcReadRequest() {}
 int NarpcReadRequest::Write(NetworkStream &stream) const {
   NarpcStorageRequest::Write(stream);
 
-  /*
-buf.PutInt(key_);
-buf.PutLong(address_);
-buf.PutInt(length_);
-// buf.PutInt(length_);
-  */
+  stream.PutInt(key_);
+  stream.PutLong(address_);
+  stream.PutInt(length_);
+  // buf.PutInt(length_);
 
   return 0;
 }

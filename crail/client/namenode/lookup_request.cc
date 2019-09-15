@@ -34,10 +34,8 @@ LookupRequest::~LookupRequest() {}
 int LookupRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 
-  /*
-filename_.Write(buf);
-buf.PutInt(0);
-  */
+  filename_.Write(stream);
+  stream.PutInt(0);
 
   return Size();
 }
