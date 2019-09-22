@@ -21,8 +21,8 @@
  * limitations under the License.
  */
 
-#ifndef NETWORK_STREAM_H
-#define NETWORK_STREAM_H
+#ifndef NARPC_STAGING_H
+#define NARPC_STAGING_H
 
 #include <fcntl.h>
 #include <memory>
@@ -33,37 +33,19 @@
 #include <vector>
 
 #include "ioutils/byte_buffer.h"
-//#include "narpc/rpc_message.h"
+#include "narpc/rpc_message.h"
 
-using namespace crail;
-using namespace std;
-
-class NetworkStream {
+class NarpcStaging {
 public:
-  NetworkStream();
-  virtual ~NetworkStream();
+  NarpcStaging();
+  virtual ~NarpcStaging();
 
   void PutHeader(int size, int ticker);
-  // void SerializeMessage(shared_ptr<RpcMessage> message);
-
-  // old stuff
-  void PutByte(unsigned char value);
-  void PutShort(short value);
-  void PutInt(int value);
-  void PutLong(long long value);
-  void PutData(shared_ptr<ByteBuffer> data);
-  void PutBytes(const char value[], int length);
-
-  unsigned char GetByte();
-  short GetShort();
-  int GetInt();
-  long long GetLong();
-  void GetData(shared_ptr<ByteBuffer> data);
-  void GetBytes(char value[], int length);
+  void SerializeMessage(shared_ptr<RpcMessage> message);
 
   void Clear();
-  int Write(int socket);
-  int Read(int socket, int size);
+  int Flush(int socket);
+  int Fetch(int socket, int size);
 
 private:
   ByteBuffer metadata_;
@@ -74,4 +56,4 @@ private:
   int SendBytesV(int socket, struct iovec *iov, int vec_count);
 };
 
-#endif /* NETWORK_STREAM_H */
+#endif /* NARPC_STAGING_H */

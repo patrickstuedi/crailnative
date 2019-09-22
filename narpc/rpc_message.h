@@ -28,12 +28,19 @@
 #include <ostream>
 #include <string>
 
+#include "ioutils/byte_buffer.h"
 #include "narpc/network_stream.h"
 
 using namespace std;
+using namespace crail;
 
 class RpcMessage {
 public:
+  virtual int UpdateMetedata(ByteBuffer &buffer) {}
+  virtual int WriteMetadata(ByteBuffer &buffer) {}
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
+
+  // old stuff
   virtual int Update(NetworkStream &stream) = 0;
   virtual int Write(NetworkStream &stream) const = 0;
 

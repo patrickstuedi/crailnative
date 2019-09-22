@@ -3,6 +3,7 @@ add_library (narpc STATIC
 	rpc_client.cc
 	network_stream.cc
 	network_utils.cc
+	narpc_staging.cc
 	)
 
 target_link_libraries (narpc LINK_PUBLIC ioutils)

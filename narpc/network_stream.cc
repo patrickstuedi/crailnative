@@ -48,6 +48,15 @@ void NetworkStream::Clear() {
   data_.clear();
 }
 
+void NetworkStream::PutHeader(int size, int ticket) {
+  metadata_.PutInt(size);
+  metadata_.PutInt(ticket);
+}
+
+// void NetworkStream::SerializeMessage(shared_ptr<RpcMessage> message) {}
+
+// old stuff
+
 void NetworkStream::PutByte(unsigned char value) { metadata_.PutByte(value); }
 
 void NetworkStream::PutInt(int value) { metadata_.PutInt(value); }
