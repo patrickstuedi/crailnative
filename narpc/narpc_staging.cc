@@ -48,17 +48,49 @@ void NarpcStaging::Clear() {
   data_.clear();
 }
 
-void NarpcStaging::PutHeader(int size, int ticket) {
+void NarpcStaging::AddHeader(int size, unsigned long long ticket) {
   metadata_.PutInt(size);
-  metadata_.PutInt(ticket);
+  metadata_.PutLong(ticket);
 }
 
-void NarpcStaging::SerializeMessage(shared_ptr<RpcMessage> message) {
+void NarpcStaging::SendMessage(int socket, shared_ptr<RpcMessage> message) {
   message->WriteMetadata(metadata_);
   shared_ptr<ByteBuffer> payload = message->GetPayload();
   if (payload) {
     data_.push_back(payload);
   }
+  Flush(socket);
+}
+
+int NarpcStaging::FetchHeader(int socket, int &size,
+                              unsigned long long &ticket) {
+  ReceiveBytes(socket, sizeof(int) * 2, metadata_.get_bytes());
+
+  size = metadata_.GetInt();
+  ticket = metadata_.GetLong();
+
+  return 0;
+}
+
+int NarpcStaging::FetchMessage(int socket, shared_ptr<RpcMessage> message) {
+
+  int old_pos = metadata_.position();
+
+  int sum = ReceiveBytes(socket, message->Size(), metadata_.get_bytes());
+
+  metadata_.set_position(old_pos + sum);
+  metadata_.Flip();
+  metadata_.set_position(old_pos);
+
+  cout << "after read, pos " << metadata_.position() << ", limit "
+       << metadata_.limit() << endl;
+
+  shared_ptr<ByteBuffer> payload = message->GetPayload();
+  if (payload) {
+    ReceiveBytes(socket, payload->Size(), payload->get_bytes());
+  }
+
+  return 0;
 }
 
 int NarpcStaging::Flush(int socket) {
@@ -91,35 +123,6 @@ SendBytes(socket, databuf->get_bytes(), databuf->remaining());
   return 0;
 }
 
-int NarpcStaging::Fetch(int socket, int size) {
-  unsigned char *buf = metadata_.get_bytes();
-  int old_pos = metadata_.position();
-
-  int sum = 0;
-  while (sum < size) {
-    int res = recv(socket, buf + sum, (size_t)(size - sum), MSG_DONTWAIT);
-
-    if (res < 0) {
-      if (errno == EAGAIN) {
-        continue;
-      }
-      // return res;
-      break;
-    }
-
-    sum += res;
-  }
-
-  metadata_.set_position(old_pos + sum);
-  metadata_.Flip();
-  metadata_.set_position(old_pos);
-
-  cout << "after read, pos " << metadata_.position() << ", limit "
-       << metadata_.limit() << endl;
-
-  return sum;
-}
-
 int NarpcStaging::SendBytesV(int socket, struct iovec *iov, int vec_count) {
   return writev(socket, iov, vec_count);
 }
@@ -142,4 +145,24 @@ int NarpcStaging::SendBytes(int socket, unsigned char *buf, int size) {
     remaining -= res;
   }
   return remaining;
+}
+
+int NarpcStaging::ReceiveBytes(int socket, int size, unsigned char *buf) {
+
+  int sum = 0;
+  while (sum < size) {
+    int res = recv(socket, buf + sum, (size_t)(size - sum), MSG_DONTWAIT);
+
+    if (res < 0) {
+      if (errno == EAGAIN) {
+        continue;
+      }
+      // return res;
+      break;
+    }
+
+    sum += res;
+  }
+
+  return sum;
 }

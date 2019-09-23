@@ -40,20 +40,23 @@ public:
   NarpcStaging();
   virtual ~NarpcStaging();
 
-  void PutHeader(int size, int ticker);
-  void SerializeMessage(shared_ptr<RpcMessage> message);
-
   void Clear();
-  int Flush(int socket);
-  int Fetch(int socket, int size);
+
+  void AddHeader(int size, unsigned long long ticket);
+  void SendMessage(int socket, shared_ptr<RpcMessage> message);
+
+  int FetchHeader(int socket, int &size, unsigned long long &ticket);
+  int FetchMessage(int socket, shared_ptr<RpcMessage> message);
 
 private:
   ByteBuffer metadata_;
   vector<shared_ptr<ByteBuffer>> data_;
   int bytes_;
 
+  int Flush(int socket);
   int SendBytes(int socket, unsigned char *buf, int length);
   int SendBytesV(int socket, struct iovec *iov, int vec_count);
+  int ReceiveBytes(int socket, int size, unsigned char *buf);
 };
 
 #endif /* NARPC_STAGING_H */

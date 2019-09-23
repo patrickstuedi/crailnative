@@ -37,6 +37,7 @@
 #include <unistd.h>
 #include <unordered_map>
 
+#include "narpc/narpc_staging.h"
 #include "narpc/rpc_message.h"
 
 using namespace std;
@@ -65,6 +66,7 @@ private:
   bool isConnected_;
 
   NetworkStream stream_;
+  NarpcStaging staging_;
   atomic<unsigned long long> counter_;
   shared_ptr<RpcMessage> responseMap_[kMaxTicket];
 };
