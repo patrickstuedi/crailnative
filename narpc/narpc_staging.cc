@@ -87,7 +87,7 @@ int NarpcStaging::FetchMessage(int socket, shared_ptr<RpcMessage> message) {
 
   shared_ptr<ByteBuffer> payload = message->GetPayload();
   if (payload) {
-    ReceiveBytes(socket, payload->Size(), payload->get_bytes());
+    ReceiveBytes(socket, payload->size(), payload->get_bytes());
   }
 
   return 0;

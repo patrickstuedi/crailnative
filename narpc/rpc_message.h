@@ -36,8 +36,8 @@ using namespace crail;
 
 class RpcMessage {
 public:
-  virtual int UpdateMetedata(ByteBuffer &buffer) {}
-  virtual int WriteMetadata(ByteBuffer &buffer) {}
+  virtual int UpdateMetedata(ByteBuffer &buffer) { return 0; }
+  virtual int WriteMetadata(ByteBuffer &buffer) { return 0; }
   virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   // old stuff
