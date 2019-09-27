@@ -124,14 +124,15 @@ int RpcClient::PollResponse() {
   // int msg_size = stream_.GetInt();
   // long long msg_ticket = stream_.GetLong();
   int size = 0;
-  long long ticket = 0;
-  // staging_.FetchHeader(socket_, size, ticket);
+  unsigned long long ticket = 0;
+  staging_.FetchHeader(socket_, size, ticket);
 
   cout << "receiving size " << size << ", ticket " << ticket << endl;
   shared_ptr<RpcMessage> response = responseMap_[ticket];
 
   // stream_.Read(socket_, msg_size);
   // msg_response->Update(stream_);
+  staging_.Clear();
   staging_.FetchMessage(socket_, response);
   cout << "RpcMessage::PollResponse " << response << " (size "
        << response->Size() << ")" << endl;

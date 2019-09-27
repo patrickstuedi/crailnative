@@ -62,37 +62,6 @@ void NarpcStaging::SendMessage(int socket, shared_ptr<RpcMessage> message) {
   Flush(socket);
 }
 
-int NarpcStaging::FetchHeader(int socket, int &size,
-                              unsigned long long &ticket) {
-  ReceiveBytes(socket, sizeof(int) * 2, metadata_.get_bytes());
-
-  size = metadata_.GetInt();
-  ticket = metadata_.GetLong();
-
-  return 0;
-}
-
-int NarpcStaging::FetchMessage(int socket, shared_ptr<RpcMessage> message) {
-
-  int old_pos = metadata_.position();
-
-  int sum = ReceiveBytes(socket, message->Size(), metadata_.get_bytes());
-
-  metadata_.set_position(old_pos + sum);
-  metadata_.Flip();
-  metadata_.set_position(old_pos);
-
-  cout << "after read, pos " << metadata_.position() << ", limit "
-       << metadata_.limit() << endl;
-
-  shared_ptr<ByteBuffer> payload = message->GetPayload();
-  if (payload) {
-    ReceiveBytes(socket, payload->size(), payload->get_bytes());
-  }
-
-  return 0;
-}
-
 int NarpcStaging::Flush(int socket) {
   metadata_.Flip();
   unsigned char *buf = metadata_.get_bytes();
@@ -128,7 +97,6 @@ int NarpcStaging::SendBytesV(int socket, struct iovec *iov, int vec_count) {
 }
 
 int NarpcStaging::SendBytes(int socket, unsigned char *buf, int size) {
-
   cout << "sending buf of size " << size << endl;
   int res = send(socket, buf, (size_t)size, (int)0);
   cout << "res " << res << endl;
@@ -145,6 +113,35 @@ int NarpcStaging::SendBytes(int socket, unsigned char *buf, int size) {
     remaining -= res;
   }
   return remaining;
+}
+
+int NarpcStaging::FetchHeader(int socket, int &size,
+                              unsigned long long &ticket) {
+  ReceiveBytes(socket, sizeof(int) * 2, metadata_.get_bytes());
+
+  size = metadata_.GetInt();
+  ticket = metadata_.GetLong();
+
+  return 0;
+}
+
+int NarpcStaging::FetchMessage(int socket, shared_ptr<RpcMessage> message) {
+  int sum = ReceiveBytes(socket, message->Size(), metadata_.get_bytes());
+  metadata_.set_position(sum);
+  metadata_.Flip();
+  message->UpdateMetedata(metadata_);
+
+  cout << "after read, pos " << metadata_.position() << ", limit "
+       << metadata_.limit() << endl;
+
+  shared_ptr<ByteBuffer> payload = message->GetPayload();
+  if (payload) {
+    ReceiveBytes(socket, payload->size(), payload->get_bytes());
+    payload->set_position(payload->position() + payload->size());
+    payload->Flip();
+  }
+
+  return 0;
 }
 
 int NarpcStaging::ReceiveBytes(int socket, int size, unsigned char *buf) {
