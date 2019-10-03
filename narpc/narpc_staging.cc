@@ -67,6 +67,8 @@ int NarpcStaging::Flush(int socket) {
   unsigned char *buf = metadata_.get_bytes();
   int size = metadata_.remaining();
 
+  cout << "Flushing size " << size << endl;
+
   /*
 SendBytes(socket, buf, size);
 

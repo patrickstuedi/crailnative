@@ -53,6 +53,8 @@ public:
   NamenodeRequest(short cmd, short type);
   virtual ~NamenodeRequest();
 
+  virtual int WriteMetadata(ByteBuffer &buffer);
+
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
 

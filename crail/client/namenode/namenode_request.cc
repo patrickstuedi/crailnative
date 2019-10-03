@@ -28,6 +28,13 @@ NamenodeRequest::NamenodeRequest(short cmd, short type)
 
 NamenodeRequest::~NamenodeRequest() {}
 
+int NamenodeRequest::WriteMetadata(ByteBuffer &buffer) {
+  buffer.PutShort(cmd_);
+  buffer.PutShort(type_);
+
+  return 0;
+}
+
 int NamenodeRequest::Write(NetworkStream &stream) const {
   stream.PutShort(cmd_);
   stream.PutShort(type_);
