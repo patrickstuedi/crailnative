@@ -35,6 +35,10 @@ public:
   NarpcStorageResponse(int error, int type);
   virtual ~NarpcStorageResponse();
 
+  virtual int UpdateMetedata(ByteBuffer &buffer);
+  virtual int WriteMetadata(ByteBuffer &buffer);
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
+
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
   int Size() const { return sizeof(int) * 2; }

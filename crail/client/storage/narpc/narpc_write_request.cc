@@ -34,6 +34,17 @@ NarpcWriteRequest::NarpcWriteRequest(int key, long long address,
 
 NarpcWriteRequest::~NarpcWriteRequest() {}
 
+int NarpcWriteRequest::WriteMetadata(ByteBuffer &buffer) {
+  NarpcStorageRequest::WriteMetadata(buffer);
+  buffer.PutInt(key_);
+  buffer.PutLong(address_);
+  buffer.PutInt(length_);
+  buffer.PutInt(length_);
+  return 0;
+}
+
+int NarpcWriteRequest::UpdateMetedata(ByteBuffer &buffer) { return Size(); }
+
 int NarpcWriteRequest::Write(NetworkStream &stream) const {
   NarpcStorageRequest::Write(stream);
   stream.PutInt(key_);

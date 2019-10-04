@@ -32,6 +32,15 @@ NarpcStorageResponse::NarpcStorageResponse(int error, int type)
 
 NarpcStorageResponse::~NarpcStorageResponse() {}
 
+int NarpcStorageResponse::WriteMetadata(ByteBuffer &buffer) { return 0; }
+
+int NarpcStorageResponse::UpdateMetedata(ByteBuffer &buffer) {
+  this->error_ = buffer.GetInt();
+  this->type_ = buffer.GetInt();
+
+  return 0;
+}
+
 int NarpcStorageResponse::Write(NetworkStream &stream) const { return 0; }
 
 int NarpcStorageResponse::Update(NetworkStream &stream) {
