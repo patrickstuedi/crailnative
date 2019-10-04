@@ -29,6 +29,26 @@ BlockInfo::BlockInfo() {}
 
 BlockInfo::~BlockInfo() {}
 
+int BlockInfo::WriteMetadata(ByteBuffer &buffer) {
+  datanode_info_.WriteMetadata(buffer);
+  buffer.PutLong(lba_);
+  buffer.PutLong(addr_);
+  buffer.PutInt(length_);
+  buffer.PutInt(lkey_);
+
+  return 0;
+}
+
+int BlockInfo::UpdateMetadata(ByteBuffer &buffer) {
+  datanode_info_.UpdateMetadata(buffer);
+  lba_ = buffer.GetLong();
+  addr_ = buffer.GetLong();
+  length_ = buffer.GetInt();
+  lkey_ = buffer.GetInt();
+
+  return 0;
+}
+
 int BlockInfo::Write(NetworkStream &stream) const {
   datanode_info_.Write(stream);
   stream.PutLong(lba_);

@@ -37,6 +37,28 @@ FileInfo::FileInfo() {
   this->modification_time_ = -1;
 }
 
+int FileInfo::WriteMetadata(ByteBuffer &buffer) {
+  buffer.PutLong(fd_);
+  buffer.PutLong(capacity_);
+  buffer.PutInt(node_type_);
+  buffer.PutLong(dir_offset_);
+  buffer.PutLong(token_);
+  buffer.PutLong(modification_time_);
+
+  return 0;
+}
+
+int FileInfo::UpdateMetedata(ByteBuffer &buffer) {
+  fd_ = buffer.GetLong();
+  capacity_ = buffer.GetLong();
+  node_type_ = buffer.GetInt();
+  dir_offset_ = buffer.GetLong();
+  token_ = buffer.GetLong();
+  modification_time_ = buffer.GetLong();
+
+  return 0;
+}
+
 int FileInfo::Write(NetworkStream &stream) const {
   stream.PutLong(fd_);
   stream.PutLong(capacity_);

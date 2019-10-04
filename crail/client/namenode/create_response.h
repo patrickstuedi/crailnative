@@ -41,6 +41,8 @@ public:
   CreateResponse();
   virtual ~CreateResponse();
 
+  virtual int UpdateMetedata(ByteBuffer &buffer);
+
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() * 2 +
            file_block_->Size() * 2;

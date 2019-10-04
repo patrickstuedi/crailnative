@@ -29,6 +29,17 @@ CreateResponse::CreateResponse()
 
 CreateResponse::~CreateResponse() {}
 
+int CreateResponse::UpdateMetedata(ByteBuffer &buffer) {
+  NamenodeResponse::UpdateMetedata(buffer);
+
+  file_info_.UpdateMetedata(buffer);
+  parent_info_.UpdateMetedata(buffer);
+  file_block_->UpdateMetadata(buffer);
+  parent_block_->UpdateMetadata(buffer);
+
+  return 0;
+}
+
 int CreateResponse::Write(NetworkStream &stream) const {
   NamenodeResponse::Write(stream);
 

@@ -37,6 +37,9 @@ public:
   DatanodeInfo(const DatanodeInfo &dn_info) = default;
   virtual ~DatanodeInfo();
 
+  virtual int UpdateMetadata(ByteBuffer &buffer);
+  virtual int WriteMetadata(ByteBuffer &buffer);
+
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
 

@@ -31,6 +31,13 @@ NamenodeResponse::NamenodeResponse() : type_(-1), error_(-1) {}
 
 NamenodeResponse::~NamenodeResponse() {}
 
+int NamenodeResponse::UpdateMetedata(ByteBuffer &buffer) {
+  this->type_ = buffer.GetShort();
+  this->error_ = buffer.GetShort();
+
+  return Size();
+}
+
 int NamenodeResponse::Write(NetworkStream &stream) const { return Size(); }
 
 int NamenodeResponse::Update(NetworkStream &stream) {

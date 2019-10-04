@@ -32,6 +32,9 @@ public:
   FileInfo();
   virtual ~FileInfo() = default;
 
+  virtual int UpdateMetedata(ByteBuffer &buffer);
+  virtual int WriteMetadata(ByteBuffer &buffer);
+
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
 

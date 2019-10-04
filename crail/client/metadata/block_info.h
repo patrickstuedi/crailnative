@@ -39,6 +39,9 @@ public:
   // BlockInfo(const BlockInfo &block_info) = default;
   virtual ~BlockInfo();
 
+  virtual int UpdateMetadata(ByteBuffer &buffer);
+  virtual int WriteMetadata(ByteBuffer &buffer);
+
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
 

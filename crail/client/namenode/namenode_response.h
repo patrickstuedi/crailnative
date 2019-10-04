@@ -38,6 +38,8 @@ public:
   NamenodeResponse();
   virtual ~NamenodeResponse();
 
+  virtual int UpdateMetedata(ByteBuffer &buffer);
+
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
 

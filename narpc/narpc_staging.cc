@@ -119,7 +119,7 @@ int NarpcStaging::SendBytes(int socket, unsigned char *buf, int size) {
 
 int NarpcStaging::FetchHeader(int socket, int &size,
                               unsigned long long &ticket) {
-  ReceiveBytes(socket, sizeof(int) * 2, metadata_.get_bytes());
+  ReceiveBytes(socket, sizeof(int) + sizeof(long long), metadata_.get_bytes());
 
   size = metadata_.GetInt();
   ticket = metadata_.GetLong();
