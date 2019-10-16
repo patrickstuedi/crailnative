@@ -31,6 +31,8 @@ public:
   VoidResponse();
   virtual ~VoidResponse();
 
+  virtual int UpdateMetedata(ByteBuffer &buffer);
+
   int Size() const { return NamenodeResponse::Size(); }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);

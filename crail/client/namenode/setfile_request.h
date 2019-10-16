@@ -38,6 +38,8 @@ public:
   SetfileRequest(FileInfo file_info, bool close);
   virtual ~SetfileRequest();
 
+  virtual int WriteMetadata(ByteBuffer &buffer);
+
   int Size() const {
     return NamenodeRequest::Size() + file_info_.Size() + sizeof(int);
   }
