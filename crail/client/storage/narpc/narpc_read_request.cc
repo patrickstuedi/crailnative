@@ -29,6 +29,16 @@ NarpcReadRequest::NarpcReadRequest(int key, long long address, int length)
 
 NarpcReadRequest::~NarpcReadRequest() {}
 
+int NarpcReadRequest::WriteMetadata(ByteBuffer &buffer) {
+  NarpcStorageRequest::WriteMetadata(buffer);
+
+  buffer.PutInt(key_);
+  buffer.PutLong(address_);
+  buffer.PutInt(length_);
+
+  return 0;
+}
+
 int NarpcReadRequest::Write(NetworkStream &stream) const {
   NarpcStorageRequest::Write(stream);
 

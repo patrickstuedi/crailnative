@@ -230,6 +230,7 @@ int Iobench::Cat(string src_file) {
                     buf->remaining());
     buf->Clear();
   }
+
   inputstream->Close();
 
   return 0;

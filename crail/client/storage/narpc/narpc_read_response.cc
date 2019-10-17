@@ -34,6 +34,17 @@ NarpcReadResponse::NarpcReadResponse(RpcClient *client,
 
 NarpcReadResponse::~NarpcReadResponse() {}
 
+int NarpcReadResponse::UpdateMetedata(ByteBuffer &buffer) {
+  NarpcStorageResponse::UpdateMetedata(buffer);
+
+  length_ = buffer.GetInt();
+
+  payload_->Clear();
+  payload_->set_limit(length_);
+
+  return 0;
+}
+
 int NarpcReadResponse::Write(NetworkStream &stream) const {
   NarpcStorageResponse::Write(stream);
 

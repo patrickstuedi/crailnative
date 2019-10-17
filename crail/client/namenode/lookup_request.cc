@@ -31,6 +31,15 @@ LookupRequest::LookupRequest(Filename &name)
 }
 LookupRequest::~LookupRequest() {}
 
+int LookupRequest::WriteMetadata(ByteBuffer &buffer) {
+  NamenodeRequest::WriteMetadata(buffer);
+
+  filename_.Write(buffer);
+  buffer.PutInt(0);
+
+  return Size();
+}
+
 int LookupRequest::Write(NetworkStream &stream) const {
   NamenodeRequest::Write(stream);
 

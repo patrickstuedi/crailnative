@@ -37,12 +37,17 @@ public:
   NarpcReadRequest(int key, long long address, int length);
   virtual ~NarpcReadRequest();
 
+  virtual int WriteMetadata(ByteBuffer &buffer);
+
   int Size() const {
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +
            sizeof(int);
   }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+  virtual string ToString() const {
+    return "NarpcReadRequest:: " + to_string(key_);
+  }
 
 private:
   int key_;

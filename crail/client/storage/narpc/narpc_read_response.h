@@ -38,11 +38,17 @@ public:
   NarpcReadResponse(RpcClient *client, shared_ptr<ByteBuffer> payload);
   virtual ~NarpcReadResponse();
 
-  int Size() const { return length_; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return payload_; }
+  virtual int UpdateMetedata(ByteBuffer &buffer);
+
+  int Size() const { return NarpcStorageResponse::Size() + sizeof(int); }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
 
   int get();
+  virtual string ToString() const {
+    return "NarpcReadResponse:: " + to_string(length_);
+  }
 
 private:
   RpcClient *client_;

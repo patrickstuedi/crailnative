@@ -49,6 +49,7 @@ public:
   }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
+
   string ToString() const {
     return "NarpcWriteRequest:: " + to_string(key_) + ", " +
            to_string(address_) + ", " + to_string(length_) + ", " +

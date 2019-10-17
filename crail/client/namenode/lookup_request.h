@@ -36,6 +36,8 @@ public:
   LookupRequest(Filename &name);
   virtual ~LookupRequest();
 
+  virtual int WriteMetadata(ByteBuffer &buffer);
+
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + sizeof(int);
   }
@@ -44,6 +46,9 @@ public:
 
   const Filename &filename() const { return filename_; }
   bool writeable() const { return writeable_; }
+  virtual string ToString() const {
+    return "LookupRequest:: " + filename_.ToString();
+  }
 
 private:
   Filename filename_;

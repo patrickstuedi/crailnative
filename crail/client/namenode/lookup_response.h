@@ -35,6 +35,8 @@ public:
   LookupResponse();
   virtual ~LookupResponse();
 
+  virtual int UpdateMetedata(ByteBuffer &buffer);
+
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() + block_info_->Size();
   }
@@ -43,6 +45,9 @@ public:
 
   FileInfo file() const { return file_info_; }
   shared_ptr<BlockInfo> file_block() const { return block_info_; }
+  virtual string ToString() const {
+    return "LookupResponse:: " + file_info_.ToString();
+  }
 
 private:
   FileInfo file_info_;

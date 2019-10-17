@@ -133,14 +133,10 @@ int NarpcStaging::FetchMessage(int socket, shared_ptr<RpcMessage> message) {
   metadata_.Flip();
   message->UpdateMetedata(metadata_);
 
-  cout << "after read, pos " << metadata_.position() << ", limit "
-       << metadata_.limit() << endl;
-
   shared_ptr<ByteBuffer> payload = message->GetPayload();
   if (payload) {
-    ReceiveBytes(socket, payload->size(), payload->get_bytes());
-    payload->set_position(payload->position() + payload->size());
-    payload->Flip();
+    ReceiveBytes(socket, payload->remaining(), payload->get_bytes());
+    payload->set_position(payload->position() + payload->remaining());
   }
 
   return 0;
