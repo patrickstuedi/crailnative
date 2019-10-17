@@ -45,7 +45,7 @@ public:
 
   int Size() const {
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +
-           sizeof(int) * 2;
+           sizeof(int) * 2 + payload_->remaining();
   }
   int Write(NetworkStream &stream) const;
   int Update(NetworkStream &stream);
