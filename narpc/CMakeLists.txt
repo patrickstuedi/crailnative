@@ -8,9 +8,8 @@ add_library (narpc STATIC
 target_link_libraries (narpc LINK_PUBLIC ioutils)
 
 #install(TARGETS narpc DESTINATION /lib)
-#install (FILES 
-#	rpc_client.h
-#	network_stream.h
-#	rpc_message.h
-#	DESTINATION /include/narpc)
+install (FILES 
+	rpc_client.h
+	rpc_message.h
+	DESTINATION /include/narpc)
 

@@ -78,3 +78,6 @@ install (FILES
 	client/storage/storage_client.h
 	client/storage/storage_cache.h
 	DESTINATION /include/crail/client/storage)
+install (FILES
+	client/utils/crail_networking.h
+	DESTINATION /include/crail/client/utils)
