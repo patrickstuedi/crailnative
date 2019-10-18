@@ -3,7 +3,7 @@
  *
  * Author: Patrick Stuedi  <pstuedi@gmail.com>
  *
- * Copyright (C) 2015-2018, IBM Corporation
+ * Copyright (C) 2015-2018
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
