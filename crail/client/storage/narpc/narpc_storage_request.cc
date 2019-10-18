@@ -32,5 +32,3 @@ int NarpcStorageRequest::Write(ByteBuffer &buffer) {
 
   return Size();
 }
-
-int NarpcStorageRequest::Update(ByteBuffer &buffer) { return Size(); }

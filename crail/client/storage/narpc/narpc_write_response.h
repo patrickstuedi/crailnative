@@ -40,7 +40,7 @@ public:
   virtual ~NarpcWriteResponse();
 
   virtual int Update(ByteBuffer &buffer);
-  virtual int Write(ByteBuffer &buffer);
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int get();
   int Size() const { return NarpcStorageResponse::Size() + sizeof(int); }

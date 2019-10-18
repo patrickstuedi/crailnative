@@ -38,6 +38,7 @@ public:
   virtual ~NarpcReadRequest();
 
   virtual int Write(ByteBuffer &buffer);
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +

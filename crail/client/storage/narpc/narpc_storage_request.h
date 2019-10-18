@@ -36,9 +36,8 @@ public:
   NarpcStorageRequest(int type);
   virtual ~NarpcStorageRequest();
 
-  virtual int Update(ByteBuffer &buffer);
   virtual int Write(ByteBuffer &buffer);
-  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
+  virtual int Update(ByteBuffer &buffer) { return 0; };
 
   int Size() const { return sizeof(int); }
   string ToString() const { return "NarpcStorageRequest"; }

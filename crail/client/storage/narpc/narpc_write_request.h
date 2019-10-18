@@ -39,7 +39,6 @@ public:
   NarpcWriteRequest(int key, long long address, shared_ptr<ByteBuffer> payload);
   virtual ~NarpcWriteRequest();
 
-  virtual int Update(ByteBuffer &buffer);
   virtual int Write(ByteBuffer &buffer);
   virtual shared_ptr<ByteBuffer> GetPayload() { return payload_; }
 

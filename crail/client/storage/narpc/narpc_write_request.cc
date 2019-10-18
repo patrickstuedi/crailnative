@@ -42,5 +42,3 @@ int NarpcWriteRequest::Write(ByteBuffer &buffer) {
   buffer.PutInt(length_);
   return 0;
 }
-
-int NarpcWriteRequest::Update(ByteBuffer &buffer) { return Size(); }

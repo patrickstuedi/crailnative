@@ -28,12 +28,6 @@ NarpcWriteResponse::NarpcWriteResponse(RpcClient *client)
 
 NarpcWriteResponse::~NarpcWriteResponse() {}
 
-int NarpcWriteResponse::Write(ByteBuffer &buffer) {
-  NarpcStorageResponse::Write(buffer);
-
-  return 0;
-}
-
 int NarpcWriteResponse::Update(ByteBuffer &buffer) {
   NarpcStorageResponse::Update(buffer);
 

@@ -32,8 +32,6 @@ NarpcStorageResponse::NarpcStorageResponse(int error, int type)
 
 NarpcStorageResponse::~NarpcStorageResponse() {}
 
-int NarpcStorageResponse::Write(ByteBuffer &buffer) { return 0; }
-
 int NarpcStorageResponse::Update(ByteBuffer &buffer) {
   this->error_ = buffer.GetInt();
   this->type_ = buffer.GetInt();
