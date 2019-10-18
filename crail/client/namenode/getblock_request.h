@@ -35,9 +35,11 @@ public:
                   long long capacity);
   virtual ~GetblockRequest();
 
+  virtual int Update(ByteBuffer &buffer) { return 0; }
+  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return 0; }
+
   int Size() const { return NamenodeRequest::Size() + sizeof(long long) * 4; };
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   long long fd() const { return fd_; }
   long long token() const { return token_; }

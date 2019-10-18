@@ -29,37 +29,13 @@ CreateResponse::CreateResponse()
 
 CreateResponse::~CreateResponse() {}
 
-int CreateResponse::UpdateMetedata(ByteBuffer &buffer) {
-  NamenodeResponse::UpdateMetedata(buffer);
+int CreateResponse::Update(ByteBuffer &buffer) {
+  NamenodeResponse::Update(buffer);
 
-  file_info_.UpdateMetedata(buffer);
-  parent_info_.UpdateMetedata(buffer);
-  file_block_->UpdateMetadata(buffer);
-  parent_block_->UpdateMetadata(buffer);
-
-  return 0;
-}
-
-int CreateResponse::Write(NetworkStream &stream) const {
-  NamenodeResponse::Write(stream);
-
-  /*
-file_info_.Write(buf);
-parent_info_.Write(buf);
-file_block_->Write(buf);
-parent_block_->Write(buf);
-  */
-
-  return 0;
-}
-
-int CreateResponse::Update(NetworkStream &stream) {
-  NamenodeResponse::Update(stream);
-
-  file_info_.Update(stream);
-  parent_info_.Update(stream);
-  file_block_->Update(stream);
-  parent_block_->Update(stream);
+  file_info_.Update(buffer);
+  parent_info_.Update(buffer);
+  file_block_->Update(buffer);
+  parent_block_->Update(buffer);
 
   return 0;
 }

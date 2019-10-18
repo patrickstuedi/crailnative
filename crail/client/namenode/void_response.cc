@@ -29,22 +29,8 @@ VoidResponse::VoidResponse() : NamenodeResponse(), error_(-1) {}
 
 VoidResponse::~VoidResponse() {}
 
-int VoidResponse::UpdateMetedata(ByteBuffer &buffer) {
-  NamenodeResponse::UpdateMetedata(buffer);
-
-  return 0;
-}
-
-int VoidResponse::Write(NetworkStream &stream) const {
-  NamenodeResponse::Write(stream);
-
-  return 0;
-}
-
-int VoidResponse::Update(NetworkStream &stream) {
-  NamenodeResponse::Update(stream);
-
-  error_ = stream.GetInt();
+int VoidResponse::Update(ByteBuffer &buffer) {
+  NamenodeResponse::Update(buffer);
 
   return 0;
 }

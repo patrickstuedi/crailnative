@@ -65,7 +65,6 @@ private:
   int socket_;
   bool isConnected_;
 
-  NetworkStream stream_;
   NarpcStaging staging_;
   atomic<unsigned long long> counter_;
   shared_ptr<RpcMessage> responseMap_[kMaxTicket];

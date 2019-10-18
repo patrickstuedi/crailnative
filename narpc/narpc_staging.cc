@@ -54,7 +54,7 @@ void NarpcStaging::AddHeader(int size, unsigned long long ticket) {
 }
 
 void NarpcStaging::SendMessage(int socket, shared_ptr<RpcMessage> message) {
-  message->WriteMetadata(metadata_);
+  message->Write(metadata_);
   shared_ptr<ByteBuffer> payload = message->GetPayload();
   if (payload) {
     data_.push_back(payload);
@@ -131,7 +131,7 @@ int NarpcStaging::FetchMessage(int socket, shared_ptr<RpcMessage> message) {
   int sum = ReceiveBytes(socket, message->Size(), metadata_.get_bytes());
   metadata_.set_position(sum);
   metadata_.Flip();
-  message->UpdateMetedata(metadata_);
+  message->Update(metadata_);
 
   shared_ptr<ByteBuffer> payload = message->GetPayload();
   if (payload) {

@@ -36,13 +36,13 @@ public:
   LookupRequest(Filename &name);
   virtual ~LookupRequest();
 
-  virtual int WriteMetadata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer) { return 0; }
+  virtual int Write(ByteBuffer &buffer);
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + sizeof(int);
   }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   const Filename &filename() const { return filename_; }
   bool writeable() const { return writeable_; }

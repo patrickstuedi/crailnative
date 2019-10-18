@@ -39,16 +39,14 @@ public:
   NarpcWriteRequest(int key, long long address, shared_ptr<ByteBuffer> payload);
   virtual ~NarpcWriteRequest();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer);
-  virtual int WriteMetadata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer);
+  virtual int Write(ByteBuffer &buffer);
   virtual shared_ptr<ByteBuffer> GetPayload() { return payload_; }
 
   int Size() const {
     return NarpcStorageRequest::Size() + sizeof(int) + sizeof(long long) +
            sizeof(int) * 2 + payload_->remaining();
   }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   string ToString() const {
     return "NarpcWriteRequest:: " + to_string(key_) + ", " +

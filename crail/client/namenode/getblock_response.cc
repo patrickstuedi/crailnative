@@ -26,21 +26,3 @@
 GetblockResponse::GetblockResponse() : NamenodeResponse() {}
 
 GetblockResponse::~GetblockResponse() {}
-
-int GetblockResponse::Write(NetworkStream &stream) const {
-  NamenodeResponse::Write(stream);
-
-  block_info_.Write(stream);
-  stream.PutShort(error_);
-
-  return 0;
-}
-
-int GetblockResponse::Update(NetworkStream &stream) {
-  NamenodeResponse::Update(stream);
-
-  block_info_.Update(stream);
-  this->error_ = stream.GetShort();
-
-  return 0;
-}

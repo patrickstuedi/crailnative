@@ -35,13 +35,13 @@ public:
   LookupResponse();
   virtual ~LookupResponse();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer);
+  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() + block_info_->Size();
   }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   FileInfo file() const { return file_info_; }
   shared_ptr<BlockInfo> file_block() const { return block_info_; }

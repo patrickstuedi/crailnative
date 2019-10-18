@@ -38,13 +38,13 @@ public:
   SetfileRequest(FileInfo file_info, bool close);
   virtual ~SetfileRequest();
 
-  virtual int WriteMetadata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer) { return 0; }
+  virtual int Write(ByteBuffer &buffer);
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + file_info_.Size() + sizeof(int);
   }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   const FileInfo file_info() const { return file_info_; }
   virtual string ToString() const {

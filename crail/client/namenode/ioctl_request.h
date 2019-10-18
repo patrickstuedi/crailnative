@@ -36,11 +36,13 @@ public:
   IoctlRequest(unsigned char op, Filename &name);
   virtual ~IoctlRequest();
 
+  virtual int Updatea(ByteBuffer &buffer) { return 0; }
+  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
+
   int Size() const {
     return NamenodeRequest::Size() + sizeof(op_) + filename_.Size();
   }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   const Filename &filename() const { return filename_; }
 

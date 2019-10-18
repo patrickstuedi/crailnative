@@ -29,7 +29,6 @@
 #include "crail/client/common/crail_constants.h"
 #include "crail/client/common/serializable.h"
 #include "ioutils/byte_buffer.h"
-#include "narpc/network_stream.h"
 
 using namespace std;
 using namespace crail;
@@ -41,7 +40,6 @@ public:
   Filename(string &name);
   virtual ~Filename();
 
-  int Write(NetworkStream &stream) const;
   int Write(ByteBuffer &buf) const;
   int Update(ByteBuffer &buf);
   int Size() const;

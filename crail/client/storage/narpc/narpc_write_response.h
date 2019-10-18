@@ -39,13 +39,11 @@ public:
   NarpcWriteResponse(RpcClient *client);
   virtual ~NarpcWriteResponse();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer);
-  virtual int WriteMetadata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer);
+  virtual int Write(ByteBuffer &buffer);
 
   int get();
   int Size() const { return NarpcStorageResponse::Size() + sizeof(int); }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
   virtual string ToString() const { return "NarpcWriteResponse"; }
 
 private:

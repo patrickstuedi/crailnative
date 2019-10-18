@@ -25,7 +25,6 @@
 #define NARPC_STORAGE_REQUEST_H
 
 #include "ioutils/byte_buffer.h"
-#include "narpc/network_stream.h"
 #include "narpc/rpc_message.h"
 
 using namespace crail;
@@ -37,12 +36,10 @@ public:
   NarpcStorageRequest(int type);
   virtual ~NarpcStorageRequest();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer);
-  virtual int WriteMetadata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer);
+  virtual int Write(ByteBuffer &buffer);
   virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
   int Size() const { return sizeof(int); }
   string ToString() const { return "NarpcStorageRequest"; }
 

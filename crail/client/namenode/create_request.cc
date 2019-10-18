@@ -34,38 +34,13 @@ CreateRequest::CreateRequest(Filename &name, int type, int storage_class,
 
 CreateRequest::~CreateRequest() {}
 
-int CreateRequest::WriteMetadata(ByteBuffer &buffer) {
-  NamenodeRequest::WriteMetadata(buffer);
+int CreateRequest::Write(ByteBuffer &buffer) {
+  NamenodeRequest::Write(buffer);
   filename_.Write(buffer);
   buffer.PutInt(type_);
   buffer.PutInt(storage_class_);
   buffer.PutInt(location_class_);
   buffer.PutInt(enumerable_);
-
-  return Size();
-}
-
-int CreateRequest::Write(NetworkStream &stream) const {
-  NamenodeRequest::Write(stream);
-  filename_.Write(stream);
-  stream.PutInt(type_);
-  stream.PutInt(storage_class_);
-  stream.PutInt(location_class_);
-  stream.PutInt(enumerable_);
-
-  return Size();
-}
-
-int CreateRequest::Update(NetworkStream &stream) {
-  NamenodeRequest::Update(stream);
-
-  /*
-filename_.Update(buf);
-type_ = buf.GetInt();
-storage_class_ = buf.GetInt();
-location_class_ = buf.GetInt();
-enumerable_ = buf.GetInt();
-  */
 
   return Size();
 }

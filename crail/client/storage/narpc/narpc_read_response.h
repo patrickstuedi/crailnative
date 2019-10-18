@@ -39,11 +39,9 @@ public:
   virtual ~NarpcReadResponse();
 
   virtual shared_ptr<ByteBuffer> GetPayload() { return payload_; }
-  virtual int UpdateMetedata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer);
 
   int Size() const { return NarpcStorageResponse::Size() + sizeof(int); }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   int get();
   virtual string ToString() const {

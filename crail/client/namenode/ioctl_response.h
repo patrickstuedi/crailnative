@@ -33,11 +33,13 @@ public:
   IoctlResponse();
   virtual ~IoctlResponse();
 
+  virtual int Update(ByteBuffer &buffer) { return 0; }
+  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
+
   int Size() const {
     return NamenodeResponse::Size() + sizeof(op_) + sizeof(long long);
   }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   long long count() const { return count_; }
 

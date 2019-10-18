@@ -28,7 +28,6 @@
 
 #include "crail/client/common/serializable.h"
 #include "ioutils/byte_buffer.h"
-#include "narpc/network_stream.h"
 #include "narpc/rpc_message.h"
 
 using namespace std;
@@ -38,10 +37,9 @@ public:
   NamenodeResponse();
   virtual ~NamenodeResponse();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer);
-
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
+  virtual int Update(ByteBuffer &buffer);
+  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const { return sizeof(short) * 2; }
   int type() { return type_; }

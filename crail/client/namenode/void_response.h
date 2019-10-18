@@ -31,11 +31,11 @@ public:
   VoidResponse();
   virtual ~VoidResponse();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer);
+  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const { return NamenodeResponse::Size(); }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
   string ToString() const { return "VoidResponse:: " + to_string(error_); }
 
 private:

@@ -32,30 +32,9 @@ LookupResponse::LookupResponse()
 
 LookupResponse::~LookupResponse() {}
 
-int LookupResponse::UpdateMetedata(ByteBuffer &buffer) {
-  NamenodeResponse::UpdateMetedata(buffer);
+int LookupResponse::Update(ByteBuffer &buffer) {
+  NamenodeResponse::Update(buffer);
 
-  file_info_.UpdateMetedata(buffer);
-  block_info_->UpdateMetadata(buffer);
-}
-
-int LookupResponse::Write(NetworkStream &stream) const {
-  NamenodeResponse::Write(stream);
-
-  /*
-file_info_.Write(buf);
-block_info_->Write(buf);
-*/
-  return 0;
-}
-
-int LookupResponse::Update(NetworkStream &stream) {
-  NamenodeResponse::Update(stream);
-
-  /*
-file_info_.Update(buf);
-block_info_->Update(buf);
-  */
-
-  return 0;
+  file_info_.Update(buffer);
+  block_info_->Update(buffer);
 }

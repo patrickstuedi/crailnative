@@ -30,27 +30,3 @@ GetblockRequest::GetblockRequest(long long fd, long long token,
       fd_(fd), token_(token), position_(position), capacity_(capacity) {}
 
 GetblockRequest::~GetblockRequest() {}
-
-int GetblockRequest::Write(NetworkStream &stream) const {
-  NamenodeRequest::Write(stream);
-
-  stream.PutLong(fd_);
-  stream.PutLong(token_);
-  stream.PutLong(position_);
-  stream.PutLong(capacity_);
-
-  return Size();
-}
-
-int GetblockRequest::Update(NetworkStream &stream) {
-  NamenodeRequest::Update(stream);
-
-  /*
-fd_ = buf.GetLong();
-token_ = buf.GetLong();
-position_ = buf.GetLong();
-capacity_ = buf.GetLong();
-  */
-
-  return Size();
-}

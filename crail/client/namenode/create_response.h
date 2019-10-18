@@ -41,14 +41,14 @@ public:
   CreateResponse();
   virtual ~CreateResponse();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer);
+  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NamenodeResponse::Size() + file_info_.Size() * 2 +
            file_block_->Size() * 2;
   }
-  int Write(NetworkStream &stream) const;
-  int Update(NetworkStream &stream);
 
   FileInfo file() const { return file_info_; }
   FileInfo parent() const { return parent_info_; }

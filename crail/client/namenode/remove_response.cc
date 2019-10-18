@@ -28,25 +28,3 @@ RemoveResponse::RemoveResponse()
       parent_info_(new FileInfo()) {}
 
 RemoveResponse::~RemoveResponse() {}
-
-int RemoveResponse::Write(NetworkStream &stream) const {
-  NamenodeResponse::Write(stream);
-
-  /*
-file_info_->Write(buf);
-parent_info_->Write(buf);
-  */
-
-  return 0;
-}
-
-int RemoveResponse::Update(NetworkStream &stream) {
-  NamenodeResponse::Update(stream);
-
-  /*
-file_info_->Update(buf);
-parent_info_->Update(buf);
-  */
-
-  return 0;
-}
