@@ -34,7 +34,7 @@ public:
   RemoveResponse();
   virtual ~RemoveResponse();
 
-  virtual int Update(ByteBuffer &buffer) { return 0; }
+  virtual int Update(ByteBuffer &buffer);
 
   int Size() const { return NamenodeResponse::Size() + file_info_->Size() * 2; }
 

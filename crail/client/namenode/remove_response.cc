@@ -28,3 +28,12 @@ RemoveResponse::RemoveResponse()
       parent_info_(new FileInfo()) {}
 
 RemoveResponse::~RemoveResponse() {}
+
+int RemoveResponse::Update(ByteBuffer &buffer) {
+  NamenodeResponse::Update(buffer);
+
+  file_info_->Update(buffer);
+  parent_info_->Update(buffer);
+
+  return Size();
+}

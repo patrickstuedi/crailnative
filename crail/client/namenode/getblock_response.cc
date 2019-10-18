@@ -26,3 +26,10 @@
 GetblockResponse::GetblockResponse() : NamenodeResponse() {}
 
 GetblockResponse::~GetblockResponse() {}
+
+int GetblockResponse::Update(ByteBuffer &buffer) {
+  NamenodeResponse::Update(buffer);
+
+  block_info_.Update(buffer);
+  error_ = buffer.GetShort();
+}

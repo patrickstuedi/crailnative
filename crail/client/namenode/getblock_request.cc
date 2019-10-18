@@ -30,3 +30,14 @@ GetblockRequest::GetblockRequest(long long fd, long long token,
       fd_(fd), token_(token), position_(position), capacity_(capacity) {}
 
 GetblockRequest::~GetblockRequest() {}
+
+int GetblockRequest::Write(ByteBuffer &buffer) {
+  NamenodeRequest::Write(buffer);
+
+  buffer.PutLong(fd_);
+  buffer.PutLong(token_);
+  buffer.PutLong(position_);
+  buffer.PutLong(capacity_);
+
+  return 0;
+}

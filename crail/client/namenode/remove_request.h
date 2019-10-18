@@ -34,7 +34,7 @@ public:
   RemoveRequest(Filename &name, bool recursive);
   virtual ~RemoveRequest();
 
-  virtual int Write(ByteBuffer &buffer) { return 0; }
+  virtual int Write(ByteBuffer &buffer);
 
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + sizeof(int);

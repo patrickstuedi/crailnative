@@ -31,3 +31,11 @@ RemoveRequest::RemoveRequest(Filename &name, bool recursive)
   this->recursive_ = recursive;
 }
 RemoveRequest::~RemoveRequest() {}
+
+int RemoveRequest::Write(ByteBuffer &buffer) {
+  NamenodeRequest::Write(buffer);
+
+  filename_.Write(buffer);
+  int recursive = this->recursive_ ? 1 : 0;
+  buffer.PutInt(recursive);
+}

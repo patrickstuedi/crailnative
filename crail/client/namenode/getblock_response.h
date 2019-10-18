@@ -34,7 +34,7 @@ public:
   GetblockResponse();
   virtual ~GetblockResponse();
 
-  virtual int Update(ByteBuffer &buffer) { return 0; }
+  virtual int Update(ByteBuffer &buffer);
 
   int Size() const {
     return NamenodeResponse::Size() + block_info_.Size() + sizeof(short);
