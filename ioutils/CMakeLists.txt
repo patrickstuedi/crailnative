@@ -4,9 +4,7 @@ add_library (ioutils STATIC
 	)
 
 #install(TARGETS narpc DESTINATION /lib)
-#install (FILES 
-#	rpc_client.h
-#	network_stream.h
-#	rpc_message.h
-#	DESTINATION /include/narpc)
+install (FILES 
+	byte_buffer.h
+	DESTINATION /include/ioutils)
 
