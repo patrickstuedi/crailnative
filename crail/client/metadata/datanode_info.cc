@@ -1,7 +1,7 @@
 /*
  * CppCrail: Native Crail
  *
- * Author: Patrick Stuedi  <stu@zurich.ibm.com>
+ * Author: Patrick Stuedi  <pstuedi@gmail.com>
  *
  * Copyright (C) 2015-2018, IBM Corporation
  *
