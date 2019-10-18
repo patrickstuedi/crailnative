@@ -38,7 +38,7 @@ public:
   NarpcReadResponse(RpcClient *client, shared_ptr<ByteBuffer> payload);
   virtual ~NarpcReadResponse();
 
-  virtual shared_ptr<ByteBuffer> GetPayload() { return payload_; }
+  virtual shared_ptr<ByteBuffer> Payload() { return payload_; }
   virtual int Update(ByteBuffer &buffer);
 
   int Size() const { return NarpcStorageResponse::Size() + sizeof(int); }

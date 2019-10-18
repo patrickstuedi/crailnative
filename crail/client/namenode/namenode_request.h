@@ -54,7 +54,7 @@ public:
 
   virtual int Write(ByteBuffer &buffer);
   virtual int Update(ByteBuffer &buffer) { return 0; }
-  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
+  virtual shared_ptr<ByteBuffer> Payload() { return nullptr; }
 
   int Size() const { return sizeof(short) * 2; }
   virtual string ToString() const {

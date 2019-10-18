@@ -37,7 +37,7 @@ class RpcMessage {
 public:
   virtual int Update(ByteBuffer &buffer) = 0;
   virtual int Write(ByteBuffer &buffer) = 0;
-  virtual shared_ptr<ByteBuffer> GetPayload() = 0;
+  virtual shared_ptr<ByteBuffer> Payload() = 0;
 
   virtual int Size() const = 0;
   virtual string ToString() const = 0;
