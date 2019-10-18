@@ -34,9 +34,7 @@ public:
   GetblockResponse();
   virtual ~GetblockResponse();
 
-  virtual int UpdateMetedata(ByteBuffer &buffer) { return 0; }
-  virtual int WriteMetadata(ByteBuffer &buffer) { return 0; }
-  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
+  virtual int Update(ByteBuffer &buffer) { return 0; }
 
   int Size() const {
     return NamenodeResponse::Size() + block_info_.Size() + sizeof(short);

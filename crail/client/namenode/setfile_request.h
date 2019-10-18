@@ -38,9 +38,7 @@ public:
   SetfileRequest(FileInfo file_info, bool close);
   virtual ~SetfileRequest();
 
-  virtual int Update(ByteBuffer &buffer) { return 0; }
   virtual int Write(ByteBuffer &buffer);
-  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + file_info_.Size() + sizeof(int);

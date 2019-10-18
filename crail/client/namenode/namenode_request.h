@@ -52,8 +52,8 @@ public:
   NamenodeRequest(short cmd, short type);
   virtual ~NamenodeRequest();
 
-  virtual int Update(ByteBuffer &buffer) { return 0; }
   virtual int Write(ByteBuffer &buffer);
+  virtual int Update(ByteBuffer &buffer) { return 0; }
   virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const { return sizeof(short) * 2; }

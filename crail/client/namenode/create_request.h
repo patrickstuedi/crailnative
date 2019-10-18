@@ -42,9 +42,7 @@ public:
                 int enumerable);
   virtual ~CreateRequest();
 
-  virtual int Update(ByteBuffer &buffer) { return 0; }
   virtual int Write(ByteBuffer &buffer);
-  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + 4 * sizeof(int);

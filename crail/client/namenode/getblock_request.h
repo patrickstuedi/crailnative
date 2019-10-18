@@ -35,9 +35,7 @@ public:
                   long long capacity);
   virtual ~GetblockRequest();
 
-  virtual int Update(ByteBuffer &buffer) { return 0; }
   virtual int Write(ByteBuffer &buffer) { return 0; }
-  virtual shared_ptr<ByteBuffer> GetPayload() { return 0; }
 
   int Size() const { return NamenodeRequest::Size() + sizeof(long long) * 4; };
 

@@ -36,9 +36,7 @@ public:
   LookupRequest(Filename &name);
   virtual ~LookupRequest();
 
-  virtual int Update(ByteBuffer &buffer) { return 0; }
   virtual int Write(ByteBuffer &buffer);
-  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const {
     return NamenodeRequest::Size() + filename_.Size() + sizeof(int);

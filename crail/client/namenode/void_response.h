@@ -32,8 +32,6 @@ public:
   virtual ~VoidResponse();
 
   virtual int Update(ByteBuffer &buffer);
-  virtual int Write(ByteBuffer &buffer) { return 0; }
-  virtual shared_ptr<ByteBuffer> GetPayload() { return nullptr; }
 
   int Size() const { return NamenodeResponse::Size(); }
   string ToString() const { return "VoidResponse:: " + to_string(error_); }
