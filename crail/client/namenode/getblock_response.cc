@@ -31,5 +31,6 @@ int GetblockResponse::Update(ByteBuffer &buffer) {
   NamenodeResponse::Update(buffer);
 
   block_info_.Update(buffer);
-  error_ = buffer.GetShort();
+
+  return Size();
 }

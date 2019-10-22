@@ -36,9 +36,7 @@ public:
 
   virtual int Update(ByteBuffer &buffer);
 
-  int Size() const {
-    return NamenodeResponse::Size() + block_info_.Size() + sizeof(short);
-  }
+  int Size() const { return NamenodeResponse::Size() + block_info_.Size(); }
 
   BlockInfo &block_info() { return block_info_; }
 
