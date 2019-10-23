@@ -11,3 +11,13 @@ tensorflow python/c++ interface:
 pytorch python/c++ interface:
 - https://pytorch.org/blog/a-tour-of-pytorch-internals-1/
 
+tf/gcloud:
+- https://medium.com/@karan817/setting-up-tensorflow-and-gpus-on-google-cloud-platform-to-run-your-neural-network-implementations-df6b81d00f31
+- https://cloud.google.com/solutions/running-distributed-tensorflow-on-compute-engine
+- https://cloud.google.com/ai-platform/deep-learning-vm/docs/tensorflow_start_instance
+- https://cloud.google.com/ml-engine/docs/tensorflow/getting-started-training-prediction
+
+tf/aws:
+- https://medium.com/@dichen_5479/setup-tensorflow-gpu-with-aws-ec2-on-ubuntu-16-04-in-10-minutes-7ee64e47a66a
+- https://medium.com/@lookfwd/install-tensorflow-1-12-gpu-on-g3-aws-ubuntu-18-04-instances-4cd884f06ec2
+
