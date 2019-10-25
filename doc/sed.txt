@@ -1,0 +1,3 @@
+find ./ -name *.cc -exec sed -i 's/<stu@zurich.ibm.com>/<pstuedi@gmail.com>/' {} \;
+find ./ -name *.cc -exec sed -i -e '/Copyright (C) 2015-2018, IBM Corporation/d' {} \;
+
