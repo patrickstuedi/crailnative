@@ -1,3 +1,4 @@
 find ./ -name *.cc -exec sed -i 's/<stu@zurich.ibm.com>/<pstuedi@gmail.com>/' {} \;
 find ./ -name *.cc -exec sed -i -e '/Copyright (C) 2015-2018, IBM Corporation/d' {} \;
+GIT_COMMITTER_DATE="Mon 19 Aug 2019 20:19:19 BST" git commit --amend --no-edit --date "Mon 19 Aug 2019 20:19:19 BST"
 
