@@ -1,0 +1,4 @@
+1) GPU-direct FS
+2) Elastic clout native backends (Redis, DynamoDB)
+3) LSM distributed memstore
+
