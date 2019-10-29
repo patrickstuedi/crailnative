@@ -24,4 +24,4 @@ tf/aws:
 ml-training:
 - https://www.youtube.com/watch?v=_RPHiqF2bSs
 - https://www.youtube.com/watch?v=gVz9jKE_9iU
-
+- https://github.com/google-research/google-research/tree/master/igt_optimizer/cloud_tpu_resnet/resnet
