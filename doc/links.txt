@@ -21,3 +21,7 @@ tf/aws:
 - https://medium.com/@dichen_5479/setup-tensorflow-gpu-with-aws-ec2-on-ubuntu-16-04-in-10-minutes-7ee64e47a66a
 - https://medium.com/@lookfwd/install-tensorflow-1-12-gpu-on-g3-aws-ubuntu-18-04-instances-4cd884f06ec2
 
+ml-training:
+- https://www.youtube.com/watch?v=_RPHiqF2bSs
+- https://www.youtube.com/watch?v=gVz9jKE_9iU
+
