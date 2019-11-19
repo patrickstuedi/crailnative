@@ -24,9 +24,6 @@ tf/aws:
 ml-training:
 - https://www.youtube.com/watch?v=_RPHiqF2bSs
 - https://www.youtube.com/watch?v=gVz9jKE_9iU
-- https://github.com/google-research/google-research/tree/master/igt_optimizer/cloud_tpu_resnet/resnet
-- resnet: https://github.com/tensorflow/models/tree/master/tutorials/image/cifar10_estimator
-- examples: https://github.com/GoogleCloudPlatform/cloudml-samples/
 
 tensorflow benchmarks
 - https://github.com/tensorflow/benchmarks
@@ -35,4 +32,17 @@ tensorflow benchmarks
 tf summit:
 - https://www.youtube.com/watch?v=uIcqeP7MFH0&t=181s (murray)
 - https://www.tensorflow.org/guide/data_performance
+- https://www.youtube.com/watch?v=SxOsJPaxHME (Brennan)
+
+resnet:
+- https://github.com/google-research/google-research/tree/master/igt_optimizer/cloud_tpu_resnet/resnet
+- resnet: https://github.com/tensorflow/models/tree/master/tutorials/image/cifar10_estimator
+- examples: https://github.com/GoogleCloudPlatform/cloudml-samples/
+- https://cloud.google.com/blog/products/ai-machine-learning/how-to-train-a-resnet-image-classifier-from-scratch-on-tpus-on-cloud-ml-engine
+- https://github.com/GoogleCloudPlatform/training-data-analyst
+- https://codelabs.developers.google.com/codelabs/tpu-resnet/#0
+- https://blog.exxactcorp.com/deep-learning-with-tensorflow-training-resnet-50-from-scratch-using-the-imagenet-dataset/
+- https://missinglink.ai/guides/tensorflow/tensorflow-resnet-building-training-scaling-residual-networks-tensorflow/
+- https://cloud.google.com/tpu/docs/tutorials/resnet
+
 
