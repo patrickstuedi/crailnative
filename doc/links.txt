@@ -46,4 +46,7 @@ resnet:
 - https://cloud.google.com/tpu/docs/tutorials/resnet
 - https://mlperf.org/
 - https://dawn.cs.stanford.edu/benchmark/
+- https://github.com/google-research/google-research.git
+- https://github.com/tensorflow/models.git
+- https://github.com/tensorflow/tpu.git
 
