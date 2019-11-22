@@ -45,5 +45,5 @@ resnet:
 - https://missinglink.ai/guides/tensorflow/tensorflow-resnet-building-training-scaling-residual-networks-tensorflow/
 - https://cloud.google.com/tpu/docs/tutorials/resnet
 - https://mlperf.org/
-- https://dawn.cs.stanford.edu/
+- https://dawn.cs.stanford.edu/benchmark/
 
