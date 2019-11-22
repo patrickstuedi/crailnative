@@ -44,5 +44,6 @@ resnet:
 - https://blog.exxactcorp.com/deep-learning-with-tensorflow-training-resnet-50-from-scratch-using-the-imagenet-dataset/
 - https://missinglink.ai/guides/tensorflow/tensorflow-resnet-building-training-scaling-residual-networks-tensorflow/
 - https://cloud.google.com/tpu/docs/tutorials/resnet
-
+- https://mlperf.org/
+- https://dawn.cs.stanford.edu/
 
