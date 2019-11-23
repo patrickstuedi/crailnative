@@ -41,10 +41,10 @@ resnet:
 - https://codelabs.developers.google.com/codelabs/tpu-resnet/#0
 - https://blog.exxactcorp.com/deep-learning-with-tensorflow-training-resnet-50-from-scratch-using-the-imagenet-dataset/
 - https://missinglink.ai/guides/tensorflow/tensorflow-resnet-building-training-scaling-residual-networks-tensorflow/
-- https://cloud.google.com/tpu/docs/tutorials/resnet
++ https://cloud.google.com/tpu/docs/tutorials/resnet
 - https://mlperf.org/
 - https://dawn.cs.stanford.edu/benchmark/
 - https://github.com/google-research/google-research.git
 - https://github.com/tensorflow/models.git
-- https://github.com/tensorflow/tpu.git
++ https://github.com/tensorflow/tpu.git
 
